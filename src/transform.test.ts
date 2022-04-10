@@ -1,14 +1,14 @@
 import { transform } from "./transform";
 
-test("transform primitive, non-primitive: should fail", () => {
+test("transform non-primitive to primitive: should fail", () => {
   expect(() => transform(undefined, 3)).toThrow();
 });
 
-test("transform primitive, equal primitive: should succeed", () => {
+test("transform primitive to equal primitive: should succeed", () => {
   expect(transform(3, 3)).toEqual(3);
 });
 
-test("transform primitive, non-equal primitive: should fail", () => {
+test("transform primitive to non-equal primitive: should fail", () => {
   expect(() => transform("hi", "bye")).toThrow();
 });
 
@@ -50,6 +50,10 @@ test("transform empty object to empty object: should succeed", () => {
 
 test("transform object to equal object: should succeed", () => {
   expect(transform({ age: 3, happy: true }, { age: 3, happy: true })).toEqual({ age: 3, happy: true });
+});
+
+test("transform object to equal object with different key order: should succeed", () => {
+  expect(transform({ happy: true, age: 3 }, { age: 3, happy: true })).toEqual({ age: 3, happy: true });
 });
 
 test("transform object with wrong value: should fail", () => {
