@@ -1,4 +1,4 @@
-import { isPrimitive, reprPrimitive } from "./primitives";
+import { isPrimitive, reprPrimitive } from "./primitive";
 
 test("bigint is primitive", () => {
   expect(isPrimitive(BigInt(200))).toBe(true);
