@@ -125,7 +125,6 @@ function transform<S extends TransformSpec>(input: WidestInput<S>, spec: S): Out
   return transformObject(input, spec as ObjectSpec) as Output<S>;
 }
 
-/*
 function compile<S extends TransformSpec>(spec: S): Transform<WidestInput<S>, Output<S>, NarrowestInput<S>> {
   return (input) => transform(input, spec);
 }
@@ -144,6 +143,13 @@ const number: Transform<unknown, number, number> = (input) => {
   throw new Error("Not a number");
 }
 
+const string: Transform<unknown, string, string> = (input) => {
+  if (typeof input === "string") {
+    return input;
+  }
+  throw new Error("Not a string");
+}
+
 function optional<S extends TransformSpec>(spec: S): Transform<WidestInput<S> | undefined, Output<S> | undefined, NarrowestInput<S> | undefined> {
   return (input) => {
     if (input === undefined) {
@@ -153,29 +159,6 @@ function optional<S extends TransformSpec>(spec: S): Transform<WidestInput<S> | 
   };
 }
 
-const specNumberValidation = {
-  min: optional(number),
-  max: optional(number),
-  multipleOf: optional(number),
-  integer: optional(boolean),
-  finite: optional(boolean),
-};
-
-type NumberValidation = Output<typeof specNumberValidation>;
-
-function aNumber(...validators: (Predicate<Number> | NumberValidation)[]): Transform<unknown, number, number> {
-  return (input) => {
-    const n = number(input);
-    for (const validator of validators) {
-      if (typeof validator === "function") {
-        assertPredicate(validator, n);
-      }
-    }
-    return n;
-  }
-}
-*/
-
 export {
   Transform,
   TransformSpec,
@@ -184,5 +167,10 @@ export {
   NarrowestInput,
   WidestInput,
   Output,
+  compile,
   transform,
+  boolean,
+  number,
+  string,
+  optional,
 }

@@ -2,7 +2,7 @@
   "name": "typesafer",
   "version": "0.0.0",
   "scripts": {
-    "prepublish": "tsc",
+    "prepublish": "tsc --project tsconfig.production.json",
     "test": "jest --coverage"
   },
   "main": "dist/index.js",

@@ -22,4 +22,4 @@ test("assertion passes when predicate does not return anything", () => {
 
 test("assertion fails when predicate returns a string", () => {
   expect(() => assertPredicate(stringPositive, -5)).toThrow();
-})
+});
