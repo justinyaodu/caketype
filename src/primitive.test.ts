@@ -42,7 +42,7 @@ test("repr bigint", () => {
 
 test("repr boolean", () => {
   expect(reprPrimitive(false)).toEqual("false");
-})
+});
 
 test("repr number", () => {
   expect(reprPrimitive(3.75)).toEqual("3.75");
@@ -53,7 +53,7 @@ test("repr -Infinity", () => {
 });
 
 test("repr string", () => {
-  expect(reprPrimitive("hi\n\t\"")).toEqual("\"hi\\n\\t\\\"\"");
+  expect(reprPrimitive('hi\n\t"')).toEqual('"hi\\n\\t\\""');
 });
 
 test("repr symbol", () => {

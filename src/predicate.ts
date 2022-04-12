@@ -13,7 +13,4 @@ function assertPredicate<T>(predicate: Predicate<T>, input: T) {
   }
 }
 
-export {
-  Predicate,
-  assertPredicate,
-}
+export { Predicate, assertPredicate };

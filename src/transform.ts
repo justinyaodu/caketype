@@ -3,7 +3,11 @@ import { isPrimitive, Primitive, reprPrimitive } from "./primitive";
 
 type Transform<I, O, E = unknown> = (input: I) => O;
 
-type TransformSpec = Primitive | Transform<unknown, unknown> | TupleSpec | ObjectSpec;
+type TransformSpec =
+  | Primitive
+  | Transform<unknown, unknown>
+  | TupleSpec
+  | ObjectSpec;
 
 type TupleSpec = readonly [] | readonly [TransformSpec, ...TransformSpec[]];
 
@@ -12,65 +16,69 @@ interface ObjectSpec {
 }
 
 // https://stackoverflow.com/a/50375286
-type UnionToIntersection<U> = (U extends unknown ? (u: U) => void : never) extends ((u: infer I) => void) ? I : never;
+type UnionToIntersection<U> = (
+  U extends unknown ? (u: U) => void : never
+) extends (u: infer I) => void
+  ? I
+  : never;
 
 type UndefinedToMissing<T> = UnionToIntersection<
   {
-    [K in keyof T]: (
-      T[K] extends undefined
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        ? {} // Value is always undefined; delete the field.
-        : undefined extends T[K]
-          ? {[key in K]?: T[K]} // Value is sometimes undefined; make the field optional.
-          : {[key in K]: T[K]} // Value is never undefined; make the field required.
-    )
+    [K in keyof T]: T[K] extends undefined
+      ? // eslint-disable-next-line @typescript-eslint/ban-types
+        {} // Value is always undefined; delete the field.
+      : undefined extends T[K]
+      ? { [key in K]?: T[K] } // Value is sometimes undefined; make the field optional.
+      : { [key in K]: T[K] }; // Value is never undefined; make the field required.
   }[keyof T]
 >;
 
-type NarrowestInput<S> = (
-  S extends Primitive
+type NarrowestInput<S> = S extends Primitive
   ? S
   : S extends Transform<infer I, infer O, infer E>
-    ? I & E 
-      : S extends TupleSpec
-        ? {readonly [K in keyof S]: K extends keyof [] ? S[K] : NarrowestInput<S[K]>}
-        : S extends ObjectSpec
-          ? UndefinedToMissing<{readonly [K in keyof S]: NarrowestInput<S[K]>}>
-          : never
-);
+  ? I & E
+  : S extends TupleSpec
+  ? {
+      readonly [K in keyof S]: K extends keyof [] ? S[K] : NarrowestInput<S[K]>;
+    }
+  : S extends ObjectSpec
+  ? UndefinedToMissing<{ readonly [K in keyof S]: NarrowestInput<S[K]> }>
+  : never;
 
-type WidestInput<S> = (
-  S extends Primitive
+type WidestInput<S> = S extends Primitive
   ? unknown
   : S extends Transform<infer I, infer O, infer E>
-    ? I 
-      : S extends TupleSpec
-        ? unknown
-        : S extends ObjectSpec
-          ? unknown
-          : never
-);
+  ? I
+  : S extends TupleSpec
+  ? unknown
+  : S extends ObjectSpec
+  ? unknown
+  : never;
 
-type Output<S> = (
-  S extends Primitive
-    ? S
-    : S extends Transform<infer I, infer O, infer E>
-      ? O 
-      : S extends TupleSpec
-        ? {-readonly [K in keyof S]: K extends keyof [] ? S[K] : Output<S[K]>}
-        : S extends ObjectSpec
-          ? UndefinedToMissing<{-readonly [K in keyof S]: Output<S[K]>}>
-          : never
-);
+type Output<S> = S extends Primitive
+  ? S
+  : S extends Transform<infer I, infer O, infer E>
+  ? O
+  : S extends TupleSpec
+  ? { -readonly [K in keyof S]: K extends keyof [] ? S[K] : Output<S[K]> }
+  : S extends ObjectSpec
+  ? UndefinedToMissing<{ -readonly [K in keyof S]: Output<S[K]> }>
+  : never;
 
-function transformPrimitive<S extends Primitive>(input: WidestInput<S>, spec: S): Output<S> {
+function transformPrimitive<S extends Primitive>(
+  input: WidestInput<S>,
+  spec: S
+): Output<S> {
   if (input === spec) {
     return spec as Output<S>;
   }
   throw new Error(`Not equal to ${reprPrimitive(spec)}`);
 }
 
-function transformTuple<S extends TupleSpec>(input: WidestInput<S>, spec: S): Output<S> {
+function transformTuple<S extends TupleSpec>(
+  input: WidestInput<S>,
+  spec: S
+): Output<S> {
   if (!Array.isArray(input)) {
     throw new Error("Not an array");
   }
@@ -89,7 +97,10 @@ function transformTuple<S extends TupleSpec>(input: WidestInput<S>, spec: S): Ou
   return transformed as Output<S>;
 }
 
-function transformObject<S extends ObjectSpec>(input: WidestInput<S>, spec: S): Output<S> {
+function transformObject<S extends ObjectSpec>(
+  input: WidestInput<S>,
+  spec: S
+): Output<S> {
   if (typeof input !== "object" || input === null) {
     throw new Error("Not an object");
   }
@@ -100,7 +111,7 @@ function transformObject<S extends ObjectSpec>(input: WidestInput<S>, spec: S): 
     }
   }
 
-  const transformed: {[key: string]: unknown} = {};
+  const transformed: { [key: string]: unknown } = {};
   for (const key of Object.getOwnPropertyNames(spec)) {
     const inputValue: unknown = input[key as keyof typeof input];
     const transformedValue = transform(inputValue, spec[key]);
@@ -113,7 +124,10 @@ function transformObject<S extends ObjectSpec>(input: WidestInput<S>, spec: S): 
   return transformed as Output<S>;
 }
 
-function transform<S extends TransformSpec>(input: WidestInput<S>, spec: S): Output<S> {
+function transform<S extends TransformSpec>(
+  input: WidestInput<S>,
+  spec: S
+): Output<S> {
   if (isPrimitive(spec)) {
     return transformPrimitive(input, spec) as Output<S>;
   }
@@ -127,7 +141,9 @@ function transform<S extends TransformSpec>(input: WidestInput<S>, spec: S): Out
   return transformObject(input, spec as ObjectSpec) as Output<S>;
 }
 
-function compile<S extends TransformSpec>(spec: S): Transform<WidestInput<S>, Output<S>, NarrowestInput<S>> {
+function compile<S extends TransformSpec>(
+  spec: S
+): Transform<WidestInput<S>, Output<S>, NarrowestInput<S>> {
   return (input) => transform(input, spec);
 }
 
@@ -136,23 +152,29 @@ const boolean: Transform<unknown, boolean, boolean> = (input) => {
     return input;
   }
   throw new Error("Not a boolean");
-}
+};
 
 const number: Transform<unknown, number, number> = (input) => {
   if (typeof input === "number") {
     return input;
   }
   throw new Error("Not a number");
-}
+};
 
 const string: Transform<unknown, string, string> = (input) => {
   if (typeof input === "string") {
     return input;
   }
   throw new Error("Not a string");
-}
+};
 
-function optional<S extends TransformSpec>(spec: S): Transform<WidestInput<S> | undefined, Output<S> | undefined, NarrowestInput<S> | undefined> {
+function optional<S extends TransformSpec>(
+  spec: S
+): Transform<
+  WidestInput<S> | undefined,
+  Output<S> | undefined,
+  NarrowestInput<S> | undefined
+> {
   return (input) => {
     if (input === undefined) {
       return undefined;
@@ -175,4 +197,4 @@ export {
   number,
   string,
   optional,
-}
+};

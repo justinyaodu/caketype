@@ -28,8 +28,4 @@ function reprPrimitive(value: Primitive): string {
   }
 }
 
-export {
-  Primitive,
-  isPrimitive,
-  reprPrimitive
-};
+export { Primitive, isPrimitive, reprPrimitive };
