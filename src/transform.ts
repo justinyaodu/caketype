@@ -12,12 +12,13 @@ interface ObjectSpec {
 }
 
 // https://stackoverflow.com/a/50375286
-type UnionToIntersection<U> = (U extends any ? (u: U) => void : never) extends ((u: infer I) => void) ? I : never;
+type UnionToIntersection<U> = (U extends unknown ? (u: U) => void : never) extends ((u: infer I) => void) ? I : never;
 
 type UndefinedToMissing<T> = UnionToIntersection<
   {
     [K in keyof T]: (
       T[K] extends undefined
+        // eslint-disable-next-line @typescript-eslint/ban-types
         ? {} // Value is always undefined; delete the field.
         : undefined extends T[K]
           ? {[key in K]?: T[K]} // Value is sometimes undefined; make the field optional.
@@ -79,6 +80,7 @@ function transformTuple<S extends TupleSpec>(input: WidestInput<S>, spec: S): Ou
 
   const transformed: unknown[] = [];
   for (let i = 0; i < spec.length; i++) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const transformedValue = transform(input[i], spec[i]);
     transformed.push(transformedValue);
@@ -100,7 +102,7 @@ function transformObject<S extends ObjectSpec>(input: WidestInput<S>, spec: S): 
 
   const transformed: {[key: string]: unknown} = {};
   for (const key of Object.getOwnPropertyNames(spec)) {
-    const inputValue: unknown = (input as any)[key];
+    const inputValue: unknown = input[key as keyof typeof input];
     const transformedValue = transform(inputValue, spec[key]);
     if (transformedValue !== undefined) {
       transformed[key] = transformedValue;
