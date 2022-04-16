@@ -1,14 +1,11 @@
 import {
-  boolean,
   compile,
-  NarrowestInput,
-  number,
-  optional,
-  Output,
-  string,
+  narrow,
+  narrowAndWide,
   Transform,
   transform,
 } from "./transform";
+import { Assert, Equivalent } from "./type-assert";
 
 test("transform non-primitive to primitive: should fail", () => {
   expect(() => transform(undefined, 3)).toThrow();
@@ -103,55 +100,45 @@ test("transform function: fails when function throws", () => {
   expect(() => transform(7, excitedTransform)).toThrow();
 });
 
+test("compile function", () => {
+  const compiled = compile((x: number) => x > 0);
+  type _ = Assert<Equivalent<typeof compiled, Transform<number, boolean>>>;
+  expect(compiled(5)).toBe(true);
+  expect(compiled(-2)).toBe(false);
+});
+
 test("compile object spec", () => {
-  const compiled = compile({ age: 3, happy: true });
+  const compiled = compile({ age: 3, happy: true } as const);
+  type _ = Assert<
+    Equivalent<
+      typeof compiled,
+      Transform<unknown, { age: 3; happy: true }, { age: 3; happy: true }>
+    >
+  >;
   expect(compiled({ age: 3, happy: true })).toEqual({ age: 3, happy: true });
   expect(() => compiled(null)).toThrow();
 });
 
-test("call boolean with boolean: should succeed", () => {
-  expect(boolean(false)).toBe(false);
+test("narrow primitive", () => {
+  const exactString = narrow("exactly this string");
+  type _ = Assert<
+    Equivalent<
+      typeof exactString,
+      Transform<"exactly this string", "exactly this string">
+    >
+  >;
+  expect(exactString("exactly this string")).toEqual("exactly this string");
+  // Can't test any other inputs without causing a type error.
 });
 
-test("call boolean with non-boolean: should fail", () => {
-  expect(() => boolean("hi")).toThrow();
-});
-
-test("call number with number: should succeed", () => {
-  expect(number(3)).toEqual(3);
-});
-
-test("call number with non-number: should fail", () => {
-  expect(() => number("hi")).toThrow();
-});
-
-test("call string with string: should succeed", () => {
-  expect(string("hi")).toEqual("hi");
-});
-
-test("call string with non-string: should fail", () => {
-  expect(() => string(3)).toThrow();
-});
-
-test("use optional directly", () => {
-  const optionalBoolean = optional(boolean);
-  expect(optionalBoolean(false)).toEqual(false);
-  expect(optionalBoolean(undefined)).toEqual(undefined);
-  expect(() => optionalBoolean("hi")).toThrow();
-});
-
-test("use optional in object spec", () => {
-  const spec = {
-    nickname: optional(string),
-  };
-
-  const tests: [NarrowestInput<typeof spec>, Output<typeof spec>][] = [
-    [{}, {}],
-    [{ nickname: undefined }, {}],
-    [{ nickname: "Chuck" }, { nickname: "Chuck" }],
+test("narrow and wide", () => {
+  const [narrow5, wide5] = narrowAndWide(5);
+  type _ = [
+    Assert<Equivalent<typeof narrow5, Transform<5, 5, 5>>>,
+    Assert<Equivalent<typeof wide5, Transform<unknown, 5, 5>>>
   ];
-
-  for (const [input, output] of tests) {
-    expect(transform(input, spec)).toEqual(output);
-  }
+  expect(narrow5(5)).toEqual(5);
+  expect(wide5(5)).toEqual(5);
+  expect(() => wide5(20)).toThrow();
+  expect(() => wide5("hi")).toThrow();
 });

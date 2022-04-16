@@ -20,4 +20,4 @@ function omit<T, K extends [] | [keyof T, ...(keyof T)[]]>(
   return omitted;
 }
 
-export { pick, omit };
+export { omit, pick };
