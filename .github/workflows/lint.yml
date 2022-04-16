@@ -16,4 +16,4 @@ jobs:
       - working-directory: .
         run: |
           npm ci
-          npm run lint-check
+          npm run lint
