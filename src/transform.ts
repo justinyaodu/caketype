@@ -12,7 +12,6 @@ const _NARROWED: unique symbol = Symbol("_NARROWED");
  * @typeParam O - output of the transform
  * @typeParam E - narrowest input that can be successfully transformed
  */
-// type Transform<I, O, E = I> = (input: I | E) => O;
 type Transform<I, O, E extends I = I> = ((input: I) => O) & {
   [_NARROWED]?: (input: E) => O;
 };
@@ -50,14 +49,6 @@ type TupleSpec =
 interface ObjectSpec {
   readonly [key: string]: UnknownTransformSpec;
 }
-
-// Use contravariance of function parameters to convert union to intersection.
-// https://stackoverflow.com/a/50375286
-type UnionToIntersection<U> = (
-  U extends unknown ? (u: U) => void : never
-) extends (u: infer I) => void
-  ? I
-  : never;
 
 /**
  * Modify an object type by removing fields that are always undefined and

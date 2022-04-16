@@ -3,3 +3,4 @@ export * from "./object";
 export * from "./primitive";
 export * from "./predicate";
 export * from "./transform";
+export * from "./type";
