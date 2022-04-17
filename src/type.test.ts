@@ -1,4 +1,5 @@
-import { boolean, number, string } from "./type";
+import { transform } from "./transform";
+import { boolean, number, placeholder, remove, string, unknown } from "./type";
 
 test("call boolean with boolean: should succeed", () => {
   expect(boolean(false)).toBe(false);
@@ -23,3 +24,21 @@ test("call string with string: should succeed", () => {
 test("call string with non-string: should fail", () => {
   expect(() => string(3)).toThrow();
 });
+
+test("placeholder", () => {
+  const spec = {
+    stuff: placeholder,
+  };
+  expect(() => transform({ stuff: 5 }, spec)).toThrow();
+  spec.stuff = 5;
+  expect(transform({ stuff: 5 }, spec)).toEqual({ stuff: 5 });
+});
+
+test("remove", () => {
+  expect(remove(5)).toEqual(undefined);
+});
+
+test("unknown", () => {
+  expect(unknown(undefined)).toEqual(undefined);
+  expect(unknown([27, "hi", false])).toEqual([27, "hi", false]);
+})

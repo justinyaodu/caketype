@@ -85,6 +85,10 @@ test("transform object with extra key: should fail", () => {
   ).toThrow();
 });
 
+test("transform object with function that returns undefined", () => {
+  expect(transform({ x: 5, y: 2 }, { x: (_input: unknown) => undefined, y: 2 })).toEqual({ y: 2 });
+})
+
 function excitedTransform(input: unknown) {
   if (typeof input === "string") {
     return input + "!";

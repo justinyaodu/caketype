@@ -1,4 +1,4 @@
-function pick<T, K extends [] | [keyof T, ...(keyof T)[]]>(
+function pick<T, K extends readonly [] | readonly [keyof T, ...(keyof T)[]]>(
   obj: T,
   ...keys: K
 ): { [key in K[number]]: T[key] } {
@@ -9,7 +9,7 @@ function pick<T, K extends [] | [keyof T, ...(keyof T)[]]>(
   return picked;
 }
 
-function omit<T, K extends [] | [keyof T, ...(keyof T)[]]>(
+function omit<T, K extends readonly [] | readonly [keyof T, ...(keyof T)[]]>(
   obj: T,
   ...keys: K
 ): { [key in Exclude<keyof T, K[number]>]: T[key] } {

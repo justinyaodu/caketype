@@ -1,4 +1,4 @@
-import { Transform } from "./transform";
+import { Transform, UnknownTransformSpec } from "./transform";
 
 const boolean: Transform<unknown, boolean, boolean> = (input) => {
   if (typeof input === "boolean") {
@@ -21,4 +21,12 @@ const string: Transform<unknown, string, string> = (input) => {
   throw new Error("Not a string");
 };
 
-export { boolean, number, string };
+const placeholder: UnknownTransformSpec = (_input) => {
+  throw new Error("Placeholder not replaced");
+}
+
+const remove: Transform<unknown, undefined> = (_input) => undefined;
+
+const unknown: Transform<unknown, unknown> = (input) => input;
+
+export { boolean, number, placeholder, remove, string, unknown };
