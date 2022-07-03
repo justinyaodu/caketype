@@ -8,6 +8,23 @@ import {
   WidestInput,
 } from "./transform";
 
+function optional<S extends TransformSpec>(
+  spec: S
+): // @ts-ignore ts(2589)
+Transform<
+  WidestInput<S> | undefined,
+  Output<S> | undefined,
+  NarrowestInput<S> | undefined
+> {
+  return (input) => {
+    if (input === undefined) {
+      return undefined;
+    }
+    // @ts-ignore ts(2589)
+    return transform(input, spec);
+  };
+}
+
 type PipeOutput<O, T> = T extends readonly []
   ? O
   : T extends readonly [infer F, ...infer R]
@@ -21,17 +38,20 @@ function pipe<S extends TransformSpec, O2>(
   t2: Transform<Output<S>, O2>
 ): // @ts-ignore ts(2589)
 Transform<WidestInput<S>, O2, NarrowestInput<S>>;
+
 function pipe<S extends TransformSpec, O2, O3>(
   spec: S,
   t2: Transform<Output<S>, O2>,
   t3: Transform<O2, O3>
 ): Transform<WidestInput<S>, O3, NarrowestInput<S>>;
+
 function pipe<S extends TransformSpec, O2, O3, O4>(
   spec: S,
   t2: Transform<Output<S>, O2>,
   t3: Transform<O2, O3>,
   t4: Transform<O3, O4>
 ): Transform<WidestInput<S>, O4, NarrowestInput<S>>;
+
 function pipe<
   S extends TransformSpec,
   T extends readonly [Transform<never, unknown>, ...Transform<never, unknown>[]]
@@ -81,7 +101,7 @@ function union<S extends readonly [TransformSpec, ...TransformSpec[]]>(
 }
 
 // @ts-ignore ts(2589)
-function validator<S extends TransformSpec>(
+function withPredicates<S extends TransformSpec>(
   spec: S,
   ...predicates: Predicate<Output<S>>[]
 ): Transform<WidestInput<S>, Output<S>, NarrowestInput<S>> {
@@ -95,4 +115,4 @@ function validator<S extends TransformSpec>(
   };
 }
 
-export { pipe, union, validator };
+export { optional, pipe, union, withPredicates };

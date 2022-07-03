@@ -1,6 +1,13 @@
 type Assert<T extends true> = T;
-type Equivalent<T, U> = T extends U ? (U extends T ? true : false) : false;
-type Extends<T, U> = T extends U ? true : false;
-type NotExtends<T, U> = T extends U ? false : true;
+type Equivalent<T, U> = [T] extends [U]
+  ? [U] extends [T]
+    ? true
+    : false
+  : false;
+type Not<T extends boolean> = T extends true
+  ? false
+  : T extends false
+  ? true
+  : boolean;
 
-export { Assert, Equivalent, Extends, NotExtends };
+export { Assert, Equivalent, Not };

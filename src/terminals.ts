@@ -23,7 +23,7 @@ const string: Transform<unknown, string, string> = (input) => {
 
 const placeholder: UnknownTransformSpec = (_input) => {
   throw new Error("Placeholder not replaced");
-}
+};
 
 const remove: Transform<unknown, undefined> = (_input) => undefined;
 

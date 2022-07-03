@@ -1,27 +1,25 @@
+import {
+  boolean,
+  number,
+  placeholder,
+  remove,
+  string,
+  unknown,
+} from "./terminals";
 import { transform } from "./transform";
-import { boolean, number, placeholder, remove, string, unknown } from "./type";
 
-test("call boolean with boolean: should succeed", () => {
+test("boolean", () => {
   expect(boolean(false)).toBe(false);
-});
-
-test("call boolean with non-boolean: should fail", () => {
   expect(() => boolean("hi")).toThrow();
 });
 
-test("call number with number: should succeed", () => {
+test("number", () => {
   expect(number(3)).toEqual(3);
-});
-
-test("call number with non-number: should fail", () => {
   expect(() => number("hi")).toThrow();
 });
 
-test("call string with string: should succeed", () => {
+test("string", () => {
   expect(string("hi")).toEqual("hi");
-});
-
-test("call string with non-string: should fail", () => {
   expect(() => string(3)).toThrow();
 });
 
@@ -41,4 +39,4 @@ test("remove", () => {
 test("unknown", () => {
   expect(unknown(undefined)).toEqual(undefined);
   expect(unknown([27, "hi", false])).toEqual([27, "hi", false]);
-})
+});
