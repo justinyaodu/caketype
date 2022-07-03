@@ -1,14 +1,20 @@
 import { optional, union } from "./combinators";
 import { boolean, number, string } from "./terminals";
-import { NarrowestInput, Transform } from "./transform";
+import { NarrowInput, Transform } from "./transform";
 
-const integer: Transform<unknown, number, number> = (input) => {
-  const n = number(input);
-  if (!Number.isInteger(n)) {
-    throw new Error("Number is not an integer");
-  }
-  return n;
+const specBooleanValidation = {
+  value: optional(boolean),
 };
+
+// Since every property of a validation object is optional, weird values
+// like arrays and numbers also satisfy this type. However, using these as
+// number validation objects is most likely a bug.
+
+// TypeScript doesn't have a way to disallow extra keys entirely, but we can
+// disallow number and symbol keys to catch the most obvious issues.
+
+type BooleanValidation = Record<number | symbol, never> &
+  NarrowInput<typeof specBooleanValidation>;
 
 const specNumberValidation = {
   finite: optional(boolean),
@@ -17,15 +23,8 @@ const specNumberValidation = {
   step: optional(number),
 };
 
-// Since every property of a number validation object is optional, weird values
-// like arrays and numbers also satisfy this type. However, using these as
-// number validation objects is most likely a bug.
-
-// TypeScript doesn't have a way to disallow extra keys entirely, but we can
-// disallow number and symbol keys to catch the most obvious issues.
-
 type NumberValidation = Record<number | symbol, never> &
-  NarrowestInput<typeof specNumberValidation>;
+  NarrowInput<typeof specNumberValidation>;
 
 const specStringValidation = {
   length: optional(union(number, specNumberValidation)),
@@ -36,7 +35,24 @@ const specStringValidation = {
 };
 
 type StringValidation = Record<number | symbol, never> &
-  NarrowestInput<typeof specStringValidation>;
+  NarrowInput<typeof specStringValidation>;
+
+function validateBoolean(
+  input: unknown,
+  validation: BooleanValidation
+): boolean {
+  const b = boolean(input);
+  if (validation.value !== undefined && b !== validation.value) {
+    throw new Error("Boolean does not match expected value");
+  }
+  return b;
+}
+
+function booleanValidatedBy(
+  validation: BooleanValidation
+): Transform<unknown, boolean, boolean> {
+  return (input) => validateBoolean(input, validation);
+}
 
 function checkNumberValidation(
   n: number,
@@ -61,6 +77,14 @@ function checkNumberValidation(
   }
   return n;
 }
+
+const integer: Transform<unknown, number, number> = (input) => {
+  const n = number(input);
+  if (!Number.isInteger(n)) {
+    throw new Error("Number is not an integer");
+  }
+  return n;
+};
 
 function validateInteger(input: unknown, validation: NumberValidation): number {
   return checkNumberValidation(integer(input), validation);
@@ -135,15 +159,18 @@ function stringValidatedBy(
 }
 
 export {
+  booleanValidatedBy,
   integer,
-  specNumberValidation,
+  integerValidatedBy,
   NumberValidation,
+  numberValidatedBy,
+  specBooleanValidation,
+  specNumberValidation,
   specStringValidation,
   StringValidation,
-  validateNumber,
-  numberValidatedBy,
-  validateInteger,
-  integerValidatedBy,
-  validateString,
   stringValidatedBy,
+  validateBoolean,
+  validateInteger,
+  validateNumber,
+  validateString,
 };

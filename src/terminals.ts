@@ -1,5 +1,7 @@
 import { Transform, UnknownTransformSpec } from "./transform";
 
+// TODO: implement bigint and symbol
+
 const boolean: Transform<unknown, boolean, boolean> = (input) => {
   if (typeof input === "boolean") {
     return input;

@@ -1,3 +1,6 @@
+/**
+ * Primitive values, excluding `undefined`.
+ */
 type Primitive = bigint | boolean | number | string | symbol | null;
 
 function isPrimitive(input: unknown): input is Primitive {

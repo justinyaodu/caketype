@@ -1,20 +1,20 @@
 import { assertPredicate, Predicate } from "./predicate";
 import {
-  NarrowestInput,
+  NarrowInput,
   Output,
   transform,
   Transform,
   TransformSpec,
-  WidestInput,
+  WideInput,
 } from "./transform";
 
 function optional<S extends TransformSpec>(
   spec: S
 ): // @ts-ignore ts(2589)
 Transform<
-  WidestInput<S> | undefined,
+  WideInput<S> | undefined,
   Output<S> | undefined,
-  NarrowestInput<S> | undefined
+  NarrowInput<S> | undefined
 > {
   return (input) => {
     if (input === undefined) {
@@ -37,20 +37,20 @@ function pipe<S extends TransformSpec, O2>(
   spec: S,
   t2: Transform<Output<S>, O2>
 ): // @ts-ignore ts(2589)
-Transform<WidestInput<S>, O2, NarrowestInput<S>>;
+Transform<WideInput<S>, O2, NarrowInput<S>>;
 
 function pipe<S extends TransformSpec, O2, O3>(
   spec: S,
   t2: Transform<Output<S>, O2>,
   t3: Transform<O2, O3>
-): Transform<WidestInput<S>, O3, NarrowestInput<S>>;
+): Transform<WideInput<S>, O3, NarrowInput<S>>;
 
 function pipe<S extends TransformSpec, O2, O3, O4>(
   spec: S,
   t2: Transform<Output<S>, O2>,
   t3: Transform<O2, O3>,
   t4: Transform<O3, O4>
-): Transform<WidestInput<S>, O4, NarrowestInput<S>>;
+): Transform<WideInput<S>, O4, NarrowInput<S>>;
 
 function pipe<
   S extends TransformSpec,
@@ -58,7 +58,7 @@ function pipe<
 >(
   spec: S,
   ...transforms: T
-): Transform<WidestInput<S>, PipeOutput<Output<S>, T>, NarrowestInput<S>> {
+): Transform<WideInput<S>, PipeOutput<Output<S>, T>, NarrowInput<S>> {
   return (input) => {
     let result: unknown = transform(input, spec);
     for (let i = 0; i < transforms.length; i++) {
@@ -73,9 +73,9 @@ type RecursiveUnionTypes<I, O, E, S> = S extends readonly []
   : S extends [infer F, ...infer R]
   ? F extends TransformSpec
     ? RecursiveUnionTypes<
-        I & WidestInput<F>,
+        I & WideInput<F>,
         O | Output<F>,
-        E | NarrowestInput<F>,
+        E | NarrowInput<F>,
         R
       >
     : never
@@ -104,7 +104,7 @@ function union<S extends readonly [TransformSpec, ...TransformSpec[]]>(
 function withPredicates<S extends TransformSpec>(
   spec: S,
   ...predicates: Predicate<Output<S>>[]
-): Transform<WidestInput<S>, Output<S>, NarrowestInput<S>> {
+): Transform<WideInput<S>, Output<S>, NarrowInput<S>> {
   return (input) => {
     const result = transform(input, spec);
     for (let i = 0; i < predicates.length; i++) {

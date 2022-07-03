@@ -7,13 +7,31 @@ import { Primitive, isPrimitive, reprPrimitive } from "./primitive";
 const _NARROWED: unique symbol = Symbol("_NARROWED");
 
 /**
- * A function that transforms an input type to an output type.
- * @typeParam I - widest input that the transform can handle
- * @typeParam O - output of the transform
- * @typeParam E - narrowest input that can be successfully transformed
+ * A function that transforms `I`'s to `O`'s, or fails by throwing an exception.
+ * Every input that isn't an `N` will always fail.
+ *
+ * @remarks
+ *
+ * Consider a function that takes any input, returns the length if the input
+ * is a lowercase string, and throws an exception otherwise. This function has
+ * a type of `Transform<unknown, number, string>`, because it can handle inputs
+ * of type `unknown`, but only `string` inputs can be successfully transformed,
+ * and it returns a `number`.
+ *
+ * Note that an input of type `N` can still fail. For example, an uppercase
+ * string is still a `string`, but the function above would still throw an
+ * exception. In general, `N` is used to exclude inputs that will always fail,
+ * not guarantee that every input will be transformed successfully.
+ *
+ * @typeParam I - Inputs that the transform can handle
+ * @typeParam O - Outputs that the transform can return
+ * @typeParam N - Minimal superset of inputs that can be successfully transformed
+ *
+ * @see {@link WideInput}, {@link Output}, and {@link NarrowInput}, which
+ * extract `I`, `O`, and `N` from existing transforms
  */
-type Transform<I, O, E extends I = I> = ((input: I) => O) & {
-  [_NARROWED]?: (input: E) => O;
+type Transform<I, O, N extends I = I> = ((input: I) => O) & {
+  [_NARROWED]?: (input: N) => O;
 };
 
 /**
@@ -26,7 +44,7 @@ type TransformSpec =
   | ObjectSpec;
 
 /**
- * A transform spec that can handle inputs of type `unknown`.
+ * A {@link TransformSpec} that can handle inputs of type `unknown`.
  */
 type UnknownTransformSpec =
   | Transform<unknown, unknown, never>
@@ -43,7 +61,7 @@ type TupleSpec =
   | readonly [UnknownTransformSpec, ...UnknownTransformSpec[]];
 
 /**
- * A transform spec for objects, where each field of the spec is a
+ * A transform spec for objects, where each property of the spec is a
  * `TransformSpec` for the corresponding key in the input.
  */
 interface ObjectSpec {
@@ -51,7 +69,7 @@ interface ObjectSpec {
 }
 
 /**
- * Modify an object type by removing fields that are always undefined and
+ * Modify an object type by removing fields that are always undefined, and
  * marking fields that could be undefined as optional.
  */
 type UndefinedToMissing<T> = {
@@ -65,31 +83,8 @@ type UndefinedToMissing<T> = {
 };
 
 /**
- * The narrowest type that can be successfully transformed by a `TransformSpec`.
- */
-type NarrowestInput<S extends TransformSpec> = WidestInput<S> &
-  (S extends Transform<infer _I, infer _O, infer E>
-    ? E
-    : S extends Primitive
-    ? S
-    : S extends TupleSpec
-    ? {
-        readonly [K in keyof S]: K extends keyof []
-          ? S[K]
-          : S[K] extends TransformSpec
-          ? NarrowestInput<S[K]>
-          : never;
-      }
-    : S extends ObjectSpec
-    ? UndefinedToMissing<{
-        readonly [K in keyof S]: S[K] extends TransformSpec
-          ? NarrowestInput<S[K]>
-          : never;
-      }>
-    : never);
-
-/**
- * The widest type that a `TransformSpec` can take as input.
+ * The widest type that this `TransformSpec` can accept as input.
+ * @typeParam S - The spec to extract the wide input type from
  */
 
 // If S is a union, the widest input should be the intersection of the widest
@@ -103,7 +98,7 @@ type NarrowestInput<S extends TransformSpec> = WidestInput<S> &
 // to prevent collapsing, then infer the parameter type of this union of
 // functions to get the intersection.
 
-type WidestInput<S extends TransformSpec> = (
+type WideInput<S extends TransformSpec> = (
   S extends Transform<infer I, infer _O, infer _E>
     ? (input: I) => I
     : (input: unknown) => unknown
@@ -112,7 +107,8 @@ type WidestInput<S extends TransformSpec> = (
   : never;
 
 /**
- * The type of the result after applying a `TransformSpec`.
+ * The type of the result after applying this `TransformSpec`.
+ * @typeParam S - The spec to extract the output type from
  */
 type Output<S extends TransformSpec> = S extends Transform<
   infer _I,
@@ -137,6 +133,32 @@ type Output<S extends TransformSpec> = S extends Transform<
         : never;
     }>
   : never;
+
+/**
+ * If an input does not satisfy this type, it will never be transformed
+ * successfully by this `TransformSpec`.
+ * @typeParam S - The spec to extract the narrow input type from
+ */
+type NarrowInput<S extends TransformSpec> = WideInput<S> &
+  (S extends Transform<infer _I, infer _O, infer E>
+    ? E
+    : S extends Primitive
+    ? S
+    : S extends TupleSpec
+    ? {
+        readonly [K in keyof S]: K extends keyof []
+          ? S[K]
+          : S[K] extends TransformSpec
+          ? NarrowInput<S[K]>
+          : never;
+      }
+    : S extends ObjectSpec
+    ? UndefinedToMissing<{
+        readonly [K in keyof S]: S[K] extends TransformSpec
+          ? NarrowInput<S[K]>
+          : never;
+      }>
+    : never);
 
 function transformPrimitive<S extends Primitive>(input: unknown, spec: S): S {
   if (input === spec) {
@@ -194,11 +216,11 @@ function transformObject<S extends ObjectSpec>(
 }
 
 function transform<S extends TransformSpec>(
-  input: WidestInput<S>,
+  input: WideInput<S>,
   spec: S
 ): Output<S> {
   if (typeof spec === "function") {
-    return (spec as Transform<WidestInput<S>, Output<S>>)(input);
+    return (spec as Transform<WideInput<S>, Output<S>>)(input);
   }
   if (isPrimitive(spec)) {
     return transformPrimitive(input, spec) as Output<S>;
@@ -209,27 +231,38 @@ function transform<S extends TransformSpec>(
   return transformObject(input, spec as ObjectSpec) as Output<S>;
 }
 
+/**
+ * Compile a {@link TransformSpec} into a {@link Transform} function.
+ *
+ * @remarks
+ *
+ * The returned function maintains a reference to `spec`, so any subsequent
+ * modifications to `spec` will also change the function's behavior.
+ *
+ * @param spec - The spec to compile
+ * @returns A {@link Transform} function which uses `spec`
+ */
 function compile<S extends TransformSpec>(
   spec: S
 ): // @ts-ignore ts(2589)
-Transform<WidestInput<S>, Output<S>, NarrowestInput<S>> {
+Transform<WideInput<S>, Output<S>, NarrowInput<S>> {
   if (typeof spec === "function") {
-    return spec as Transform<WidestInput<S>, Output<S>, NarrowestInput<S>>;
+    return spec as Transform<WideInput<S>, Output<S>, NarrowInput<S>>;
   }
   return (input) => transform(input, spec);
 }
 
 function narrow<S extends TransformSpec>(
   spec: S
-): Transform<NarrowestInput<S>, Output<S>> {
+): Transform<NarrowInput<S>, Output<S>> {
   return compile(spec);
 }
 
 function narrowAndWide<S extends TransformSpec>(
   spec: S
 ): [
-  Transform<NarrowestInput<S>, Output<S>>,
-  Transform<WidestInput<S>, Output<S>, NarrowestInput<S>>
+  Transform<NarrowInput<S>, Output<S>>,
+  Transform<WideInput<S>, Output<S>, NarrowInput<S>>
 ] {
   const compiled = compile(spec);
   return [compiled, compiled];
@@ -241,9 +274,9 @@ export {
   UnknownTransformSpec,
   TupleSpec,
   ObjectSpec,
-  WidestInput,
+  WideInput,
   Output,
-  NarrowestInput,
+  NarrowInput,
   transform,
   compile,
   narrow,

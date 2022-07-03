@@ -1,4 +1,4 @@
-import { Assert, Equivalent, Not } from "./type-assert";
+import { Assert, AssertAll, Equivalent, Not } from "./type-assert";
 
 test("Assert", () => {
   type _ = [
@@ -10,6 +10,22 @@ test("Assert", () => {
   ];
 });
 
+test("AssertAll", () => {
+  type _ = [
+    AssertAll<[]>,
+    AssertAll<[true]>,
+    AssertAll<[true, true]>,
+    // @ts-expect-error
+    AssertAll<[false]>,
+    // @ts-expect-error
+    AssertAll<[true, false]>,
+    // @ts-expect-error
+    AssertAll<[false, true, true]>,
+    // @ts-expect-error
+    AssertAll<true>
+  ];
+});
+
 test("Not", () => {
   const _1: Not<false> = true;
   const _2: Not<true> = false;
@@ -18,15 +34,15 @@ test("Not", () => {
 });
 
 test("Equivalent", () => {
-  type _ = [
-    Assert<Equivalent<number, number>>,
-    Assert<Not<Equivalent<number, boolean>>>,
-    Assert<Equivalent<"a" | "b", "b" | "a">>,
-    Assert<Not<Equivalent<"a", "a" | "b">>>,
-    Assert<Not<Equivalent<"a" | "b", "b">>>,
-    Assert<Not<Equivalent<false, boolean>>>,
-    Assert<
+  type _ = AssertAll<
+    [
+      Equivalent<number, number>,
+      Not<Equivalent<number, boolean>>,
+      Equivalent<"a" | "b", "b" | "a">,
+      Not<Equivalent<"a", "a" | "b">>,
+      Not<Equivalent<"a" | "b", "b">>,
+      Not<Equivalent<false, boolean>>,
       Equivalent<{ a: number } & { b: boolean }, { a: number; b: boolean }>
-    >
-  ];
+    ]
+  >;
 });

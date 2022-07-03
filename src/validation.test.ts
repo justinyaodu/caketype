@@ -1,4 +1,5 @@
 import {
+  booleanValidatedBy,
   integer,
   integerValidatedBy,
   numberValidatedBy,
@@ -6,6 +7,21 @@ import {
   validateNumber,
   validateString,
 } from "./validation";
+
+test("booleanValidatedBy", () => {
+  const anyBoolean = booleanValidatedBy({});
+  expect(anyBoolean(false)).toBe(false);
+  expect(anyBoolean(true)).toBe(true);
+  expect(() => anyBoolean(null)).toThrow();
+
+  const onlyFalse = booleanValidatedBy({ value: false });
+  expect(onlyFalse(false)).toBe(false);
+  expect(() => onlyFalse(true)).toThrow();
+
+  const onlyTrue = booleanValidatedBy({ value: true });
+  expect(onlyTrue(true)).toBe(true);
+  expect(() => onlyTrue(false)).toThrow();
+});
 
 test("integer and integerValidatedBy without any validations", () => {
   for (const transform of [integer, integerValidatedBy({})]) {

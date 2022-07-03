@@ -23,8 +23,12 @@ test("transform non-array to tuple: should fail", () => {
   expect(() => transform("oops", [3, false])).toThrow();
 });
 
+test("transform object to tuple: should fail", () => {
+  expect(() => transform({}, [])).toThrow();
+});
+
 test("transform empty tuple to empty tuple: should succeed", () => {
-  expect(transform([], [])).toEqual([]);
+  expect(transform([], [])).toStrictEqual([]);
 });
 
 test("transform non-empty tuple to empty tuple: should fail", () => {
@@ -32,7 +36,7 @@ test("transform non-empty tuple to empty tuple: should fail", () => {
 });
 
 test("transform tuple to equal tuple: should succeed", () => {
-  expect(transform([3, false], [3, false])).toEqual([3, false]);
+  expect(transform([3, false], [3, false])).toStrictEqual([3, false]);
 });
 
 test("transform tuple with wrong length: should fail", () => {
@@ -52,18 +56,22 @@ test("transform primitive to object: should fail", () => {
 });
 
 test("transform empty object to empty object: should succeed", () => {
-  expect(transform({}, {})).toEqual({});
+  expect(transform({}, {})).toStrictEqual({});
 });
 
 test("transform object to equal object: should succeed", () => {
-  expect(transform({ age: 3, happy: true }, { age: 3, happy: true })).toEqual({
+  expect(
+    transform({ age: 3, happy: true }, { age: 3, happy: true })
+  ).toStrictEqual({
     age: 3,
     happy: true,
   });
 });
 
 test("transform object to equal object with different key order: should succeed", () => {
-  expect(transform({ happy: true, age: 3 }, { age: 3, happy: true })).toEqual({
+  expect(
+    transform({ happy: true, age: 3 }, { age: 3, happy: true })
+  ).toStrictEqual({
     age: 3,
     happy: true,
   });
@@ -88,7 +96,7 @@ test("transform object with extra key: should fail", () => {
 test("transform object with function that returns undefined", () => {
   expect(
     transform({ x: 5, y: 2 }, { x: (_input: unknown) => undefined, y: 2 })
-  ).toEqual({ y: 2 });
+  ).toStrictEqual({ y: 2 });
 });
 
 function excitedTransform(input: unknown) {
