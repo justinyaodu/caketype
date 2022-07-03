@@ -2,7 +2,7 @@
   "name": "typesafer",
   "version": "0.0.0",
   "scripts": {
-    "build": "rm dist/* && tsc --project tsconfig.production.json",
+    "build": "mkdir -p dist/ && rm -f dist/* && tsc --project tsconfig.production.json",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "lint": "eslint --cache --report-unused-disable-directives . && prettier --check .",
