@@ -1,8 +1,8 @@
 import { Primitive, isPrimitive, reprPrimitive } from "./primitive";
 
 /**
- * Unique symbol used by `Transform`s to retain the narrowest input type for
- * type inference. Not used at runtime.
+ * Unique symbol used by {@link Transform} to retain the narrow input type. Not
+ * used at runtime.
  */
 const _NARROWED: unique symbol = Symbol("_NARROWED");
 
@@ -127,11 +127,12 @@ type Output<S extends TransformSpec> = S extends Transform<
         : never;
     }
   : S extends ObjectSpec
-  ? UndefinedToMissing<{
-      -readonly [K in keyof S]: S[K] extends TransformSpec
-        ? Output<S[K]>
-        : never;
-    }>
+  ? object &
+      UndefinedToMissing<{
+        -readonly [K in keyof S]: S[K] extends TransformSpec
+          ? Output<S[K]>
+          : never;
+      }>
   : never;
 
 /**
@@ -153,11 +154,12 @@ type NarrowInput<S extends TransformSpec> = WideInput<S> &
           : never;
       }
     : S extends ObjectSpec
-    ? UndefinedToMissing<{
-        readonly [K in keyof S]: S[K] extends TransformSpec
-          ? NarrowInput<S[K]>
-          : never;
-      }>
+    ? object &
+        UndefinedToMissing<{
+          readonly [K in keyof S]: S[K] extends TransformSpec
+            ? NarrowInput<S[K]>
+            : never;
+        }>
     : never);
 
 function transformPrimitive<S extends Primitive>(input: unknown, spec: S): S {
@@ -178,11 +180,10 @@ function transformTuple<S extends TupleSpec>(
     throw new Error(`Length is not ${spec.length}`);
   }
 
-  // @ts-ignore ts(2589)
-  const transformed: Output<S>[number][] = [];
+  const transformed = [];
   for (let i = 0; i < spec.length; i++) {
-    const elementSpec: S[number] = spec[i];
-    transformed.push(transform(input[i], elementSpec));
+    // @ts-ignore ts(2589)
+    transformed.push(transform(input[i], spec[i]));
     // TODO: per-element exception handling
   }
   return transformed as Output<S>;
@@ -204,7 +205,11 @@ function transformObject<S extends ObjectSpec>(
 
   const transformed: { [key: string]: unknown } = {};
   for (const key of Object.getOwnPropertyNames(spec)) {
-    const inputValue: unknown = input[key as keyof typeof input];
+    let inputValue: unknown;
+    if (key in input) {
+      inputValue = (input as Record<string, unknown>)[key];
+    }
+    // @ts-ignore ts(2589)
     const transformedValue = transform(inputValue, spec[key]);
     if (transformedValue !== undefined) {
       transformed[key] = transformedValue;
@@ -255,6 +260,7 @@ Transform<WideInput<S>, Output<S>, NarrowInput<S>> {
 function narrow<S extends TransformSpec>(
   spec: S
 ): Transform<NarrowInput<S>, Output<S>> {
+  // @ts-ignore ts(2589)
   return compile(spec);
 }
 

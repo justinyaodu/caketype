@@ -23,6 +23,10 @@ const string: Transform<unknown, string, string> = (input) => {
   throw new Error("Not a string");
 };
 
+function identity<T>(input: T): T {
+  return input;
+}
+
 const placeholder: UnknownTransformSpec = (_input) => {
   throw new Error("Placeholder not replaced");
 };
@@ -31,4 +35,4 @@ const remove: Transform<unknown, undefined> = (_input) => undefined;
 
 const unknown: Transform<unknown, unknown> = (input) => input;
 
-export { boolean, number, placeholder, remove, string, unknown };
+export { boolean, identity, number, placeholder, remove, string, unknown };

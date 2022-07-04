@@ -1,5 +1,6 @@
 import {
   boolean,
+  identity,
   number,
   placeholder,
   remove,
@@ -21,6 +22,11 @@ test("number", () => {
 test("string", () => {
   expect(string("hi")).toEqual("hi");
   expect(() => string(3)).toThrow();
+});
+
+test("identity", () => {
+  expect(identity(7)).toEqual(7);
+  expect(identity({ hello: "there" })).toStrictEqual({ hello: "there" });
 });
 
 test("placeholder", () => {
