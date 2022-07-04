@@ -27,10 +27,8 @@ Transform<
 
 type PipeOutput<O, T> = T extends readonly []
   ? O
-  : T extends readonly [infer F, ...infer R]
-  ? F extends Transform<O, infer P>
-    ? PipeOutput<P, R>
-    : never
+  : T extends readonly [infer _F extends Transform<O, infer P>, ...infer R]
+  ? PipeOutput<P, R>
   : never;
 
 function pipe<S extends TransformSpec, O2>(
@@ -70,15 +68,8 @@ function pipe<
 
 type RecursiveUnionTypes<I, O, E, S> = S extends readonly []
   ? [I, O, E]
-  : S extends [infer F, ...infer R]
-  ? F extends TransformSpec
-    ? RecursiveUnionTypes<
-        I & WideInput<F>,
-        O | Output<F>,
-        E | NarrowInput<F>,
-        R
-      >
-    : never
+  : S extends [infer F extends TransformSpec, ...infer R]
+  ? RecursiveUnionTypes<I & WideInput<F>, O | Output<F>, E | NarrowInput<F>, R>
   : never;
 
 type UnionTypes<S> = RecursiveUnionTypes<unknown, never, never, S>;
