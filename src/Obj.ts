@@ -306,7 +306,6 @@ type Merged<T extends [object, ...object[]]> = T extends [
  * provided objects, skipping properties that are explicitly set to `undefined`.
  *
  * @example
- *
  * ```ts
  * Obj.merge({ a: 1, b: 2, c: 3 }, { a: 99, b: undefined }); // { a: 99, b: 2, c: 3 }
  * ```
