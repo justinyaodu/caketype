@@ -1,0 +1,32 @@
+{
+  "name": "typesafer",
+  "version": "0.1.0",
+  "description": "Runtime type checking and other type-safe helpers for TypeScript",
+  "author": "Justin Yao Du <justinyaodu@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/justinyaodu/typesafer",
+  "bugs": "https://github.com/justinyaodu/typesafer/issues",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "build": "mkdir -p dist/ && npm run clean && tsc",
+    "test": "jest && printf '\\nWith exactOptionalPropertyTypes:\\n\\n' && jest --config jest-exactOptionalPropertyTypes.config.js",
+    "lint": "eslint --cache --report-unused-disable-directives . && prettier --check .",
+    "lint-fix": "eslint --fix --cache --report-unused-disable-directives .; prettier --write .",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.47.1",
+    "@typescript-eslint/parser": "^5.47.1",
+    "eslint": "^8.30.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^3.5.2",
+    "eslint-plugin-import": "^2.26.0",
+    "prettier": "^2.8.1",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.9.4"
+  }
+}
