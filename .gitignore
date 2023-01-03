@@ -1,5 +1,6 @@
 /coverage/
 /dist/
 /temp/
+/types/
 node_modules/
 .eslintcache

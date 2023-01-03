@@ -13,8 +13,9 @@
   "main": "dist/index.js",
   "types": "dist/typesafer.d.ts",
   "scripts": {
-    "clean": "rm -rf dist/*",
-    "build": "mkdir -p dist/ && npm run clean && tsc",
+    "clean": "rm -rf dist/* types/*",
+    "build": "mkdir -p dist/ types/ && npm run clean && tsc && api-extractor run",
+    "ae": "api-extractor run --local",
     "test": "jest && printf '\\nWith exactOptionalPropertyTypes:\\n\\n' && jest --config jest-exactOptionalPropertyTypes.config.js",
     "lint": "eslint --cache --report-unused-disable-directives . && prettier --check .",
     "lint-fix": "eslint --fix --cache --report-unused-disable-directives .; prettier --write .",
