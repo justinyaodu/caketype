@@ -1,8 +1,15 @@
-import { AssertExtends, Extends, Primitive } from "../src";
+import {
+  AssertExtends,
+  Extends,
+  Primitive,
+  isPrimitive,
+  stringifyPrimitive,
+} from "../src";
 
 const primitivesAndStrings: [Primitive, string][] = [
   [BigInt(-27), "-27n"],
   [false, "false"],
+  [5, "5"],
   [3.75, "3.75"],
   [-Infinity, "-Infinity"],
   [-0, "0"],
@@ -14,17 +21,14 @@ const primitivesAndStrings: [Primitive, string][] = [
   [undefined, "undefined"],
 ];
 
-test.each(primitivesAndStrings)(
-  "Primitive.is(%p) returns true",
-  (primitive) => {
-    expect(Primitive.is(primitive)).toStrictEqual(true);
-  }
-);
+test.each(primitivesAndStrings)("isPrimitive(%p) returns true", (primitive) => {
+  expect(isPrimitive(primitive)).toStrictEqual(true);
+});
 
 test.each(primitivesAndStrings)(
-  "Primitive.stringify(%p) returns %p",
+  "stringifyPrimitive(%p) returns %p",
   (primitive, string) => {
-    expect(Primitive.stringify(primitive)).toStrictEqual(string);
+    expect(stringifyPrimitive(primitive)).toStrictEqual(string);
   }
 );
 
@@ -48,6 +52,6 @@ type MapIsPrimitive<T extends readonly unknown[]> = T extends readonly [
   : [];
 type _ = AssertExtends<MapIsPrimitive<typeof notPrimitives>, false[]>;
 
-test.each(notPrimitives)("Primitive.is(%p) returns false", (notPrimitive) => {
-  expect(Primitive.is(notPrimitive)).toStrictEqual(false);
+test.each(notPrimitives)("isPrimitive(%p) returns false", (notPrimitive) => {
+  expect(isPrimitive(notPrimitive)).toStrictEqual(false);
 });

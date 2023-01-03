@@ -1,3 +1,5 @@
 /coverage/
 /dist/
+/etc/typesafer.api.md
+/temp/
 .eslintcache

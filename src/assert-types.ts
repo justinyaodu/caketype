@@ -10,6 +10,8 @@
  *
  * @see {@link AssertExtends} to get more specific error messages if you are
  * asserting that one type extends another.
+ *
+ * @public
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type Assert<T extends true> = never;
@@ -26,6 +28,8 @@ type Assert<T extends true> = never;
  * This behaves like {@link Assert} combined with {@link Extends}, but it uses
  * generic constraints so you can get more specific error messages from the
  * TypeScript compiler.
+ *
+ * @public
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type AssertExtends<T extends U, U> = never;
@@ -38,6 +42,8 @@ type AssertExtends<T extends U, U> = never;
  * type _true = Equivalent<string["length"], number>; // true
  * type _false = Equivalent<3, number>; // false: 3 extends number, but number does not extend 3
  * ```
+ *
+ * @public
  */
 type Equivalent<T, U> = [T] extends [U]
   ? [U] extends [T]
@@ -55,6 +61,8 @@ type Equivalent<T, U> = [T] extends [U]
  *
  * @see {@link AssertExtends} to get more specific error messages if you are
  * asserting that one type extends another.
+ *
+ * @public
  */
 type Extends<T, U> = [T] extends [U] ? true : false;
 
@@ -65,6 +73,8 @@ type Extends<T, U> = [T] extends [U] ? true : false;
  * ```ts
  * type _ = If<true, "then", "else">; // "then"
  * ```
+ *
+ * @public
  */
 type If<T extends boolean, U, V> = T extends true ? U : V;
 
@@ -76,6 +86,8 @@ type If<T extends boolean, U, V> = T extends true ? U : V;
  * type _false = Not<true>; // false
  * type _boolean = Not<boolean>; // negation of true | false is true | false
  * ```
+ *
+ * @public
  */
 type Not<T extends boolean> = T extends true ? false : true;
 

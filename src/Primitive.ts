@@ -1,13 +1,23 @@
 /**
  * A JavaScript
- * [primitive value](https://developer.mozilla.org/en-US/docs/Glossary/Primitive).
+ * [primitive value](https://developer.mozilla.org/en-US/docs/Glossary/Primitive):
+ * bigint, boolean, number, string, symbol, null, or undefined.
+ * @public
  */
 type Primitive = bigint | boolean | number | string | symbol | null | undefined;
 
 /**
  * Return whether a value is a {@link Primitive}.
+ *
+ * @example
+ * ```ts
+ * isPrimitive(5); // true
+ * isPrimitive([]); // false
+ * ```
+ *
+ * @public
  */
-function is(value: unknown): value is Primitive {
+function isPrimitive(value: unknown): value is Primitive {
   switch (typeof value) {
     case "bigint":
     case "boolean":
@@ -24,19 +34,21 @@ function is(value: unknown): value is Primitive {
 }
 
 /**
- * Return a string representation of a {@link Primitive} value that resembles
- * how it would be written as a literal in source code.
+ * Return a string representation of a {@link Primitive} that resembles how it
+ * would be written as a literal in source code.
  *
  * @example
  * ```ts
- * console.log(Primitive.stringify(BigInt(-27))); // -27n
- * console.log(Primitive.stringify("hi\nbye")); // "hi\nbye"
+ * console.log(stringifyPrimitive(BigInt(-27))); // -27n
+ * console.log(stringifyPrimitive("hi\nbye")); // "hi\nbye"
  * // Symbols are unique, so they cannot be recreated
  * // by evaluating their string representation:
- * console.log(Primitive.stringify(Symbol("apple"))); // Symbol(apple)
+ * console.log(stringifyPrimitive(Symbol("apple"))); // Symbol(apple)
  * ```
+ *
+ * @public
  */
-function stringify(value: Primitive): string {
+function stringifyPrimitive(value: Primitive): string {
   switch (typeof value) {
     case "bigint":
       return `${value}n`;
@@ -47,9 +59,4 @@ function stringify(value: Primitive): string {
   }
 }
 
-const Primitive = {
-  is,
-  stringify,
-} as const;
-
-export { Primitive };
+export { Primitive, isPrimitive, stringifyPrimitive };

@@ -6,8 +6,12 @@
   "license": "MIT",
   "homepage": "https://github.com/justinyaodu/typesafer",
   "bugs": "https://github.com/justinyaodu/typesafer/issues",
+  "repository": "github:justinyaodu/typesafer",
+  "files": [
+    "dist/"
+  ],
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/typesafer.d.ts",
   "scripts": {
     "clean": "rm -rf dist/*",
     "build": "mkdir -p dist/ && npm run clean && tsc",
@@ -18,6 +22,7 @@
     "prepublishOnly": "npm test && npm run lint"
   },
   "devDependencies": {
+    "@microsoft/api-extractor": "^7.33.7",
     "@types/jest": "^29.2.5",
     "@typescript-eslint/eslint-plugin": "^5.47.1",
     "@typescript-eslint/parser": "^5.47.1",

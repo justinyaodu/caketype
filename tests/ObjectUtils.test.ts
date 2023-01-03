@@ -1,18 +1,64 @@
-import { Assert, AssertExtends, Equivalent, If, Merged, Obj } from "../src";
+import {
+  Assert,
+  AssertExtends,
+  Entry,
+  EntryIncludingSymbols,
+  Equivalent,
+  If,
+  Merged,
+  ObjectUtils,
+  entries,
+  entriesIncludingSymbols,
+  entriesIncludingSymbolsUnsound,
+  entriesUnsound,
+  keys,
+  keysIncludingSymbols,
+  keysIncludingSymbolsUnsound,
+  keysUnsound,
+  mapValues,
+  mapValuesUnsound,
+  merge,
+  omit,
+  omitLoose,
+  pick,
+  values,
+  valuesIncludingSymbols,
+  valuesIncludingSymbolsUnsound,
+  valuesUnsound,
+} from "../src";
 import { FlagExactOptionalPropertyTypes } from "../src/index-internal";
 
 import { typeCheckOnly } from "./test-helpers";
 
 describe("documentation examples", () => {
+  test("Entry", () => {
+    type Person = { name: string; age: number };
+    type PersonEntry = Entry<Person>;
+    type _ = Assert<
+      Equivalent<PersonEntry, ["name", string] | ["age", number]>
+    >;
+  });
+
+  test("EntryIncludingSymbols", () => {
+    const sym = Symbol("my symbol");
+    type Example = { age: number; [sym]: boolean };
+    type ExampleEntry = EntryIncludingSymbols<Example>;
+    type _ = Assert<
+      Equivalent<ExampleEntry, ["age", number] | [typeof sym, boolean]>
+    >;
+  });
+
   test("merge simple", () => {
-    expect(
-      Obj.merge({ a: 1, b: 2, c: 3 }, { a: 99, b: undefined })
-    ).toStrictEqual({ a: 99, b: 2, c: 3 });
+    expect(merge({ a: 1, b: 2, c: 3 }, { a: 99, b: undefined })).toStrictEqual({
+      a: 99,
+      b: 2,
+      c: 3,
+    });
   });
 
   test("merge vs. spread", () => {
     const defaults = { muted: false, volume: 20 };
-    const muted = Obj.merge(defaults, { muted: true, volume: undefined });
+    const muted = merge(defaults, { muted: true, volume: undefined });
     expect(muted).toStrictEqual({ muted: true, volume: 20 });
 
     const wrong1 = { ...defaults, ...{ muted: true, volume: undefined } };
@@ -41,28 +87,12 @@ describe("documentation examples", () => {
 
     expect(volume).toStrictEqual(undefined);
   });
-});
 
-const {
-  entries,
-  entriesIncludingSymbols,
-  entriesIncludingSymbolsUnsound,
-  entriesUnsound,
-  keys,
-  keysIncludingSymbols,
-  keysIncludingSymbolsUnsound,
-  keysUnsound,
-  mapValues,
-  mapValuesUnsound,
-  merge,
-  omit,
-  omitLoose,
-  pick,
-  values,
-  valuesIncludingSymbols,
-  valuesIncludingSymbolsUnsound,
-  valuesUnsound,
-} = Obj;
+  test("ObjectUtils", () => {
+    expect(merge({ a: 1 }, { b: 2 })).toStrictEqual({ a: 1, b: 2 });
+    expect(ObjectUtils.merge({ a: 1 }, { b: 2 })).toStrictEqual({ a: 1, b: 2 });
+  });
+});
 
 const inheritedSymbol = Symbol("inheritedSymbol");
 const nonEnumInheritedSymbol = Symbol("nonEnumInheritedSymbol");

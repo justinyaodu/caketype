@@ -1,4 +1,4 @@
 export * from "./assert-types";
-export * from "./Obj";
+export * from "./ObjectUtils";
 export * from "./Primitive";
 export * from "./typescript-flags";
