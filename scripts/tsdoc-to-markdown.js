@@ -46,7 +46,10 @@ function extractDocLines(lines) {
 
 function processDocLine(line) {
   line = line.replace(/^\s*[*][ ]?/, "");
-  line = line.replaceAll(/[{]@link ([^}]+)[}]/g, "[$1](#$1)");
+  line = line.replaceAll(
+    /[{]@link ([^}]+)[}]/g,
+    (_, target) => `[${target}](#${target.toLowerCase().replace(".", "")})`
+  );
   line = line.replaceAll("@example", "");
   line = line.replaceAll("@public", "");
   line = line.replaceAll("@remarks", "");

@@ -26,7 +26,7 @@ type PersonEntry = Entry<Person>;
 // ["name", string] | ["age", number]
 ```
 
-See [entriesUnsound](#entriesUnsound) to get these entries from an object at runtime.
+See [entriesUnsound](#entriesunsound) to get these entries from an object at runtime.
 
 #### `EntryIncludingSymbols`
 
@@ -40,7 +40,7 @@ type ExampleEntry = EntryIncludingSymbols<Example>;
 // ["age", number] | [typeof sym, boolean]
 ```
 
-See [entriesIncludingSymbolsUnsound](#entriesIncludingSymbolsUnsound) to get these entries from an
+See [entriesIncludingSymbolsUnsound](#entriesincludingsymbolsunsound) to get these entries from an
 object at runtime.
 
 #### `entries`
@@ -49,7 +49,7 @@ Alias for
 [Object.entries](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries)
 with a sound type signature.
 
-See [entriesUnsound](#entriesUnsound) to infer a more specific type for the entries
+See [entriesUnsound](#entriesunsound) to infer a more specific type for the entries
 when all of the object's properties are declared in its type.
 See [this issue](https://github.com/microsoft/TypeScript/issues/38520)
 explaining why Object.entries is unsound.
@@ -76,12 +76,12 @@ This differs from
 [Object.entries](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/entries)
 by including properties with symbol keys.
 
-See [entriesIncludingSymbolsUnsound](#entriesIncludingSymbolsUnsound) to infer a more specific type
+See [entriesIncludingSymbolsUnsound](#entriesincludingsymbolsunsound) to infer a more specific type
 for the entries when all of the object's properties are declared in its type.
 
 #### `entriesIncludingSymbolsUnsound`
 
-Like [entriesIncludingSymbols](#entriesIncludingSymbols), but use the object type to infer
+Like [entriesIncludingSymbols](#entriesincludingsymbols), but use the object type to infer
 the type of the entries.
 
 This is unsound unless all of the object's own enumerable properties are
@@ -97,7 +97,7 @@ even if its entry appears in the return type.
 Alias for
 [Object.keys](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys).
 
-See [keysUnsound](#keysUnsound) to infer a more specific type for the keys when all
+See [keysUnsound](#keysunsound) to infer a more specific type for the keys when all
 of the object's properties are declared in its type.
 
 #### `keysUnsound`
@@ -125,12 +125,12 @@ by including symbol keys, and it differs from
 [Reflect.ownKeys](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect/ownKeys)
 by excluding the keys of non-enumerable properties.
 
-See [keysIncludingSymbolsUnsound](#keysIncludingSymbolsUnsound) to infer a more specific type for
+See [keysIncludingSymbolsUnsound](#keysincludingsymbolsunsound) to infer a more specific type for
 the keys when all of the object's properties are declared in its type.
 
 #### `keysIncludingSymbolsUnsound`
 
-Like [keysIncludingSymbols](#keysIncludingSymbols), but use the object type to infer the type
+Like [keysIncludingSymbols](#keysincludingsymbols), but use the object type to infer the type
 of the keys.
 
 This is unsound unless all of the object's own enumerable properties are
@@ -147,7 +147,7 @@ Alias for
 [Object.values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)
 with a sound type signature.
 
-See [valuesUnsound](#valuesUnsound) to infer a more specific type for the values when
+See [valuesUnsound](#valuesunsound) to infer a more specific type for the values when
 all of the object's properties are declared in its type.
 See [this issue](https://github.com/microsoft/TypeScript/issues/38520)
 explaining why
@@ -178,7 +178,7 @@ by including properties with symbol keys.
 
 #### `valuesIncludingSymbolsUnsound`
 
-Like [valuesIncludingSymbols](#valuesIncludingSymbols), but use the object type to infer the
+Like [valuesIncludingSymbols](#valuesincludingsymbols), but use the object type to infer the
 type of the values.
 
 This is unsound unless all of the object's own enumerable properties are
@@ -195,12 +195,12 @@ Return a new object created by mapping the enumerable own property values of
 an existing object. This is analogous to
 [Array.map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map).
 
-See [mapValuesUnsound](#mapValuesUnsound) to infer more specific types for the keys and
+See [mapValuesUnsound](#mapvaluesunsound) to infer more specific types for the keys and
 values when all of the object's properties are declared in its type.
 
 #### `mapValuesUnsound`
 
-Like [mapValues](#mapValues), but use the object type to infer the types of the
+Like [mapValues](#mapvalues), but use the object type to infer the types of the
 values and keys.
 
 This is unsound unless all of the object's own enumerable properties are
@@ -253,7 +253,7 @@ const volume: number = wrong2.volume;
 Return a new object created by copying the enumerable own properties of a
 source object, but omitting the properties with the specified keys.
 
-See [omitLoose](#omitLoose) to allow keys that are not `keyof T`.
+See [omitLoose](#omitloose) to allow keys that are not `keyof T`.
 
 #### `omitLoose`
 
@@ -288,7 +288,7 @@ type Primitive = bigint | boolean | number | string | symbol | null | undefined;
 
 #### `isPrimitive`
 
-Return whether a value is a [Primitive](#Primitive).
+Return whether a value is a [Primitive](#primitive).
 
 ```ts
 isPrimitive(5); // true
@@ -297,7 +297,7 @@ isPrimitive([]); // false
 
 #### `stringifyPrimitive`
 
-Return a string representation of a [Primitive](#Primitive) that resembles how it
+Return a string representation of a [Primitive](#primitive) that resembles how it
 would be written as a literal in source code.
 
 ```ts

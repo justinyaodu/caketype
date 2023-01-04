@@ -21,7 +21,6 @@ type Entry<T extends object> = {
  * too.
  *
  * @example
- *
  * ```ts
  * const sym = Symbol("my symbol");
  * type Example = { age: number, [sym]: boolean };
