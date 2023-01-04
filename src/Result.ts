@@ -9,16 +9,14 @@
  * @example Using an existing Result:
  * ```ts
  * function showDecimal(input: string): string {
- *   // Result<number, string> is an alias for Ok<number> | Err<string>
  *   const result: Result<number, string> = parseBinary(input);
+ *   // result is Ok<number> | Err<string>
  *   if (result.ok) {
- *     // result is narrowed to Ok<number>
- *     const num: number = result.value;
- *     return `binary ${input} is decimal ${num}`;
+ *     // result is Ok<number>, so result.value is a number
+ *     return `binary ${input} is decimal ${result.value}`;
  *   } else {
- *     // result is narrowed to Err<string>
- *     const message: string = result.error;
- *     return `not a binary number: ${message}`;
+ *     // result is Err<string>, so result.error is a string
+ *     return `not a binary number: ${result.error}`;
  *   }
  * }
  *
@@ -34,10 +32,10 @@
  *     return Result.err("empty string");
  *   }
  *   let num = 0;
- *   for (let i = 0; i < input.length; i++) {
- *     if (input[i] === "0") {
+ *   for (const char of input) {
+ *     if (char === "0") {
  *       num = num * 2;
- *     } else if (input[i] === "1") {
+ *     } else if (char === "1") {
  *       num = num * 2 + 1;
  *     } else {
  *       return Result.err("invalid character");

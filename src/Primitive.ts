@@ -1,7 +1,6 @@
 /**
  * A JavaScript
- * [primitive value](https://developer.mozilla.org/en-US/docs/Glossary/Primitive):
- * bigint, boolean, number, string, symbol, null, or undefined.
+ * [primitive value](https://developer.mozilla.org/en-US/docs/Glossary/Primitive).
  * @public
  */
 type Primitive = bigint | boolean | number | string | symbol | null | undefined;
