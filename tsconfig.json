@@ -9,7 +9,7 @@
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
-    "declarationDir": "types",
+    "declarationDir": "types"
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

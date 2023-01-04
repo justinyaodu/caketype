@@ -35,6 +35,23 @@ export type EntryIncludingSymbols<T extends object> = {
 // @public
 export type Equivalent<T, U> = [T] extends [U] ? [U] extends [T] ? true : false : false;
 
+// Warning: (ae-forgotten-export) The symbol "ResultClass" needs to be exported by the entry point index.d.ts
+// Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
+//
+// @public
+export class Err<E> extends ResultClass<never, E> {
+    // @internal
+    constructor(error: E);
+    readonly error: E;
+    // (undocumented)
+    errorOr(_IGNORED: unknown): E;
+    readonly ok = false;
+    // (undocumented)
+    toString(): string;
+    // (undocumented)
+    valueOr<U>(ifErr: U): U;
+}
+
 // @public
 export type Extends<T, U> = [T] extends [U] ? true : false;
 
@@ -103,6 +120,22 @@ export const ObjectUtils: {
     readonly valuesUnsound: typeof valuesUnsound;
 };
 
+// Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
+//
+// @public
+export class Ok<T> extends ResultClass<T, never> {
+    // @internal
+    constructor(value: T);
+    // (undocumented)
+    errorOr<F>(ifOk: F): F;
+    readonly ok = true;
+    // (undocumented)
+    toString(): string;
+    readonly value: T;
+    // (undocumented)
+    valueOr(_IGNORED: unknown): T;
+}
+
 // @public
 export function omit<T extends object, K extends (keyof T & (string | symbol))[]>(object: T, ...keys: K): {
     [L in Exclude<keyof T, K[number]>]: T[L];
@@ -120,6 +153,14 @@ export function pick<T extends object, K extends (keyof T & (string | symbol))[]
 
 // @public
 export type Primitive = bigint | boolean | number | string | symbol | null | undefined;
+
+// @public
+export type Result<T, E> = Ok<T> | Err<E>;
+
+// Warning: (ae-forgotten-export) The symbol "ResultUtilities" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export const Result: ResultUtilities;
 
 // @public
 export function stringifyPrimitive(value: Primitive): string;

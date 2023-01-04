@@ -307,3 +307,142 @@ console.log(stringifyPrimitive("hi\nbye")); // "hi\nbye"
 // by evaluating their string representation:
 console.log(stringifyPrimitive(Symbol("apple"))); // Symbol(apple)
 ```
+
+### Results
+
+#### `Result`
+
+Represent the result of an operation that could succeed or fail.
+
+```ts
+type Result<T, E> = Ok<T> | Err<E>;
+```
+
+This is a
+[discriminated union](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#discriminated-unions),
+where [Ok](#ok) represents a successful result, and [Err](#err) represents
+an unsuccessful result.
+
+Using an existing Result:
+
+```ts
+function showDecimal(input: string): string {
+  // Result<number, string> is an alias for Ok<number> | Err<string>
+  const result: Result<number, string> = parseBinary(input);
+  if (result.ok) {
+    // result is narrowed to Ok<number>
+    const num: number = result.value;
+    return `binary ${input} is decimal ${num}`;
+  } else {
+    // result is narrowed to Err<string>
+    const message: string = result.error;
+    return `not a binary number: ${message}`;
+  }
+}
+
+showDecimal("101"); // "binary 101 is decimal 5"
+showDecimal("foo"); // "not a binary number: invalid character"
+showDecimal(""); // "not a binary number: empty string"
+```
+
+Creating Results:
+
+```ts
+function parseBinary(input: string): Result<number, string> {
+  if (input.length === 0) {
+    return Result.err("empty string");
+  }
+  let num = 0;
+  for (let i = 0; i < input.length; i++) {
+    if (input[i] === "0") {
+      num = num * 2;
+    } else if (input[i] === "1") {
+      num = num * 2 + 1;
+    } else {
+      return Result.err("invalid character");
+    }
+  }
+  return Result.ok(num);
+}
+
+parseBinary("101"); // Ok(5)
+parseBinary("foo"); // Err(invalid character)
+parseBinary(""); // Err(empty string)
+```
+
+#### `Result.ok`
+
+Return an [Ok](#ok) with the provided value, using undefined if no value is
+provided.
+
+```ts
+Result.ok(5); // Ok(5)
+Result.ok(); // Ok(undefined)
+```
+
+#### `Result.err`
+
+Return an [Err](#err) with the provided error, using undefined if no error is
+provided.
+
+```ts
+Result.err("oops"); // Err(oops)
+Result.err(); // Err(undefined)
+```
+
+#### Instance Methods
+
+##### `Result.valueOr`
+
+Return [Ok.value](#okvalue), or the provided argument if this is not an Ok.
+
+```ts
+Result.ok(5).valueOr(0); // 5
+Result.err("oops").valueOr(0); // 0
+```
+
+##### `Result.errorOr`
+
+Return [Err.error](#errerror), or the provided argument if this is not an Err.
+
+```ts
+Result.err("oops").errorOr("no error"); // "oops"
+Result.ok(5).errorOr("no error"); // "no error"
+```
+
+##### `Result.toString`
+
+Return a string representation of this Result.
+
+```ts
+Result.ok(5).toString(); // "Ok(5)"
+Result.err({}).toString(); // "Err([object Object])"
+```
+
+#### `Ok`
+
+The result of a successful operation.
+
+See [Result.ok](#resultok) to construct an Ok.
+
+##### `Ok.ok`
+
+Always true. In contrast, [Err.ok](#errok) is always false.
+
+##### `Ok.value`
+
+The value returned by the successful operation.
+
+#### `Err`
+
+The result of an unsuccessful operation.
+
+See [Result.err](#resulterr) to construct an Err.
+
+##### `Err.ok`
+
+Always false. In contrast, [Ok.ok](#okok) is always true.
+
+##### `Err.error`
+
+The value returned by the unsuccessful operation.

@@ -33,4 +33,8 @@ export {
   Primitive,
   isPrimitive,
   stringifyPrimitive,
+  // Result.ts
+  Result,
+  Ok,
+  Err,
 } from "./index-internal";

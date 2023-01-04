@@ -11,5 +11,13 @@
   },
   "dtsRollup": {
     "enabled": true
+  },
+  "messages": {
+    "extractorMessageReporting": {
+      "ae-unresolved-link": {
+        "logLevel": "warning",
+        "addToApiReportFile": true
+      }
+    }
   }
 }
