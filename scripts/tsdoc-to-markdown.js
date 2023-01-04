@@ -50,10 +50,10 @@ function processDocLine(line) {
     /[{]@link ([^}]+)[}]/g,
     (_, target) => `[${target}](#${target.toLowerCase().replace(".", "")})`
   );
-  line = line.replaceAll(/@example[ ]?/g, "");
+  line = line.replaceAll(/@example[ ]?/g, "\n");
   line = line.replaceAll("@public", "");
   line = line.replaceAll("@remarks", "");
-  line = line.replaceAll("@see", "See");
+  line = line.replaceAll("@see", "\nSee");
   return line;
 }
 

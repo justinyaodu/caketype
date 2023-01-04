@@ -51,6 +51,7 @@ with a sound type signature.
 
 See [entriesUnsound](#entriesunsound) to infer a more specific type for the entries
 when all of the object's properties are declared in its type.
+
 See [this issue](https://github.com/microsoft/TypeScript/issues/38520)
 explaining why Object.entries is unsound.
 
@@ -149,6 +150,7 @@ with a sound type signature.
 
 See [valuesUnsound](#valuesunsound) to infer a more specific type for the values when
 all of the object's properties are declared in its type.
+
 See [this issue](https://github.com/microsoft/TypeScript/issues/38520)
 explaining why
 [Object.values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)
