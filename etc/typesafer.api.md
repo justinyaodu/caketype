@@ -157,10 +157,10 @@ export type Primitive = bigint | boolean | number | string | symbol | null | und
 // @public
 export type Result<T, E> = Ok<T> | Err<E>;
 
-// Warning: (ae-forgotten-export) The symbol "ResultUtilities" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "ResultUtils" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
-export const Result: ResultUtilities;
+export const Result: ResultUtils;
 
 // @public
 export function stringifyPrimitive(value: Primitive): string;

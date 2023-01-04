@@ -164,7 +164,7 @@ class Err<E> extends ResultClass<never, E> {
 }
 
 /** @internal */
-interface ResultUtilities {
+interface ResultUtils {
   /**
    * Return an {@link Ok} with the provided value, using undefined if no value
    * is provided.
@@ -193,7 +193,7 @@ interface ResultUtilities {
 }
 
 /** @public */
-const Result: ResultUtilities = {
+const Result: ResultUtils = {
   ok<T>(value?: T): Ok<T | undefined> {
     return new Ok(value);
   },
