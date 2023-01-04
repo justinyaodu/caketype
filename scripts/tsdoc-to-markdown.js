@@ -7,8 +7,11 @@
  */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
+
 const process = require("process");
 const readline = require("readline");
+
+const { slugify } = require("./slugify");
 
 function extractDocLines(lines) {
   const commentStart = /^\s*[/][*][*]\s*$/;
@@ -48,7 +51,7 @@ function processDocLine(line) {
   line = line.replace(/^\s*[*][ ]?/, "");
   line = line.replaceAll(
     /[{]@link ([^}]+)[}]/g,
-    (_, target) => `[${target}](#${target.toLowerCase().replace(".", "")})`
+    (_, target) => `[${target}](#${slugify(target)})`
   );
   line = line.replaceAll(/@example[ ]?/g, "\n");
   line = line.replaceAll("@public", "");
