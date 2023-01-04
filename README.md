@@ -390,7 +390,7 @@ Result.err("oops"); // Err(oops)
 Result.err(); // Err(undefined)
 ```
 
-#### Instance Methods
+#### `Result` Instance Methods
 
 ##### `Result.valueOr`
 
