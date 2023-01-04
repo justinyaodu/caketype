@@ -14,4 +14,3 @@ jobs:
       - uses: actions/setup-node@v2
       - run: |
           npm ci
-          npm run build
