@@ -58,6 +58,8 @@
   - [`Extends`](#extends)
   - [`If`](#if)
   - [`Not`](#not)
+- [Utility Types](#utility-types)
+  - [`Class`](#class)
 
 ---
 
@@ -975,4 +977,39 @@ type _false = Not<true>; // false
 
 type _boolean = Not<boolean>;
 // negation of true | false is false | true
+```
+
+---
+
+### UTILITY TYPES
+
+---
+
+#### `Class`
+
+The type of a class (something that can be called with `new` to construct
+an instance).
+
+```ts
+interface Class<T = any, A extends unknown[] = any>
+```
+
+_Type Parameters_
+
+`T` - Type of the class instances.
+
+`A` - Type of the constructor arguments.
+
+_Example_
+
+```ts
+// Any class.
+const a: Class[] = [Date, Array, RegExp];
+
+// A class whose instance type is Date.
+const b: Class<Date> = Date;
+
+// A class whose instance type is Date, and whose
+// constructor can be called with one number argument.
+const c: Class<Date, [number]> = Date;
 ```

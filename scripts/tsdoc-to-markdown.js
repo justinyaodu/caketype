@@ -36,9 +36,17 @@ function extractDocLines(lines) {
     } else if (commentEnd.test(line)) {
       insideComment = false;
 
-      // Read the line after the comment and prepend it to the group,
-      // to help identify what code the comment is attached to.
-      lineGroups[lineGroups.length - 1].unshift(`\n<!-- ${lines[i + 1]} -->`);
+      // Find the next line of code after the doc comment and prepend it to the
+      // group, to help identify what code the comment is attached to.
+
+      // Skip over line comments, like // eslint-disable-next-line.
+      let index = i + 1;
+      while (index < lines.length && /\s*[/][/]/.test(lines[index])) {
+        index++;
+      }
+
+      // lines[index] might be undefined, but that's okay.
+      lineGroups[lineGroups.length - 1].unshift(`\n<!-- ${lines[index]} -->`);
     } else if (insideComment) {
       lineGroups[lineGroups.length - 1].push(line);
     }
