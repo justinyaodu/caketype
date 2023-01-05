@@ -284,6 +284,8 @@ function deepDelete<
  *
  * deepDeleteResult(map, 3, "hi"); // Err(undefined)
  * ```
+ *
+ * @public
  */
 function deepDeleteResult<
   M extends DeepMapLike<K>,
