@@ -59,6 +59,8 @@
   - [`If`](#if)
   - [`Not`](#not)
 
+---
+
 ### Map Utilities
 
 Utility functions for manipulating
@@ -296,6 +298,8 @@ const secondKey = {};
 const value = 5;
 getOrSetComputed(map, firstKey, () => new WeakMap()).set(secondKey, value);
 ```
+
+---
 
 ### Object Utilities
 
@@ -574,6 +578,8 @@ the specified keys.
 Non-enumerable properties are copied from the source object, but the
 properties will be enumerable in the returned object.
 
+---
+
 ### Primitives
 
 #### `Primitive`
@@ -606,6 +612,8 @@ console.log(stringifyPrimitive("hi\nbye")); // "hi\nbye"
 // by evaluating their string representation:
 console.log(stringifyPrimitive(Symbol("apple"))); // Symbol(apple)
 ```
+
+---
 
 ### Results
 
@@ -743,6 +751,8 @@ Always false. In contrast, [Ok.ok](#okok) is always true.
 ##### `Err.error`
 
 The value returned by the unsuccessful operation.
+
+---
 
 ### Type-Level Assertions
 
