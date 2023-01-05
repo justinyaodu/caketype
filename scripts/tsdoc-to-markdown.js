@@ -11,7 +11,7 @@
 const process = require("process");
 const readline = require("readline");
 
-const { slugify } = require("./slugify");
+const { slugify } = require("./util");
 
 function extractDocLines(lines) {
   const commentStart = /^\s*[/][*][*]\s*$/;
@@ -38,7 +38,7 @@ function extractDocLines(lines) {
 
       // Read the line after the comment and prepend it to the group,
       // to help identify what code the comment is attached to.
-      lineGroups[lineGroups.length - 1].unshift(`<!-- ${lines[i + 1]} -->`);
+      lineGroups[lineGroups.length - 1].unshift(`\n<!-- ${lines[i + 1]} -->`);
     } else if (insideComment) {
       lineGroups[lineGroups.length - 1].push(line);
     }

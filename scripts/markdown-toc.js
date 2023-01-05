@@ -19,7 +19,7 @@ function processHeading(line) {
   return line.replace(
     /^(#+) (.*)$/,
     (_, hashes, text) =>
-      `${"  ".repeat(hashes.length)}* [${text}](#${slugify(text)})`
+      `${"  ".repeat(hashes.length)}- [${text}](#${slugify(text)})`
   );
 }
 
