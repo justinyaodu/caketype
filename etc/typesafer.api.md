@@ -10,6 +10,12 @@ export type Assert<T extends true> = never;
 // @public
 export type AssertExtends<T extends U, U> = never;
 
+// @public
+export interface Class<T = any, A extends unknown[] = any> extends Function {
+    // (undocumented)
+    new (...args: A): T;
+}
+
 // Warning: (ae-forgotten-export) The symbol "DeepMapLike" needs to be exported by the entry point index.d.ts
 //
 // @public

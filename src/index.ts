@@ -6,6 +6,8 @@ export {
   Extends,
   If,
   Not,
+  // Class.ts
+  Class,
   // MapUtils.ts
   MapLike,
   MapUtils,
