@@ -27,12 +27,15 @@ describe("documentation examples", () => {
   });
 
   test("If", () => {
-    type _ = Assert<Equivalent<If<true, "then", "else">, "then">>;
+    type _apple = Assert<Equivalent<If<true, "apple", "banana">, "apple">>;
+    type _either = Assert<
+      Equivalent<If<true | false, "apple", "banana">, "apple" | "banana">
+    >;
   });
 
   test("Not", () => {
-    type _false = Not<true>; // false
-    type _boolean = Not<boolean>; // negation of true | false is true | false
+    type _false = Not<true>;
+    type _boolean = Not<boolean>;
 
     type _ = Assert<Equivalent<[_false, _boolean], [false, boolean]>>;
   });
