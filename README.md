@@ -1,5 +1,17 @@
 ## API Reference
 
+- [Map Utilities](#map-utilities)
+  - [`MapLike`](#maplike)
+  - [`deleteResult`](#deleteresult)
+  - [`getResult`](#getresult)
+  - [`getOrSet`](#getorset)
+  - [`getOrSetComputed`](#getorsetcomputed)
+  - [`deepDelete`](#deepdelete)
+  - [`deepDeleteResult`](#deepdeleteresult)
+  - [`deepGet`](#deepget)
+  - [`deepGetResult`](#deepgetresult)
+  - [`deepHas`](#deephas)
+  - [`deepSet`](#deepset)
 - [Object Utilities](#object-utilities)
   - [`Entry`](#entry)
   - [`EntryIncludingSymbols`](#entryincludingsymbols)
@@ -39,6 +51,244 @@
   - [`Err`](#err)
     - [`Err.ok`](#errok)
     - [`Err.error`](#errerror)
+
+### Map Utilities
+
+Utility functions for manipulating
+[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)s,
+[WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap)s,
+and other [MapLike](#maplike)s.
+
+These functions can be imported directly, or accessed as properties of `MapUtils`:
+
+```ts
+const nestedMap: Map<number, Map<string, number>> = new Map();
+
+import { deepSet } from "typesafer";
+deepSet(nestedMap, 3, "hi", 7); // Map { 3 -> Map { "hi" -> 7 } }
+
+// Alternatively:
+import { MapUtils } from "typesafer";
+MapUtils.deepSet(nestedMap, 3, "hi", 7); // Map { 3 -> Map { "hi" -> 7 } }
+```
+
+#### `MapLike`
+
+Common interface for
+[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)s
+and
+[WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap)s.
+
+```ts
+interface MapLike<K, V> {
+  delete(key: K): boolean;
+  get(key: K): V | undefined;
+  has(key: K): boolean;
+  set(key: K, value: V): MapLike<K, V>;
+}
+```
+
+#### `deleteResult`
+
+Like
+[Map.delete](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/delete),
+but return an [Ok](#ok) with the value of the deleted entry, or an
+[Err](#err) if the entry does not exist.
+
+```ts
+const map: Map<number, string> = new Map();
+map.set(3, "hi");
+
+deleteResult(map, 3); // Ok("hi")
+// map is empty now
+
+deleteResult(map, 3); // Err(undefined)
+```
+
+#### `getResult`
+
+Like
+[Map.get](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/get),
+but return an [Ok](#ok) with the retrieved value, or an [Err](#err) if the
+entry does not exist.
+
+```ts
+const map: Map<number, string> = new Map();
+map.set(3, "hi");
+
+getResult(map, 3); // Ok("hi")
+getResult(map, 4); // Err(undefined)
+```
+
+#### `getOrSet`
+
+If the map has an entry with the provided key, return the existing value.
+Otherwise, insert an entry with the provided key and default value, and
+return the inserted value.
+
+```ts
+const map: Map<number, string> = new Map();
+map.set(3, "hi");
+
+getOrSet(map, 3, "default"); // "hi"
+// map is unchanged
+
+getOrSet(map, 4, "default"); // "default"
+// map is now Map { 3 -> "hi", 4 -> "default" }
+```
+
+See [getOrSetComputed](#getorsetcomputed) to avoid constructing a default value if the
+key is present.
+
+#### `getOrSetComputed`
+
+If the map has an entry with the provided key, return the existing value.
+Otherwise, use the callback to compute a new value, insert an entry with the
+provided key and computed value, and return the inserted value.
+value.
+
+```ts
+const map: Map<string, string[]> = new Map();
+
+getOrSetComputed(map, "alice", () => []).push("bob");
+// "alice" is not present, so the value [] is computed and returned
+// then "bob" is added to the returned array
+// map is now Map { "alice" -> ["bob"] }
+
+getOrSetComputed(map, "alice", () => []).push("cindy");
+// "alice" is present, so the existing array ["bob"] is returned
+// then "charlie" is added to the returned array
+// map is now Map { "alice" -> ["bob", "cindy"] }
+```
+
+The callback can use the map key to compute the new value:
+
+```ts
+const map: Map<string, string[]> = new Map();
+
+getOrSetComputed(map, "alice", (name) => [name]).push("bob");
+// "alice" is not present, so the value ["alice"] is computed and returned
+// then "bob" is added to the returned array
+// map is now Map { "alice" -> ["alice", "bob"] }
+```
+
+See [getOrSet](#getorset) to use a constant instead of a computed value.
+
+#### `deepDelete`
+
+Like
+[Map.delete](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/delete),
+but use a sequence of keys to delete an entry from a nested map.
+
+```ts
+const map: Map<number, Map<string, number>> = new Map();
+map.set(3, new Map());
+map.get(3).set("hi", 7);
+// map is Map { 3 -> Map { "hi" -> 7 } }
+
+deepDelete(map, 3, "hi"); // true
+// map is Map { 3 -> Map {} }
+
+deepDeleteResult(map, 3, "hi"); // false
+```
+
+#### `deepDeleteResult`
+
+Like [deepDelete](#deepdelete), but return an [Ok](#ok) with the value of the
+deleted entry, or [Err](#err) if the entry does not exist.
+
+```ts
+const map: Map<number, Map<string, number>> = new Map();
+map.set(3, new Map());
+map.get(3).set("hi", 7);
+// map is Map { 3 -> Map { "hi" -> 7 } }
+
+deepDeleteResult(map, 3, "hi"); // Ok(7)
+// map is Map { 3 -> Map {} }
+
+deepDeleteResult(map, 3, "hi"); // Err(undefined)
+```
+
+#### `deepGet`
+
+Like
+[Map.get](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/get),
+but use a sequence of keys to get a value from a nested map.
+
+```ts
+const map: Map<number, Map<string, number>> = new Map();
+map.set(3, new Map());
+map.get(3).set("hi", 7);
+// map is Map { 3 -> Map { "hi" -> 7 } }
+
+deepGet(map, 3, "hi"); // 7
+deepGet(map, 3, "oops"); // undefined
+deepGet(map, 4, "hi"); // undefined
+```
+
+#### `deepGetResult`
+
+Like [deepGet](#deepget), but return an [Ok](#ok) with the retrieved value, or
+an [Err](#err) if the entry does not exist.
+
+```ts
+const map: Map<number, Map<string, number>> = new Map();
+map.set(3, new Map());
+map.get(3).set("hi", 7);
+// map is Map { 3 -> Map { "hi" -> 7 } }
+
+deepGetResult(map, 3, "hi"); // Ok(7)
+deepGetResult(map, 3, "oops"); // Err(undefined)
+deepGetResult(map, 4, "hi"); // Err(undefined)
+```
+
+#### `deepHas`
+
+Like
+[Map.has](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/has),
+but use a sequence of keys to access a nested map.
+
+```ts
+const map: Map<number, Map<string, number>> = new Map();
+map.set(3, new Map());
+map.get(3).set("hi", 7);
+// map is Map { 3 -> Map { "hi" -> 7 } }
+
+deepHas(map, 3, "hi"); // true
+deepHas(map, 3, "oops"); // false
+deepHas(map, 4, "hi"); // false
+```
+
+#### `deepSet`
+
+Like
+[Map.set](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/set),
+but use a sequence of keys to access a nested map.
+
+```ts
+const map: Map<number, Map<string, number>> = new Map();
+deepSet(map, 3, "hi", 7);
+// map is Map { 3 -> Map { "hi" -> 7 } }
+
+deepSet(map, 4, new Map());
+// map is Map { 3 -> Map { "hi" -> 7 }, 4 -> Map {} }
+```
+
+New nested
+[Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)s
+are constructed and inserted as necessary. Thus, all of the nested maps must
+be Maps specifically.
+
+If your nested maps are not Maps, you can use [getOrSetComputed](#getorsetcomputed) to
+accomplish the same thing:
+
+```ts
+const map: WeakMap<object, WeakMap<object, number>> = new WeakMap();
+const firstKey = {};
+const secondKey = {};
+const value = 5;
+getOrSetComputed(map, firstKey, () => new WeakMap()).set(secondKey, value);
+```
 
 ### Object Utilities
 

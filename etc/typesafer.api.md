@@ -10,6 +10,33 @@ export type Assert<T extends true> = never;
 // @public
 export type AssertExtends<T extends U, U> = never;
 
+// Warning: (ae-forgotten-export) The symbol "DeepMapLike" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function deepDelete<M extends DeepMapLike<K>, K extends [unknown, ...unknown[]]>(map: M, ...keys: K): boolean;
+
+// Warning: (ae-forgotten-export) The symbol "DeepValue" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function deepDeleteResult<M extends DeepMapLike<K>, K extends [unknown, ...unknown[]]>(map: M, ...keys: K): Result<DeepValue<M, K>, undefined>;
+
+// @public
+export function deepGet<M extends DeepMapLike<K>, K extends [unknown, ...unknown[]]>(map: M, ...keys: K): DeepValue<M, K> | undefined;
+
+// @public
+export function deepGetResult<M extends DeepMapLike<K>, K extends [unknown, ...unknown[]]>(map: M, ...keys: K): Result<DeepValue<M, K>, undefined>;
+
+// @public
+export function deepHas<M extends DeepMapLike<K>, K extends [unknown, ...unknown[]]>(map: M, ...keys: K): boolean;
+
+// Warning: (ae-forgotten-export) The symbol "DeepMap" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function deepSet<M extends DeepMap<K>, K extends [unknown, ...unknown[]]>(map: M, ...keysAndValue: [...K, DeepValue<M, K>]): void;
+
+// @public
+export function deleteResult<K, V>(map: MapLike<K, V>, key: K): Result<V, undefined>;
+
 // @public
 export function entries(object: object): [string, unknown][];
 
@@ -56,6 +83,15 @@ export class Err<E> extends ResultClass<never, E> {
 export type Extends<T, U> = [T] extends [U] ? true : false;
 
 // @public
+export function getOrSet<K, V>(map: MapLike<K, V>, key: K, defaultValue: V): V;
+
+// @public
+export function getOrSetComputed<K, V>(map: MapLike<K, V>, key: K, keyToDefaultValue: (key: K) => V): V;
+
+// @public
+export function getResult<K, V>(map: MapLike<K, V>, key: K): Result<V, undefined>;
+
+// @public
 export type If<T extends boolean, U, V> = T extends true ? U : V;
 
 // @public
@@ -72,6 +108,28 @@ export function keysIncludingSymbolsUnsound<T extends object>(object: T): (keyof
 
 // @public
 export function keysUnsound<T extends object>(object: T): (keyof T & string)[];
+
+// @public
+export interface MapLike<K, V> {
+    delete(key: K): boolean;
+    get(key: K): V | undefined;
+    has(key: K): boolean;
+    set(key: K, value: V): MapLike<K, V>;
+}
+
+// @public
+export const MapUtils: {
+    readonly deleteResult: typeof deleteResult;
+    readonly deepDelete: typeof deepDelete;
+    readonly deepDeleteResult: typeof deepDeleteResult;
+    readonly deepGet: typeof deepGet;
+    readonly deepGetResult: typeof deepGetResult;
+    readonly deepHas: typeof deepHas;
+    readonly deepSet: typeof deepSet;
+    readonly getOrSet: typeof getOrSet;
+    readonly getOrSetComputed: typeof getOrSetComputed;
+    readonly getResult: typeof getResult;
+};
 
 // @public
 export function mapValues<T extends object, R>(object: T, mapper: (value: unknown, key: string | symbol, object: T) => R): {

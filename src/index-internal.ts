@@ -1,4 +1,5 @@
 export * from "./assert-types";
+export * from "./MapUtils";
 export * from "./ObjectUtils";
 export * from "./Primitive";
 export * from "./Result";
