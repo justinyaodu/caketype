@@ -2,6 +2,7 @@ name: Lint and style check
 
 on:
   push:
+    branches: main
   pull_request:
     branches: main
 
