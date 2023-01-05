@@ -384,7 +384,8 @@ function mapValuesUnsound<T extends object, R>(
  *
  * @example
  * ```ts
- * merge({ a: 1, b: 2, c: 3 }, { a: 99, b: undefined }); // { a: 99, b: 2, c: 3 }
+ * merge({ a: 1, b: 2, c: 3 }, { a: 99, b: undefined });
+ * // { a: 99, b: 2, c: 3 }
  * ```
  *
  * @remarks
@@ -395,7 +396,8 @@ function mapValuesUnsound<T extends object, R>(
  *
  * ```ts
  * const defaults = { muted: false, volume: 20 };
- * const muted = merge(defaults, { muted: true, volume: undefined }); // { muted: true, volume: 20 }
+ * const muted = merge(defaults, { muted: true, volume: undefined });
+ * // { muted: true, volume: 20 }
  * ```
  *
  * [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
@@ -404,7 +406,8 @@ function mapValuesUnsound<T extends object, R>(
  * do not give the desired result:
  *
  * ```ts
- * const wrong1 = { ...defaults, ...{ muted: true, volume: undefined } }; // { muted: true, volume: undefined }
+ * const wrong1 = { ...defaults, ...{ muted: true, volume: undefined } };
+ * // { muted: true, volume: undefined }
  * ```
  *
  * If the TypeScript flag
@@ -416,7 +419,8 @@ function mapValuesUnsound<T extends object, R>(
  * type Config = { muted: boolean, volume: number };
  * const overrides: Partial<Config> = { muted: true, volume: undefined };
  * const wrong2: Config = { ...defaults, ...overrides };
- * // No type errors, but at runtime, volume is undefined instead of a number
+ * // no type errors, but at runtime,
+ * // volume is undefined instead of a number
  * const volume: number = wrong2.volume;
  * ```
  *
@@ -505,7 +509,7 @@ function pick<T extends object, K extends (keyof T & (string | symbol))[]>(
  * import { merge } from "typesafer";
  * merge({ a: 1 }, { b: 2 }); // { a: 1, b: 2 }
  *
- * // Alternatively:
+ * // alternatively:
  * import { ObjectUtils } from "typesafer";
  * ObjectUtils.merge({ a: 1 }, { b: 2 }); // { a: 1, b: 2 }
  * ```

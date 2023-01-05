@@ -61,7 +61,7 @@
 
 ---
 
-### Map Utilities
+### MAP UTILITIES
 
 Utility functions for manipulating
 [Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map)s,
@@ -76,10 +76,12 @@ const nestedMap: Map<number, Map<string, number>> = new Map();
 import { deepSet } from "typesafer";
 deepSet(nestedMap, 3, "hi", 7); // Map { 3 -> Map { "hi" -> 7 } }
 
-// Alternatively:
+// alternatively:
 import { MapUtils } from "typesafer";
 MapUtils.deepSet(nestedMap, 3, "hi", 7); // Map { 3 -> Map { "hi" -> 7 } }
 ```
+
+---
 
 #### `MapLike`
 
@@ -96,6 +98,8 @@ interface MapLike<K, V> {
   set(key: K, value: V): MapLike<K, V>;
 }
 ```
+
+---
 
 #### `deleteResult`
 
@@ -114,6 +118,8 @@ deleteResult(map, 3); // Ok("hi")
 deleteResult(map, 3); // Err(undefined)
 ```
 
+---
+
 #### `getResult`
 
 Like
@@ -128,6 +134,8 @@ map.set(3, "hi");
 getResult(map, 3); // Ok("hi")
 getResult(map, 4); // Err(undefined)
 ```
+
+---
 
 #### `getOrSet`
 
@@ -148,6 +156,8 @@ getOrSet(map, 4, "default"); // "default"
 
 See [getOrSetComputed](#getorsetcomputed) to avoid constructing a default value if the
 key is present.
+
+---
 
 #### `getOrSetComputed`
 
@@ -183,6 +193,8 @@ getOrSetComputed(map, "alice", (name) => [name]).push("bob");
 
 See [getOrSet](#getorset) to use a constant instead of a computed value.
 
+---
+
 #### `deepDelete`
 
 Like
@@ -201,6 +213,8 @@ deepDelete(map, 3, "hi"); // true
 deepDeleteResult(map, 3, "hi"); // false
 ```
 
+---
+
 #### `deepDeleteResult`
 
 Like [deepDelete](#deepdelete), but return an [Ok](#ok) with the value of the
@@ -217,6 +231,8 @@ deepDeleteResult(map, 3, "hi"); // Ok(7)
 
 deepDeleteResult(map, 3, "hi"); // Err(undefined)
 ```
+
+---
 
 #### `deepGet`
 
@@ -235,6 +251,8 @@ deepGet(map, 3, "oops"); // undefined
 deepGet(map, 4, "hi"); // undefined
 ```
 
+---
+
 #### `deepGetResult`
 
 Like [deepGet](#deepget), but return an [Ok](#ok) with the retrieved value, or
@@ -250,6 +268,8 @@ deepGetResult(map, 3, "hi"); // Ok(7)
 deepGetResult(map, 3, "oops"); // Err(undefined)
 deepGetResult(map, 4, "hi"); // Err(undefined)
 ```
+
+---
 
 #### `deepHas`
 
@@ -267,6 +287,8 @@ deepHas(map, 3, "hi"); // true
 deepHas(map, 3, "oops"); // false
 deepHas(map, 4, "hi"); // false
 ```
+
+---
 
 #### `deepSet`
 
@@ -301,7 +323,7 @@ getOrSetComputed(map, firstKey, () => new WeakMap()).set(secondKey, value);
 
 ---
 
-### Object Utilities
+### OBJECT UTILITIES
 
 Utility functions for manipulating objects.
 
@@ -312,10 +334,12 @@ These functions can be imported directly, or accessed as properties of
 import { merge } from "typesafer";
 merge({ a: 1 }, { b: 2 }); // { a: 1, b: 2 }
 
-// Alternatively:
+// alternatively:
 import { ObjectUtils } from "typesafer";
 ObjectUtils.merge({ a: 1 }, { b: 2 }); // { a: 1, b: 2 }
 ```
+
+---
 
 #### `Entry`
 
@@ -328,6 +352,8 @@ type PersonEntry = Entry<Person>;
 ```
 
 See [entriesUnsound](#entriesunsound) to get these entries from an object at runtime.
+
+---
 
 #### `EntryIncludingSymbols`
 
@@ -344,6 +370,8 @@ type ExampleEntry = EntryIncludingSymbols<Example>;
 See [entriesIncludingSymbolsUnsound](#entriesincludingsymbolsunsound) to get these entries from an
 object at runtime.
 
+---
+
 #### `entries`
 
 Alias for
@@ -355,6 +383,8 @@ when all of the object's properties are declared in its type.
 
 See [this issue](https://github.com/microsoft/TypeScript/issues/38520)
 explaining why Object.entries is unsound.
+
+---
 
 #### `entriesUnsound`
 
@@ -370,6 +400,8 @@ still be returned at runtime.
 If a property is not enumerable, its entry will not be returned at runtime,
 even if its entry appears in the return type.
 
+---
+
 #### `entriesIncludingSymbols`
 
 Return the entries of an object's own enumerable properties.
@@ -380,6 +412,8 @@ by including properties with symbol keys.
 
 See [entriesIncludingSymbolsUnsound](#entriesincludingsymbolsunsound) to infer a more specific type
 for the entries when all of the object's properties are declared in its type.
+
+---
 
 #### `entriesIncludingSymbolsUnsound`
 
@@ -394,6 +428,8 @@ returned at runtime.
 If a property is not enumerable, its entry will not be returned at runtime,
 even if its entry appears in the return type.
 
+---
+
 #### `keys`
 
 Alias for
@@ -401,6 +437,8 @@ Alias for
 
 See [keysUnsound](#keysunsound) to infer a more specific type for the keys when all
 of the object's properties are declared in its type.
+
+---
 
 #### `keysUnsound`
 
@@ -417,6 +455,8 @@ still be returned at runtime.
 If a property is not enumerable, its key will not be returned at runtime,
 even if its key appears in the return type.
 
+---
+
 #### `keysIncludingSymbols`
 
 Return the string and symbol keys of an object's own enumerable properties.
@@ -430,6 +470,8 @@ by excluding the keys of non-enumerable properties.
 See [keysIncludingSymbolsUnsound](#keysincludingsymbolsunsound) to infer a more specific type for
 the keys when all of the object's properties are declared in its type.
 
+---
+
 #### `keysIncludingSymbolsUnsound`
 
 Like [keysIncludingSymbols](#keysincludingsymbols), but use the object type to infer the type
@@ -442,6 +484,8 @@ runtime.
 
 If a property is not enumerable, its key will not be returned at runtime,
 even if its key appears in the return type.
+
+---
 
 #### `values`
 
@@ -457,6 +501,8 @@ explaining why
 [Object.values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)
 is unsound.
 
+---
+
 #### `valuesUnsound`
 
 Like
@@ -471,6 +517,8 @@ still be returned at runtime.
 If a property is not enumerable, its value will not be returned at runtime,
 even if its value appears in the return type.
 
+---
+
 #### `valuesIncludingSymbols`
 
 Return the values of an object's own enumerable properties.
@@ -478,6 +526,8 @@ Return the values of an object's own enumerable properties.
 This differs from
 [Object.values](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values)
 by including properties with symbol keys.
+
+---
 
 #### `valuesIncludingSymbolsUnsound`
 
@@ -492,6 +542,8 @@ returned at runtime.
 If a property is not enumerable, its value will not be returned at runtime,
 even if its value appears in the return type.
 
+---
+
 #### `mapValues`
 
 Return a new object created by mapping the enumerable own property values of
@@ -500,6 +552,8 @@ an existing object. This is analogous to
 
 See [mapValuesUnsound](#mapvaluesunsound) to infer more specific types for the keys and
 values when all of the object's properties are declared in its type.
+
+---
 
 #### `mapValuesUnsound`
 
@@ -511,13 +565,16 @@ declared in its type. If a property is not declared in the object type, its
 key and value cannot be type-checked against the function parameter types,
 but the function will still be called with that key and value at runtime.
 
+---
+
 #### `merge`
 
 Return a new object created by merging the enumerable own properties of the
 provided objects, skipping properties that are explicitly set to `undefined`.
 
 ```ts
-merge({ a: 1, b: 2, c: 3 }, { a: 99, b: undefined }); // { a: 99, b: 2, c: 3 }
+merge({ a: 1, b: 2, c: 3 }, { a: 99, b: undefined });
+// { a: 99, b: 2, c: 3 }
 ```
 
 By default, TypeScript allows optional properties to be explicitly set to
@@ -526,7 +583,8 @@ properties that are set to `undefined` in order to use a default value:
 
 ```ts
 const defaults = { muted: false, volume: 20 };
-const muted = merge(defaults, { muted: true, volume: undefined }); // { muted: true, volume: 20 }
+const muted = merge(defaults, { muted: true, volume: undefined });
+// { muted: true, volume: 20 }
 ```
 
 [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)
@@ -535,7 +593,8 @@ and
 do not give the desired result:
 
 ```ts
-const wrong1 = { ...defaults, ...{ muted: true, volume: undefined } }; // { muted: true, volume: undefined }
+const wrong1 = { ...defaults, ...{ muted: true, volume: undefined } };
+// { muted: true, volume: undefined }
 ```
 
 If the TypeScript flag
@@ -547,9 +606,12 @@ and object spreading is unsound:
 type Config = { muted: boolean; volume: number };
 const overrides: Partial<Config> = { muted: true, volume: undefined };
 const wrong2: Config = { ...defaults, ...overrides };
-// No type errors, but at runtime, volume is undefined instead of a number
+// no type errors, but at runtime,
+// volume is undefined instead of a number
 const volume: number = wrong2.volume;
 ```
+
+---
 
 #### `omit`
 
@@ -557,6 +619,8 @@ Return a new object created by copying the enumerable own properties of a
 source object, but omitting the properties with the specified keys.
 
 See [omitLoose](#omitloose) to allow keys that are not `keyof T`.
+
+---
 
 #### `omitLoose`
 
@@ -570,6 +634,8 @@ object. This type inference limitation does not affect the runtime behavior.
 
 See [omit](#omit) to restrict the keys to `keyof T`.
 
+---
+
 #### `pick`
 
 Return a new object created by copying the properties of a source object with
@@ -580,7 +646,9 @@ properties will be enumerable in the returned object.
 
 ---
 
-### Primitives
+### PRIMITIVES
+
+---
 
 #### `Primitive`
 
@@ -591,6 +659,8 @@ A JavaScript
 type Primitive = bigint | boolean | number | string | symbol | null | undefined;
 ```
 
+---
+
 #### `isPrimitive`
 
 Return whether a value is a [Primitive](#primitive).
@@ -599,6 +669,8 @@ Return whether a value is a [Primitive](#primitive).
 isPrimitive(5); // true
 isPrimitive([]); // false
 ```
+
+---
 
 #### `stringifyPrimitive`
 
@@ -615,7 +687,9 @@ console.log(stringifyPrimitive(Symbol("apple"))); // Symbol(apple)
 
 ---
 
-### Results
+### RESULTS
+
+---
 
 #### `Result`
 
@@ -675,6 +749,8 @@ parseBinary("foo"); // Err(invalid character)
 parseBinary(""); // Err(empty string)
 ```
 
+---
+
 #### `Result.ok`
 
 Return an [Ok](#ok) with the provided value, using undefined if no value is
@@ -684,6 +760,8 @@ provided.
 Result.ok(5); // Ok(5)
 Result.ok(); // Ok(undefined)
 ```
+
+---
 
 #### `Result.err`
 
@@ -695,7 +773,11 @@ Result.err("oops"); // Err(oops)
 Result.err(); // Err(undefined)
 ```
 
+---
+
 #### `Result` Instance Methods
+
+---
 
 ##### `Result.valueOr`
 
@@ -724,6 +806,8 @@ Result.ok(5).toString(); // "Ok(5)"
 Result.err({}).toString(); // "Err([object Object])"
 ```
 
+---
+
 #### `Ok`
 
 The result of a successful operation.
@@ -737,6 +821,8 @@ Always true. In contrast, [Err.ok](#errok) is always false.
 ##### `Ok.value`
 
 The value returned by the successful operation.
+
+---
 
 #### `Err`
 
@@ -754,12 +840,14 @@ The value returned by the unsuccessful operation.
 
 ---
 
-### Type-Level Assertions
+### TYPE-LEVEL ASSERTIONS
 
 Inspect and assert relationships between types. For example, you can
 assert that one type extends another, or that two types are equivalent.
 
 This can be used to test complex conditional types and type inference.
+
+---
 
 #### `Assert`
 
@@ -784,6 +872,8 @@ type _fail = Assert<Equivalent<string, number>>;
 See [AssertExtends](#assertextends) to get more specific error messages if you are
 asserting that one type extends another.
 
+---
+
 #### `AssertExtends`
 
 Assert that T extends U.
@@ -791,6 +881,8 @@ Assert that T extends U.
 ```ts
 type AssertExtends<T extends U, U> = never;
 ```
+
+_Example_
 
 ```ts
 type _pass = AssertExtends<3, number>;
@@ -804,6 +896,8 @@ This behaves like [Assert](#assert) combined with [Extends](#extends), but it us
 generic constraints so you can get more specific error messages from the
 TypeScript compiler.
 
+---
+
 #### `Equivalent`
 
 If T and U extend each other, return true. Otherwise, return false.
@@ -816,12 +910,16 @@ type Equivalent<T, U> = [T] extends [U]
   : false;
 ```
 
+_Example_
+
 ```ts
 type _true = Equivalent<string["length"], number>; // true
 
 type _false = Equivalent<3, number>;
 // false: 3 extends number, but number does not extend 3
 ```
+
+---
 
 #### `Extends`
 
@@ -831,6 +929,8 @@ If T extends U, return true. Otherwise, return false.
 type Extends<T, U> = [T] extends [U] ? true : false;
 ```
 
+_Example_
+
 ```ts
 type _ = Assert<Not<Extends<number, 3>>>;
 // OK: number does not extend 3
@@ -838,6 +938,8 @@ type _ = Assert<Not<Extends<number, 3>>>;
 
 See [AssertExtends](#assertextends) to get more specific error messages if you are
 asserting that one type extends another.
+
+---
 
 #### `If`
 
@@ -847,12 +949,16 @@ If T is true, return U. Otherwise, return V.
 type If<T extends boolean, U, V> = T extends true ? U : V;
 ```
 
+_Example_
+
 ```ts
 type _apple = If<true, "apple", "banana">; // "apple"
 
 type _either = If<true | false, "apple", "banana">;
 // "apple" | "banana"
 ```
+
+---
 
 #### `Not`
 
@@ -861,6 +967,8 @@ Return the boolean negation of the type argument.
 ```ts
 type Not<T extends boolean> = T extends true ? false : true;
 ```
+
+_Example_
 
 ```ts
 type _false = Not<true>; // false

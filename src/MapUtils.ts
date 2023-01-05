@@ -442,7 +442,7 @@ function deepSet<M extends DeepMap<K>, K extends [unknown, ...unknown[]]>(
  * import { deepSet } from "typesafer";
  * deepSet(nestedMap, 3, "hi", 7); // Map { 3 -> Map { "hi" -> 7 } }
  *
- * // Alternatively:
+ * // alternatively:
  * import { MapUtils } from "typesafer";
  * MapUtils.deepSet(nestedMap, 3, "hi", 7); // Map { 3 -> Map { "hi" -> 7 } }
  * ```
