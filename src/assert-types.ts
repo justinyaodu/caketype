@@ -31,7 +31,7 @@
 type Assert<T extends true> = never;
 
 /**
- * Assert that T extends U.
+ * Assert that `T` extends `U`.
  *
  * @example
  * ```ts
@@ -52,7 +52,7 @@ type Assert<T extends true> = never;
 type AssertExtends<T extends U, U> = never;
 
 /**
- * If T and U extend each other, return true. Otherwise, return false.
+ * If `T` and `U` extend each other, return true. Otherwise, return false.
  *
  * @example
  * ```ts
@@ -71,7 +71,7 @@ type Equivalent<T, U> = [T] extends [U]
   : false;
 
 /**
- * If T extends U, return true. Otherwise, return false.
+ * If `T` extends `U`, return true. Otherwise, return false.
  *
  * @example
  * ```ts
@@ -87,7 +87,7 @@ type Equivalent<T, U> = [T] extends [U]
 type Extends<T, U> = [T] extends [U] ? true : false;
 
 /**
- * If T is true, return U. Otherwise, return V.
+ * If `T` is true, return `U`. Otherwise, return `V`.
  *
  * @example
  * ```ts

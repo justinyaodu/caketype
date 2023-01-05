@@ -878,7 +878,7 @@ asserting that one type extends another.
 
 #### `AssertExtends`
 
-Assert that T extends U.
+Assert that `T` extends `U`.
 
 ```ts
 type AssertExtends<T extends U, U> = never;
@@ -902,7 +902,7 @@ TypeScript compiler.
 
 #### `Equivalent`
 
-If T and U extend each other, return true. Otherwise, return false.
+If `T` and `U` extend each other, return true. Otherwise, return false.
 
 ```ts
 type Equivalent<T, U> = [T] extends [U]
@@ -925,7 +925,7 @@ type _false = Equivalent<3, number>;
 
 #### `Extends`
 
-If T extends U, return true. Otherwise, return false.
+If `T` extends `U`, return true. Otherwise, return false.
 
 ```ts
 type Extends<T, U> = [T] extends [U] ? true : false;
@@ -945,7 +945,7 @@ asserting that one type extends another.
 
 #### `If`
 
-If T is true, return U. Otherwise, return V.
+If `T` is true, return `U`. Otherwise, return `V`.
 
 ```ts
 type If<T extends boolean, U, V> = T extends true ? U : V;
