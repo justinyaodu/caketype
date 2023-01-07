@@ -1,5 +1,7 @@
 ## API Reference
 
+- [Comparison Utilities](#comparison-utilities)
+  - [`sameValueZero`](#samevaluezero)
 - [Map Utilities](#map-utilities)
   - [`MapLike`](#maplike)
   - [`deleteResult`](#deleteresult)
@@ -29,6 +31,7 @@
   - [`valuesIncludingSymbolsUnsound`](#valuesincludingsymbolsunsound)
   - [`mapValues`](#mapvalues)
   - [`mapValuesUnsound`](#mapvaluesunsound)
+  - [`lookup`](#lookup)
   - [`merge`](#merge)
   - [`omit`](#omit)
   - [`omitLoose`](#omitloose)
@@ -60,6 +63,26 @@
   - [`Not`](#not)
 - [Utility Types](#utility-types)
   - [`Class`](#class)
+
+---
+
+### COMPARISON UTILITIES
+
+#### `sameValueZero`
+
+Return whether two values are equal, using the
+[SameValueZero](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Equality_comparisons_and_sameness)
+equality algorithm.
+
+This has almost the same behavior as `===`, except it considers `NaN` equal
+to `NaN`.
+
+```ts
+sameValueZero(3, 3); // true
+sameValueZero(0, false); // false
+sameValueZero(0, -0); // true
+sameValueZero(NaN, NaN); // true
+```
 
 ---
 

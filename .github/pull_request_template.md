@@ -6,6 +6,7 @@
 
 <!-- delete irrelevant items -->
 
+- [ ] Update exports (for public API changes)
 - [ ] Update API report (for public API changes)
 - [ ] Update API Reference to match TSDoc (for TSDoc changes)
 - [ ] Update API Reference table of contents (if adding, removing, or reordering API items)
