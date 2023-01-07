@@ -8,6 +8,8 @@ export {
   Not,
   // Class.ts
   Class,
+  // compare.ts
+  sameValueZero,
   // MapUtils.ts
   MapLike,
   MapUtils,

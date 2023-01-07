@@ -232,6 +232,9 @@ export type Result<T, E> = Ok<T> | Err<E>;
 export const Result: ResultUtils;
 
 // @public
+export function sameValueZero(a: unknown, b: unknown): boolean;
+
+// @public
 export function stringifyPrimitive(value: Primitive): string;
 
 // @public
