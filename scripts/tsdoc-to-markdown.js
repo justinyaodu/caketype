@@ -8,10 +8,7 @@
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const process = require("process");
-const readline = require("readline");
-
-const { slugify } = require("./util");
+const { slugify, withLines } = require("./util");
 
 function extractDocLines(lines) {
   const commentStart = /^\s*[/][*][*]\s*$/;
@@ -74,14 +71,4 @@ function processLines(lines) {
   }
 }
 
-function main() {
-  const rl = readline.createInterface({
-    input: process.stdin,
-  });
-
-  const lines = [];
-  rl.on("line", (line) => lines.push(line));
-  rl.on("close", () => processLines(lines));
-}
-
-main();
+withLines(null, processLines);
