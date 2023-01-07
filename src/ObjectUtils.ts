@@ -400,7 +400,7 @@ function mapValuesUnsound<T extends object, R>(
  * const propertyNotDeclared: {} = aBoolean;
  *
  * const wrong: { value: number } = merge(aNumber, propertyNotDeclared);
- * // no type errors, but at runtime, this is { value: true }
+ * // no type errors, but at runtime, wrong is { value: true }
  * ```
  *
  * @remarks
@@ -434,9 +434,9 @@ function mapValuesUnsound<T extends object, R>(
  * type Config = { muted: boolean, volume: number };
  * const overrides: Partial<Config> = { muted: true, volume: undefined };
  * const wrong2: Config = { ...defaults, ...overrides };
- * // no type errors, but at runtime,
- * // volume is undefined instead of a number
+ *
  * const volume: number = wrong2.volume;
+ * // no type errors, but at runtime, volume is undefined
  * ```
  *
  * @public
