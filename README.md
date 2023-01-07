@@ -853,8 +853,6 @@ Result.err(); // Err(undefined)
 
 #### `Result` Instance Methods
 
----
-
 ##### `Result.valueOr`
 
 Return [Ok.value](#okvalue), or the provided argument if this is not an Ok.
