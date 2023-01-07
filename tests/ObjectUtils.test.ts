@@ -77,13 +77,13 @@ describe("documentation examples", () => {
 
   test("merge unsound", () => {
     const aNumber = { value: 3 };
-    const aBoolean = { value: true };
+    const aString = { value: "hi" };
 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    const propertyNotDeclared: {} = aBoolean;
+    const propertyNotDeclared: {} = aString;
 
     const wrong: { value: number } = merge(aNumber, propertyNotDeclared);
-    expect(wrong).toStrictEqual({ value: true });
+    expect(wrong).toStrictEqual({ value: "hi" });
   });
 
   test("merge vs. spread", () => {

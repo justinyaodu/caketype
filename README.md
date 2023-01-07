@@ -617,13 +617,13 @@ preceding object:
 
 ```ts
 const aNumber = { value: 3 };
-const aBoolean = { value: true };
+const aString = { value: "hi" };
 
 // property 'value' is not declared in type, but present at runtime
-const propertyNotDeclared: {} = aBoolean;
+const propertyNotDeclared: {} = aString;
 
 const wrong: { value: number } = merge(aNumber, propertyNotDeclared);
-// no type errors, but at runtime, wrong is { value: true }
+// no type errors, but at runtime, wrong is { value: "hi" }
 ```
 
 _Remarks_
