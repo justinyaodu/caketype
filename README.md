@@ -68,6 +68,8 @@
 
 ### COMPARISON UTILITIES
 
+---
+
 #### `sameValueZero`
 
 Return whether two values are equal, using the
