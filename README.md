@@ -569,6 +569,37 @@ but the function will still be called with that key and value at runtime.
 
 ---
 
+#### `lookup`
+
+Find the first object with the given key set to a non-`undefined` value, and
+return that value. If none of the objects have a non-`undefined` value,
+return `undefined`.
+
+```ts
+lookup("a", { a: 1 }, { a: 2 }); // 1
+lookup("a", { a: undefined }, { a: 2 }); // 2
+lookup("a", {}, { a: 2 }); // 2
+lookup("a", {}, {}); // undefined
+```
+
+If the objects contain properties that are not declared in their
+types, the inferred return type could be incorrect. This is because an
+undeclared property can take precedence over a declared property on a later
+object:
+
+```ts
+const aNumber = { value: 3 };
+const aString = { value: "hi" };
+
+// property 'value' is not declared in type, but present at runtime
+const propertyNotDeclared: {} = aString;
+
+const wrong: number = lookup("value", propertyNotDeclared, aNumber);
+// no type errors, but at runtime, wrong is "hi"
+```
+
+---
+
 #### `merge`
 
 Return a new object created by merging the enumerable own properties of the

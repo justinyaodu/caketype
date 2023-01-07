@@ -378,6 +378,61 @@ function mapValuesUnsound<T extends object, R>(
   );
 }
 
+type LookupReturn<K extends PropertyKey, T extends object[]> = T extends []
+  ? undefined
+  : T extends [infer F, ...infer R extends object[]]
+  ? K extends keyof F
+    ?
+        | Exclude<F[K], undefined>
+        | (undefined extends F[K] ? LookupReturn<K, R> : never)
+    : LookupReturn<K, R>
+  : never;
+
+/**
+ * Find the first object with the given key set to a non-`undefined` value, and
+ * return that value. If none of the objects have a non-`undefined` value,
+ * return `undefined`.
+ *
+ * @example
+ * ```ts
+ * lookup("a", { a: 1 }, { a: 2 }); // 1
+ * lookup("a", { a: undefined }, { a: 2 }); // 2
+ * lookup("a", {}, { a: 2 }); // 2
+ * lookup("a", {}, {}); // undefined
+ * ```
+ *
+ * @example If the objects contain properties that are not declared in their
+ * types, the inferred return type could be incorrect. This is because an
+ * undeclared property can take precedence over a declared property on a later
+ * object:
+ * ```ts
+ * const aNumber = { value: 3 };
+ * const aString = { value: "hi" };
+ *
+ * // property 'value' is not declared in type, but present at runtime
+ * const propertyNotDeclared: {} = aString;
+ *
+ * const wrong: number = lookup("value", propertyNotDeclared, aNumber);
+ * // no type errors, but at runtime, wrong is "hi"
+ * ```
+ *
+ * @public
+ */
+function lookup<K extends PropertyKey, T extends [object, ...object[]]>(
+  key: K,
+  ...objects: T
+): LookupReturn<K, T> {
+  for (const object of objects) {
+    if (key in object) {
+      const value = (object as Record<PropertyKey, unknown>)[key];
+      if (value !== undefined) {
+        return value as LookupReturn<K, T>;
+      }
+    }
+  }
+  return undefined as LookupReturn<K, T>;
+}
+
 /**
  * Return a new object created by merging the enumerable own properties of the
  * provided objects, skipping properties that are explicitly set to `undefined`.
@@ -565,6 +620,7 @@ export {
   keysIncludingSymbols,
   keysIncludingSymbolsUnsound,
   keysUnsound,
+  lookup,
   mapValues,
   mapValuesUnsound,
   merge,
