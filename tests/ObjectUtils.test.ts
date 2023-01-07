@@ -56,6 +56,17 @@ describe("documentation examples", () => {
     });
   });
 
+  test("merge unsound", () => {
+    const aNumber = { value: 3 };
+    const aBoolean = { value: true };
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    const propertyNotDeclared: {} = aBoolean;
+
+    const wrong: { value: number } = merge(aNumber, propertyNotDeclared);
+    expect(wrong).toStrictEqual({ value: true });
+  });
+
   test("merge vs. spread", () => {
     const defaults = { muted: false, volume: 20 };
     const muted = merge(defaults, { muted: true, volume: undefined });

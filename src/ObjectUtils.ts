@@ -388,6 +388,21 @@ function mapValuesUnsound<T extends object, R>(
  * // { a: 99, b: 2, c: 3 }
  * ```
  *
+ * @example If the objects contain properties that are not declared in their
+ * types, the inferred type of the merged object could be incorrect. This is
+ * because an undeclared property can replace a declared property from a
+ * preceding object:
+ * ```ts
+ * const aNumber = { value: 3 };
+ * const aBoolean = { value: true };
+ *
+ * // property 'value' is not declared in type, but present at runtime
+ * const propertyNotDeclared: {} = aBoolean;
+ *
+ * const wrong: { value: number } = merge(aNumber, propertyNotDeclared);
+ * // no type errors, but at runtime, this is { value: true }
+ * ```
+ *
  * @remarks
  *
  * By default, TypeScript allows optional properties to be explicitly set to

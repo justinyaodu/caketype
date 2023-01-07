@@ -579,6 +579,23 @@ merge({ a: 1, b: 2, c: 3 }, { a: 99, b: undefined });
 // { a: 99, b: 2, c: 3 }
 ```
 
+If the objects contain properties that are not declared in their
+types, the inferred type of the merged object could be incorrect. This is
+because an undeclared property can replace a declared property from a
+preceding object:
+```ts
+const aNumber = { value: 3 };
+const aBoolean = { value: true };
+
+// property 'value' is not declared in type, but present at runtime
+const propertyNotDeclared: {} = aBoolean;
+
+const wrong: { value: number } = merge(aNumber, propertyNotDeclared);
+// no type errors, but at runtime, this is { value: true }
+```
+
+_Remarks_
+
 By default, TypeScript allows optional properties to be explicitly set to
 `undefined`. When merging partial objects, it's often desirable to skip
 properties that are set to `undefined` in order to use a default value:
