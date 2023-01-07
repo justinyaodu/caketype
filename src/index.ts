@@ -34,6 +34,7 @@ export {
   keysIncludingSymbols,
   keysIncludingSymbolsUnsound,
   keysUnsound,
+  lookup,
   mapValues,
   mapValuesUnsound,
   merge,

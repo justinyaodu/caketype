@@ -15,6 +15,7 @@ import {
   keysIncludingSymbols,
   keysIncludingSymbolsUnsound,
   keysUnsound,
+  lookup,
   mapValues,
   mapValuesUnsound,
   merge,
@@ -46,6 +47,24 @@ describe("documentation examples", () => {
     type _ = Assert<
       Equivalent<ExampleEntry, ["age", number] | [typeof sym, boolean]>
     >;
+  });
+
+  test("lookup", () => {
+    expect<number>(lookup("a", { a: 1 }, { a: 2 })).toStrictEqual(1);
+    expect<number>(lookup("a", { a: undefined }, { a: 2 })).toStrictEqual(2);
+    expect<number>(lookup("a", {}, { a: 2 })).toStrictEqual(2);
+    expect<undefined>(lookup("a", {}, {})).toStrictEqual(undefined);
+  });
+
+  test("lookup unsound", () => {
+    const aNumber = { value: 3 };
+    const aString = { value: "hi" };
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    const propertyNotDeclared: {} = aString;
+
+    const wrong: number = lookup("value", propertyNotDeclared, aNumber);
+    expect(wrong).toStrictEqual("hi");
   });
 
   test("merge simple", () => {

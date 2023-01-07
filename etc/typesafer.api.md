@@ -115,6 +115,11 @@ export function keysIncludingSymbolsUnsound<T extends object>(object: T): (keyof
 // @public
 export function keysUnsound<T extends object>(object: T): (keyof T & string)[];
 
+// Warning: (ae-forgotten-export) The symbol "LookupReturn" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function lookup<K extends PropertyKey, T extends [object, ...object[]]>(key: K, ...objects: T): LookupReturn<K, T>;
+
 // @public
 export interface MapLike<K, V> {
     delete(key: K): boolean;
