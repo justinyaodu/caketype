@@ -191,7 +191,6 @@ key is present.
 If the map has an entry with the provided key, return the existing value.
 Otherwise, use the callback to compute a new value, insert an entry with the
 provided key and computed value, and return the inserted value.
-value.
 
 ```ts
 const map: Map<string, string[]> = new Map();
