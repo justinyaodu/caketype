@@ -141,7 +141,7 @@ function getOrSet<K, V>(map: MapLike<K, V>, key: K, defaultValue: V) {
  *
  * getOrSetComputed(map, "alice", () => []).push("cindy");
  * // "alice" is present, so the existing array ["bob"] is returned
- * // then "charlie" is added to the returned array
+ * // then "cindy" is added to the returned array
  * // map is now Map { "alice" -> ["bob", "cindy"] }
  * ```
  *
