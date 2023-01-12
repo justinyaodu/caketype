@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 /**
- * Ensure that links to heading anchors are all valid.
+ * Ensure that heading anchors do not conflict, and that links to heading
+ * anchors are all valid.
  */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
@@ -12,20 +13,30 @@ const process = require("process");
 const { slugify, withLines } = require("./util");
 
 function findErrors(lines, error) {
-  const anchors = new Set();
-  for (const line of lines) {
-    const match = /^#+ (.*)$/.exec(line);
+  const anchors = new Map();
+  for (let i = 0; i < lines.length; i++) {
+    const match = /^#+ (.*)$/.exec(lines[i]);
     if (match) {
-      anchors.add(slugify(match[1]));
+      const anchor = slugify(match[1]);
+      if (anchors.has(anchor)) {
+        error(
+          `line ${
+            i + 1
+          }: heading anchor conflicts with previous heading on line ${
+            anchors.get(anchor) + 1
+          }`
+        );
+      } else {
+        anchors.set(anchor, i);
+      }
     }
   }
 
   for (let i = 0; i < lines.length; i++) {
-    const lineNum = i + 1;
     // Hack to iterate over all matches - we don't actually do any replacing.
     lines[i].replaceAll(/\]\(#([^)]+)\)/g, (_, anchor) => {
       if (!anchors.has(anchor)) {
-        error(`line ${lineNum}: broken anchor link ${JSON.stringify(anchor)}`);
+        error(`line ${i + 1}: broken anchor link ${JSON.stringify(anchor)}`);
       }
     });
   }
@@ -38,10 +49,10 @@ function processLines(lines) {
     exitCode = 1;
   }
 
-  console.log("Checking links to heading anchors in README.md...");
+  console.log("Checking heading anchors in README.md...");
   findErrors(lines, error);
   if (exitCode === 0) {
-    console.log("Heading anchor links OK!");
+    console.log("Heading anchors OK!");
   }
 
   process.exit(exitCode);
