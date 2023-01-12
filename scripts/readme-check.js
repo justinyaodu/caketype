@@ -23,9 +23,8 @@ function findHeadingAnchorErrors(lines, error) {
       const anchor = slugify(match[1]);
       if (anchors.has(anchor)) {
         error(
-          `line ${
-            i + 1
-          }: heading anchor conflicts with previous heading on line ${
+          i,
+          `heading anchor conflicts with previous heading on line ${
             anchors.get(anchor) + 1
           }`
         );
@@ -39,7 +38,7 @@ function findHeadingAnchorErrors(lines, error) {
     // Hack to iterate over all matches - we don't actually do any replacing.
     lines[i].replaceAll(/\]\(#([^)]+)\)/g, (_, anchor) => {
       if (!anchors.has(anchor)) {
-        error(`line ${i + 1}: broken anchor link ${JSON.stringify(anchor)}`);
+        error(i, `broken anchor link ${JSON.stringify(anchor)}`);
       }
     });
   }
@@ -72,17 +71,16 @@ function findHorizontalRuleErrors(lines, error) {
   }
 
   for (let i = referenceStart + 1; i < changelogStart; i++) {
-    const lineNum = i + 1;
     if (isHorizontalRule(lines[i])) {
       const j = i + 2;
       if (!(j in lines) || !isSectionHeading(lines[j])) {
-        error(`line ${lineNum}: extraneous horizontal rule`);
+        error(i, "extraneous horizontal rule");
       }
     }
     if (isSectionHeading(lines[i])) {
       const j = i - 2;
       if (!(j in lines) || !isHorizontalRule(lines[j])) {
-        error(`line ${lineNum}: missing horizontal rule before heading`);
+        error(i, "missing horizontal rule before heading");
       }
     }
   }
@@ -90,8 +88,8 @@ function findHorizontalRuleErrors(lines, error) {
 
 function processLines(lines) {
   let exitCode = 0;
-  function error(message) {
-    console.error(message);
+  function error(line, message) {
+    console.error(`line ${line + 1}: ${message}`);
     exitCode = 1;
   }
 
