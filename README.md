@@ -1,5 +1,3 @@
-## API Reference
-
 - [Comparison Utilities](#comparison-utilities)
   - [`sameValueZero`](#samevaluezero)
 - [Map Utilities](#map-utilities)

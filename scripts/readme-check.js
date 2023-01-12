@@ -60,13 +60,13 @@ function findHorizontalRuleErrors(lines, error) {
 
   const referenceStart = lines.indexOf("## API Reference");
   if (referenceStart === -1) {
-    error("could not find start of API reference section");
+    error(null, "could not find start of API reference section");
     return;
   }
 
   const changelogStart = lines.indexOf("## Changelog");
   if (changelogStart === -1) {
-    error("could not find start of changelog");
+    error(null, "could not find start of changelog");
     return;
   }
 
@@ -89,7 +89,7 @@ function findHorizontalRuleErrors(lines, error) {
 function processLines(lines) {
   let exitCode = 0;
   function error(line, message) {
-    console.error(`line ${line + 1}: ${message}`);
+    console.error((line === null ? "" : `line ${line + 1}: `) + message);
     exitCode = 1;
   }
 
