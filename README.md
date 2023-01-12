@@ -1084,3 +1084,17 @@ const b: Class<Date> = Date;
 // constructor can be called with one number argument.
 const c: Class<Date, [number]> = Date;
 ```
+
+## Changelog
+
+### v0.2.0 - 2023-01-11
+
+#### Added
+
+- [sameValueZero](#samevaluezero) utility function
+- [Map Utilities](#map-utilities)
+- [Object Utilities](#object-utilities)
+- [Primitives](#primitives)
+- [Results](#results)
+- [Type-Level Assertions](#type-level-assertions)
+- [Class](#class) utility type
