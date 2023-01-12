@@ -576,11 +576,11 @@ function pick<T extends object, K extends (keyof T & (string | symbol))[]>(
  * `ObjectUtils`:
  *
  * ```ts
- * import { merge } from "typesafer";
+ * import { merge } from "caketype";
  * merge({ a: 1 }, { b: 2 }); // { a: 1, b: 2 }
  *
  * // alternatively:
- * import { ObjectUtils } from "typesafer";
+ * import { ObjectUtils } from "caketype";
  * ObjectUtils.merge({ a: 1 }, { b: 2 }); // { a: 1, b: 2 }
  * ```
  *

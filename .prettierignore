@@ -1,6 +1,6 @@
 /coverage/
 /dist/
-/etc/typesafer.api.md
+/etc/caketype.api.md
 /temp/
 /types/
 .eslintcache

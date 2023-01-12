@@ -100,11 +100,11 @@ These functions can be imported directly, or accessed as properties of `MapUtils
 ```ts
 const nestedMap: Map<number, Map<string, number>> = new Map();
 
-import { deepSet } from "typesafer";
+import { deepSet } from "caketype";
 deepSet(nestedMap, 3, "hi", 7); // Map { 3 -> Map { "hi" -> 7 } }
 
 // alternatively:
-import { MapUtils } from "typesafer";
+import { MapUtils } from "caketype";
 MapUtils.deepSet(nestedMap, 3, "hi", 7); // Map { 3 -> Map { "hi" -> 7 } }
 ```
 
@@ -357,11 +357,11 @@ These functions can be imported directly, or accessed as properties of
 `ObjectUtils`:
 
 ```ts
-import { merge } from "typesafer";
+import { merge } from "caketype";
 merge({ a: 1 }, { b: 2 }); // { a: 1, b: 2 }
 
 // alternatively:
-import { ObjectUtils } from "typesafer";
+import { ObjectUtils } from "caketype";
 ObjectUtils.merge({ a: 1 }, { b: 2 }); // { a: 1, b: 2 }
 ```
 

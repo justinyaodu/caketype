@@ -438,11 +438,11 @@ function deepSet<M extends DeepMap<K>, K extends [unknown, ...unknown[]]>(
  * ```ts
  * const nestedMap: Map<number, Map<string, number>> = new Map();
  *
- * import { deepSet } from "typesafer";
+ * import { deepSet } from "caketype";
  * deepSet(nestedMap, 3, "hi", 7); // Map { 3 -> Map { "hi" -> 7 } }
  *
  * // alternatively:
- * import { MapUtils } from "typesafer";
+ * import { MapUtils } from "caketype";
  * MapUtils.deepSet(nestedMap, 3, "hi", 7); // Map { 3 -> Map { "hi" -> 7 } }
  * ```
  *

@@ -1,17 +1,17 @@
 {
-  "name": "typesafer",
+  "name": "caketype",
   "version": "0.1.0",
   "description": "Runtime type checking and other type-safe helpers for TypeScript",
   "author": "Justin Yao Du <justinyaodu@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/justinyaodu/typesafer",
-  "bugs": "https://github.com/justinyaodu/typesafer/issues",
-  "repository": "github:justinyaodu/typesafer",
+  "homepage": "https://github.com/justinyaodu/caketype",
+  "bugs": "https://github.com/justinyaodu/caketype/issues",
+  "repository": "github:justinyaodu/caketype",
   "files": [
     "dist/"
   ],
   "main": "dist/index.js",
-  "types": "dist/typesafer.d.ts",
+  "types": "dist/caketype.d.ts",
   "scripts": {
     "clean": "rm -rf dist/* types/*",
     "build": "mkdir -p dist/ types/ && npm run clean && tsc && api-extractor run",
