@@ -46,7 +46,7 @@ function findHeadingAnchorErrors(lines, error) {
 }
 
 /**
- * Ensure that horizontal rules in the API reference portion are correctly used
+ * Ensure that horizontal rules in the API reference section are correctly used
  * between sections.
  */
 function findHorizontalRuleErrors(lines, error) {
@@ -59,9 +59,9 @@ function findHorizontalRuleErrors(lines, error) {
     return /^#{3,4}[^#]/.test(line);
   }
 
-  const referenceStart = lines.indexOf("## Utility Reference");
+  const referenceStart = lines.indexOf("## API Reference");
   if (referenceStart === -1) {
-    error("could not find start of API reference portion");
+    error("could not find start of API reference section");
     return;
   }
 
