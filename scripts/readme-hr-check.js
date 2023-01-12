@@ -22,13 +22,19 @@ function isSectionHeading(line) {
 }
 
 function findErrors(lines, error) {
-  const referenceStart = lines.indexOf("## API Reference");
+  const referenceStart = lines.indexOf("## Utility Reference");
   if (referenceStart === -1) {
     error("could not find start of API reference section");
     return;
   }
 
-  for (let i = referenceStart + 1; i < lines.length; i++) {
+  const changelogStart = lines.indexOf("## Changelog");
+  if (changelogStart === -1) {
+    error("could not find start of changelog");
+    return;
+  }
+
+  for (let i = referenceStart + 1; i < changelogStart; i++) {
     const lineNum = i + 1;
     if (isHorizontalRule(lines[i])) {
       const j = i + 2;

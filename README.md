@@ -1,4 +1,4 @@
-## API Reference
+## Utility Reference
 
 - [Comparison Utilities](#comparison-utilities)
   - [`sameValueZero`](#samevaluezero)
