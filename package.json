@@ -1,6 +1,6 @@
 {
   "name": "caketype",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Runtime type checking and other type-safe helpers for TypeScript",
   "author": "Justin Yao Du <justinyaodu@gmail.com>",
   "license": "MIT",
