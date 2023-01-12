@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Ensure that horizontal rules in the API Reference section of README.md are
+ * Ensure that horizontal rules in the API reference portion of README.md are
  * correctly used between sections.
  */
 
@@ -24,7 +24,7 @@ function isSectionHeading(line) {
 function findErrors(lines, error) {
   const referenceStart = lines.indexOf("## Utility Reference");
   if (referenceStart === -1) {
-    error("could not find start of API reference section");
+    error("could not find start of API reference portion");
     return;
   }
 
@@ -59,7 +59,7 @@ function processLines(lines) {
   }
 
   console.log(
-    "Checking horizontal rules in API Reference section of README.md..."
+    "Checking horizontal rules in API reference portion of README.md..."
   );
   findErrors(lines, error);
   if (exitCode === 0) {
