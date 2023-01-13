@@ -3,6 +3,7 @@ export * from "./tags";
 
 export * from "./Cake";
 export * from "./CakeError";
+export * from "./CakeErrorStringifier";
 export * from "./CakeStringifier";
 export * from "./Checker";
 export * from "./TypePredicateCake";
