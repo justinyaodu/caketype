@@ -27,10 +27,4 @@ class OptionalTag<T> extends Tag<"optional", T> {
   }
 }
 
-class RestTag<T> extends Tag<"rest", T> {
-  constructor(untagged: T) {
-    super("rest", untagged);
-  }
-}
-
-export { TagLike, Untagged, OptionalTag, RestTag };
+export { TagLike, Untagged, OptionalTag };
