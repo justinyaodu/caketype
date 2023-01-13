@@ -10,6 +10,7 @@
     "declaration": true,
     "declarationMap": true,
     "declarationDir": "types",
+    "importsNotUsedAsValues": "error",
     "noImplicitOverride": true
   },
   "include": ["src/**/*.ts"],

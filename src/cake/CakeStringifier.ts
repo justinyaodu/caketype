@@ -1,6 +1,6 @@
 import { deepGetResult } from "../index-internal";
 
-import { Cake, CakeDispatchStringifyContext } from "./index-internal";
+import type { Cake, CakeDispatchStringifyContext } from "./index-internal";
 
 class CakeStringifier {
   private readonly cache: Map<Cake, string | undefined>;

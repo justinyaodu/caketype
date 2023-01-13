@@ -1,11 +1,7 @@
 import { Result } from "../index-internal";
 
-import {
-  CakeError,
-  CakeStringifier,
-  Checker,
-  Untagged,
-} from "./index-internal";
+import { CakeStringifier, Checker, Untagged } from "./index-internal";
+import type { CakeError } from "./index-internal";
 
 interface CakeDispatchCheckContext {
   readonly recurse: (cake: Cake, value: unknown) => CakeError | null;
