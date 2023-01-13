@@ -4,7 +4,7 @@ import type {
   CakeErrorDispatchFormatContext,
 } from "./index-internal";
 
-type StringTree = string | [string, StringTree[]];
+type StringTree = string | readonly [string, readonly StringTree[]];
 
 class CakeErrorStringifier {
   readonly cakeStringifier: CakeStringifier;
