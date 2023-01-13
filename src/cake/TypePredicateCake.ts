@@ -13,14 +13,14 @@ class TypePredicateCake<T> extends Cake<T> {
     super();
   }
 
-  override dispatchCheck(value: unknown): CakeError | null {
+  dispatchCheck(value: unknown): CakeError | null {
     if (this.predicate(value)) {
       return null;
     }
     return new TypePredicateFailedCakeError(this, value);
   }
 
-  override dispatchStringify(): string {
+  dispatchStringify(): string {
     return this.name;
   }
 }
@@ -31,7 +31,7 @@ class TypePredicateFailedCakeError extends CakeError {
     super();
   }
 
-  override dispatchFormat({
+  dispatchFormat({
     stringifyCake,
   }: CakeErrorDispatchFormatContext): StringTree {
     return `Value does not satisfy type '${stringifyCake(

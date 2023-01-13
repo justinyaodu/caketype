@@ -44,7 +44,7 @@ abstract class Cake<in out T = any> extends Untagged {
 
   abstract dispatchStringify(context: CakeDispatchStringifyContext): string;
 
-  toString(): string {
+  override toString(): string {
     return new CakeStringifier().stringify(this);
   }
 }
