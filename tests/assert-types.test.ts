@@ -1,4 +1,4 @@
-import { Assert, Extends, Equivalent, If, Not, AssertExtends } from "../src";
+import type { Assert, Extends, Equivalent, If, Not, AssertExtends } from "../src";
 
 describe("documentation examples", () => {
   test("Assert", () => {
