@@ -9,7 +9,7 @@ import {
 } from "./index-internal";
 
 class Checker {
-  private readonly cache: Map<Cake, Map<unknown, CakeError | null | undefined>>;
+  protected readonly cache: Map<Cake, Map<unknown, CakeError | null | undefined>>;
   protected readonly context: CakeDispatchCheckContext;
 
   constructor() {
