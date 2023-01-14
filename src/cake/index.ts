@@ -3,7 +3,21 @@ export {
   Cake,
   // CakeError.ts
   CakeError,
+  // Checker.ts
+  CircularReferenceCakeError,
+  // ObjectCake.ts
+  ObjectCake,
+  NotAnObjectCakeError,
+  ObjectPropertiesCakeError,
+  ObjectRequiredPropertyMissingCakeError,
+  // ReferenceCake.ts
+  ReferenceCake,
+  reference,
+  // tags.ts
+  optional,
   // TypePredicateCake.ts
+  TypePredicateCake,
+  TypePredicateFailedCakeError,
   any,
   boolean,
   bigint,

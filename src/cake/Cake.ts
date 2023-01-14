@@ -45,4 +45,6 @@ abstract class Cake<in out T = any> extends Untagged {
   }
 }
 
-export { Cake, CakeDispatchCheckContext, CakeDispatchStringifyContext };
+type Infer<C extends Cake> = C extends Cake<infer T> ? T : never;
+
+export { Cake, CakeDispatchCheckContext, CakeDispatchStringifyContext, Infer };

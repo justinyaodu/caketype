@@ -1,10 +1,8 @@
-import { CakeStringifier } from "./index-internal";
+import { CakeStringifier, StringTree } from "./index-internal";
 import type {
   CakeError,
   CakeErrorDispatchFormatContext,
 } from "./index-internal";
-
-type StringTree = string | readonly [string, readonly StringTree[]];
 
 class CakeErrorStringifier {
   readonly cakeStringifier: CakeStringifier;
@@ -61,4 +59,4 @@ class CakeErrorStringifier {
   }
 }
 
-export { CakeErrorStringifier, StringTree };
+export { CakeErrorStringifier };

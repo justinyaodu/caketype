@@ -1,12 +1,10 @@
 interface TagLike<L, T> {
   readonly tag: L;
-  readonly untagged: T;
   readonly untag: () => [L, T];
 }
 
 class Untagged implements TagLike<null, Untagged> {
   readonly tag = null;
-  readonly untagged = this;
 
   untag(): [null, this] {
     return [this.tag, this];
@@ -27,4 +25,8 @@ class OptionalTag<T> extends Tag<"optional", T> {
   }
 }
 
-export { TagLike, Untagged, OptionalTag };
+function optional<T>(value: T): OptionalTag<T> {
+  return new OptionalTag(value);
+}
+
+export { Untagged, OptionalTag, optional };

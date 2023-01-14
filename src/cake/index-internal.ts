@@ -6,4 +6,7 @@ export * from "./CakeError";
 export * from "./CakeErrorStringifier";
 export * from "./CakeStringifier";
 export * from "./Checker";
+export * from "./ObjectCake";
+export * from "./ReferenceCake";
+export * from "./StringTree";
 export * from "./TypePredicateCake";
