@@ -17,6 +17,9 @@ import {
   prependStringTree,
 } from "./index-internal";
 
+/**
+ * @public
+ */
 type ObjectCakeProperties = {
   readonly [key: string | symbol]: Cake | OptionalTag<Cake>;
 };
@@ -30,6 +33,9 @@ type OnlyOptionalKeys<P extends ObjectCakeProperties> = keyof {
   [K in keyof P as P[K] extends OptionalTag<infer _> ? K : never]: P[K];
 };
 
+/**
+ * @public
+ */
 class ObjectCake<P extends ObjectCakeProperties> extends Cake<
   ({
     -readonly [K in OnlyRequiredKeys<P>]: P[K] extends Cake
@@ -114,6 +120,9 @@ class ObjectCake<P extends ObjectCakeProperties> extends Cake<
   }
 }
 
+/**
+ * @public
+ */
 class NotAnObjectCakeError extends CakeError {
   constructor(readonly cake: Cake, readonly value: unknown) {
     super();
@@ -128,6 +137,9 @@ class NotAnObjectCakeError extends CakeError {
   }
 }
 
+/**
+ * @public
+ */
 class ObjectRequiredPropertyMissingCakeError extends CakeError {
   constructor(readonly cake: Cake) {
     super();
@@ -138,6 +150,9 @@ class ObjectRequiredPropertyMissingCakeError extends CakeError {
   }
 }
 
+/**
+ * @public
+ */
 class ObjectPropertiesCakeError extends CakeError {
   constructor(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -165,6 +180,7 @@ class ObjectPropertiesCakeError extends CakeError {
 
 export {
   ObjectCake,
+  ObjectCakeProperties,
   NotAnObjectCakeError,
   ObjectPropertiesCakeError,
   ObjectRequiredPropertyMissingCakeError,

@@ -8,6 +8,9 @@ import {
   StringTree,
 } from "./index-internal";
 
+/**
+ * @internal
+ */
 class Checker {
   protected readonly cache: Map<
     Cake,
@@ -48,6 +51,9 @@ class Checker {
   }
 }
 
+/**
+ * @internal
+ */
 class CircularReferenceCakeError extends CakeError {
   constructor(readonly cake: Cake, readonly value: unknown) {
     super();

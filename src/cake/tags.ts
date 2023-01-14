@@ -19,12 +19,18 @@ class Tag<L, T> implements TagLike<L, T> {
   }
 }
 
+/**
+ * @public
+ */
 class OptionalTag<T> extends Tag<"optional", T> {
   constructor(untagged: T) {
     super("optional", untagged);
   }
 }
 
+/**
+ * @public
+ */
 function optional<T>(value: T): OptionalTag<T> {
   return new OptionalTag(value);
 }

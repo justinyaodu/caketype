@@ -3,10 +3,16 @@ import type { Result } from "../index-internal";
 import { CakeStringifier, Checker, Untagged } from "./index-internal";
 import type { CakeError } from "./index-internal";
 
+/**
+ * @public
+ */
 interface CakeDispatchCheckContext {
   readonly recurse: (cake: Cake, value: unknown) => CakeError | null;
 }
 
+/**
+ * @public
+ */
 interface CakeDispatchStringifyContext {
   readonly recurse: (cake: Cake) => string;
 }
@@ -44,6 +50,9 @@ abstract class Cake<in out T = any> extends Untagged {
   }
 }
 
+/**
+ * @public
+ */
 type Infer<C extends Cake> = C extends Cake<infer T> ? T : never;
 
 export { Cake, CakeDispatchCheckContext, CakeDispatchStringifyContext, Infer };

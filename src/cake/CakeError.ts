@@ -1,6 +1,9 @@
 import { CakeErrorStringifier } from "./index-internal";
 import type { Cake, StringTree } from "./index-internal";
 
+/**
+ * @public
+ */
 interface CakeErrorDispatchFormatContext {
   readonly recurse: (error: CakeError) => StringTree;
   readonly stringifyCake: (cake: Cake) => string;

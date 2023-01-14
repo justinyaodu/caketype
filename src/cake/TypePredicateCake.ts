@@ -16,6 +16,9 @@ import {
   StringTree,
 } from "./index-internal";
 
+/**
+ * @public
+ */
 class TypePredicateCake<T> extends Cake<T> {
   constructor(
     readonly name: string,
@@ -36,6 +39,9 @@ class TypePredicateCake<T> extends Cake<T> {
   }
 }
 
+/**
+ * @public
+ */
 class TypePredicateFailedCakeError extends CakeError {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(readonly cake: TypePredicateCake<any>, readonly value: unknown) {
@@ -51,13 +57,44 @@ class TypePredicateFailedCakeError extends CakeError {
   }
 }
 
+/**
+ * @public
+ */
 const any = new TypePredicateCake("any", is_any);
+
+/**
+ * @public
+ */
 const boolean = new TypePredicateCake("boolean", is_boolean);
+
+/**
+ * @public
+ */
 const bigint = new TypePredicateCake("bigint", is_bigint);
+
+/**
+ * @public
+ */
 const never = new TypePredicateCake("never", is_never);
+
+/**
+ * @public
+ */
 const number = new TypePredicateCake("number", is_number);
+
+/**
+ * @public
+ */
 const string = new TypePredicateCake("string", is_string);
+
+/**
+ * @public
+ */
 const symbol = new TypePredicateCake("symbol", is_symbol);
+
+/**
+ * @public
+ */
 const unknown = new TypePredicateCake("unknown", is_unknown);
 
 export {

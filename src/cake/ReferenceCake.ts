@@ -6,6 +6,9 @@ import {
   Infer,
 } from "./index-internal";
 
+/**
+ * @public
+ */
 class ReferenceCake<C extends Cake> extends Cake<Infer<C>> {
   constructor(readonly get: () => C) {
     super();
@@ -23,6 +26,9 @@ class ReferenceCake<C extends Cake> extends Cake<Infer<C>> {
   }
 }
 
+/**
+ * @public
+ */
 function reference<T, C extends Cake<T> = Cake<T>>(
   get: () => C
 ): ReferenceCake<C> {

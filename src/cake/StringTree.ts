@@ -1,3 +1,6 @@
+/**
+ * @public
+ */
 type StringTree = string | readonly [string, readonly StringTree[]];
 
 function prependStringTree(prepend: string, tree: StringTree): StringTree {
