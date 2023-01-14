@@ -157,6 +157,10 @@ const values: {
             o
           ),
         }),
+      [
+        `Value does not satisfy type '{name?: (reference(() => [Circular])) | undefined}': object properties are invalid.`,
+        `  Property "name": Could not determine if value satisfies type '{name?: (reference(() => [Circular])) | undefined}': value contains a circular reference.`,
+      ].join("\n"),
     ],
   },
 };

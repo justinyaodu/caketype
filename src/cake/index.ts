@@ -4,6 +4,7 @@ export {
   // CakeError.ts
   CakeError,
   // Checker.ts
+  Checker,
   CircularReferenceCakeError,
   // ObjectCake.ts
   ObjectCake,
