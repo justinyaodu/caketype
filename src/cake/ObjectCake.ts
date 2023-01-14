@@ -45,14 +45,14 @@ class ObjectCake<P extends ObjectCakeProperties> extends Cake<
     -readonly [K in OnlyOptionalKeys<P>]?: P[K] extends OptionalTag<
       infer I extends Cake
     >
-      ? Infer<I>
+      ? Infer<I> | undefined
       : never;
   } extends infer I
     ? { [K in keyof I]: I[K] }
     : never) &
     object
 > {
-  constructor(readonly properties: P) {
+  constructor(readonly properties: Readonly<P>) {
     super();
   }
 

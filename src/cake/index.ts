@@ -1,4 +1,9 @@
 export {
+  // Baker.ts
+  Bakeable,
+  ObjectBakeable,
+  bake,
+  Baked,
   // Cake.ts
   Cake,
   CakeDispatchCheckContext,
