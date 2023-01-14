@@ -13,7 +13,9 @@ import {
   Cake,
   CakeError,
   CakeErrorDispatchFormatContext,
+  CakeDispatchStringifyContext,
   StringTree,
+  CakeDispatchCheckContext,
 } from "./index-internal";
 
 /**
@@ -27,14 +29,21 @@ class TypePredicateCake<T> extends Cake<T> {
     super();
   }
 
-  dispatchCheck(value: unknown): CakeError | null {
+  dispatchCheck(
+    value: unknown,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    context: CakeDispatchCheckContext
+  ): CakeError | null {
     if (this.predicate(value)) {
       return null;
     }
     return new TypePredicateFailedCakeError(this, value);
   }
 
-  dispatchStringify(): string {
+  dispatchStringify(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    context: CakeDispatchStringifyContext
+  ): string {
     return this.name;
   }
 }
@@ -48,9 +57,8 @@ class TypePredicateFailedCakeError extends CakeError {
     super();
   }
 
-  dispatchFormat({
-    stringifyCake,
-  }: CakeErrorDispatchFormatContext): StringTree {
+  dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree {
+    const { stringifyCake } = context;
     return `Value does not satisfy type '${stringifyCake(
       this.cake
     )}': type predicate failed.`;

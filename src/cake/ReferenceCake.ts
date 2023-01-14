@@ -16,12 +16,14 @@ class ReferenceCake<C extends Cake> extends Cake<Infer<C>> {
 
   dispatchCheck(
     value: unknown,
-    { recurse }: CakeDispatchCheckContext
+    context: CakeDispatchCheckContext
   ): CakeError | null {
+    const { recurse } = context;
     return recurse(this.get(), value);
   }
 
-  dispatchStringify({ recurse }: CakeDispatchStringifyContext): string {
+  dispatchStringify(context: CakeDispatchStringifyContext): string {
+    const { recurse } = context;
     return `reference(() => ${recurse(this.get())})`;
   }
 }

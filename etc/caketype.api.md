@@ -90,7 +90,7 @@ export class CircularReferenceCakeError extends CakeError {
     // (undocumented)
     readonly cake: Cake;
     // (undocumented)
-    dispatchFormat({ stringifyCake, }: CakeErrorDispatchFormatContext): StringTree;
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
     // (undocumented)
     readonly value: unknown;
 }
@@ -264,7 +264,7 @@ export class NotAnObjectCakeError extends CakeError {
     // (undocumented)
     readonly cake: Cake;
     // (undocumented)
-    dispatchFormat({ stringifyCake, }: CakeErrorDispatchFormatContext): StringTree;
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
     // (undocumented)
     readonly value: unknown;
 }
@@ -285,9 +285,9 @@ export class ObjectCake<P extends ObjectCakeProperties> extends Cake<({
 } : never) & object> {
     constructor(properties: P);
     // (undocumented)
-    dispatchCheck(value: unknown, { recurse }: CakeDispatchCheckContext): CakeError | null;
+    dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
-    dispatchStringify({ recurse }: CakeDispatchStringifyContext): string;
+    dispatchStringify(context: CakeDispatchStringifyContext): string;
     // (undocumented)
     readonly properties: P;
 }
@@ -303,7 +303,7 @@ export class ObjectPropertiesCakeError extends CakeError {
     // (undocumented)
     readonly cake: ObjectCake<any>;
     // (undocumented)
-    dispatchFormat({ recurse, stringifyCake, }: CakeErrorDispatchFormatContext): StringTree;
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
     // (undocumented)
     readonly errors: Record<string | symbol, CakeError>;
     // (undocumented)
@@ -316,7 +316,7 @@ export class ObjectRequiredPropertyMissingCakeError extends CakeError {
     // (undocumented)
     readonly cake: Cake;
     // (undocumented)
-    dispatchFormat(): StringTree;
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
 }
 
 // @public
@@ -392,9 +392,9 @@ export function reference<T, C extends Cake<T> = Cake<T>>(get: () => C): Referen
 export class ReferenceCake<C extends Cake> extends Cake<Infer<C>> {
     constructor(get: () => C);
     // (undocumented)
-    dispatchCheck(value: unknown, { recurse }: CakeDispatchCheckContext): CakeError | null;
+    dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
-    dispatchStringify({ recurse }: CakeDispatchStringifyContext): string;
+    dispatchStringify(context: CakeDispatchStringifyContext): string;
     // (undocumented)
     readonly get: () => C;
 }
@@ -426,9 +426,9 @@ export const symbol: TypePredicateCake<symbol>;
 export class TypePredicateCake<T> extends Cake<T> {
     constructor(name: string, predicate: (value: unknown) => value is T);
     // (undocumented)
-    dispatchCheck(value: unknown): CakeError | null;
+    dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
-    dispatchStringify(): string;
+    dispatchStringify(context: CakeDispatchStringifyContext): string;
     // (undocumented)
     readonly name: string;
     // (undocumented)
@@ -441,7 +441,7 @@ export class TypePredicateFailedCakeError extends CakeError {
     // (undocumented)
     readonly cake: TypePredicateCake<any>;
     // (undocumented)
-    dispatchFormat({ stringifyCake, }: CakeErrorDispatchFormatContext): StringTree;
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
     // (undocumented)
     readonly value: unknown;
 }

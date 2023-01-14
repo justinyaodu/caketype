@@ -58,8 +58,9 @@ class ObjectCake<P extends ObjectCakeProperties> extends Cake<
 
   dispatchCheck(
     value: unknown,
-    { recurse }: CakeDispatchCheckContext
+    context: CakeDispatchCheckContext
   ): CakeError | null {
+    const { recurse } = context;
     if (!is_object(value)) {
       return new NotAnObjectCakeError(this, value);
     }
@@ -96,7 +97,8 @@ class ObjectCake<P extends ObjectCakeProperties> extends Cake<
     }
   }
 
-  dispatchStringify({ recurse }: CakeDispatchStringifyContext): string {
+  dispatchStringify(context: CakeDispatchStringifyContext): string {
+    const { recurse } = context;
     const entries = keysIncludingSymbols(this.properties).map((key) => {
       const [tag, field] = this.properties[key].untag();
       const keyString = ObjectCake.stringifyKey(key);
@@ -128,9 +130,8 @@ class NotAnObjectCakeError extends CakeError {
     super();
   }
 
-  dispatchFormat({
-    stringifyCake,
-  }: CakeErrorDispatchFormatContext): StringTree {
+  dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree {
+    const { stringifyCake } = context;
     return `Value does not satisfy type '${stringifyCake(
       this.cake
     )}': value is not an object.`;
@@ -145,7 +146,10 @@ class ObjectRequiredPropertyMissingCakeError extends CakeError {
     super();
   }
 
-  dispatchFormat(): StringTree {
+  dispatchFormat(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    context: CakeErrorDispatchFormatContext
+  ): StringTree {
     return "Required property is missing.";
   }
 }
@@ -163,10 +167,8 @@ class ObjectPropertiesCakeError extends CakeError {
     super();
   }
 
-  dispatchFormat({
-    recurse,
-    stringifyCake,
-  }: CakeErrorDispatchFormatContext): StringTree {
+  dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree {
+    const { recurse, stringifyCake } = context;
     return [
       `Value does not satisfy type '${stringifyCake(
         this.cake

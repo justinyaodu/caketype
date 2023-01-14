@@ -59,9 +59,8 @@ class CircularReferenceCakeError extends CakeError {
     super();
   }
 
-  dispatchFormat({
-    stringifyCake,
-  }: CakeErrorDispatchFormatContext): StringTree {
+  dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree {
+    const { stringifyCake } = context;
     return `Could not determine if value satisfies type '${stringifyCake(
       this.cake
     )}': value contains a circular reference.`;
