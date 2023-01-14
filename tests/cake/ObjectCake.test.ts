@@ -57,7 +57,11 @@ const circularNameObj = (() => {
 const values: {
   [K in keyof typeof cakes]: Record<
     string,
-    [unknown, (cake: typeof cakes[K], value: unknown) => CakeError | null]
+    [
+      unknown,
+      (cake: typeof cakes[K], value: unknown) => CakeError | null,
+      string?
+    ]
   >;
 } = {
   person: {
@@ -124,6 +128,11 @@ const values: {
             "oops"
           ),
         }),
+      [
+        `Value does not satisfy type '{name: string, height?: (number) | undefined}': object properties are invalid.`,
+        `  Property "name": Value does not satisfy type 'string': type predicate failed.`,
+        `  Property "height": Value does not satisfy type 'number': type predicate failed.`,
+      ].join("\n"),
     ],
     circularNameObj: [
       circularNameObj,
@@ -156,18 +165,29 @@ const cakeValueTable: (readonly [
   keyof typeof cakes,
   string,
   unknown,
-  CakeError | null
+  CakeError | null,
+  string | undefined
 ])[] = keysUnsound(cakes).flatMap((cake) =>
-  Object.entries(values[cake]).map(([valueName, [value, errorProvider]]) => [
-    cake,
-    valueName,
-    value,
-    errorProvider(cakes[cake] as any, value),
-  ])
+  Object.entries(values[cake]).map(
+    ([valueName, [value, errorProvider, errorString]]) => [
+      cake,
+      valueName,
+      value,
+      errorProvider(cakes[cake] as any, value),
+      errorString,
+    ]
+  )
 );
 
-test.each(cakeValueTable)("%s.check(s)", (cake, _, value, error) => {
-  expect(cakes[cake].check(value)).toStrictEqual(
-    error === null ? Result.ok(value) : Result.err(error)
-  );
-});
+test.each(cakeValueTable)(
+  "%s.check(s)",
+  (cake, _, value, error, errorString) => {
+    const result = cakes[cake].check(value);
+    expect(result).toStrictEqual(
+      error === null ? Result.ok(value) : Result.err(error)
+    );
+    if (errorString !== undefined && !result.ok) {
+      expect(result.error.toString()).toStrictEqual(errorString);
+    }
+  }
+);
