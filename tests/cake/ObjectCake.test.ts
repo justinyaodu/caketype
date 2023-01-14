@@ -16,6 +16,7 @@ import {
   reference,
   Cake,
   entriesUnsound,
+  boolean,
 } from "../../src";
 
 interface CircularName {
@@ -65,7 +66,13 @@ const values: {
   >;
 } = {
   person: {
-    notObject: ["oops", (c, o) => new NotAnObjectCakeError(c, o)],
+    notObject: [
+      "oops",
+      (c, o) => new NotAnObjectCakeError(c, o),
+      [
+        `Value does not satisfy type '{name: string, height?: (number) | undefined}': value is not an object.`,
+      ].join("\n"),
+    ],
     optionalPresent: [
       {
         name: "Alice",
@@ -92,6 +99,10 @@ const values: {
         new ObjectPropertiesCakeError(c, o as object, {
           name: new ObjectRequiredPropertyMissingCakeError(c.properties.name),
         }),
+      [
+        `Value does not satisfy type '{name: string, height?: (number) | undefined}': object properties are invalid.`,
+        `  Property "name": Required property is missing.`,
+      ].join("\n"),
     ],
     requiredWrong: [
       {
@@ -195,3 +206,15 @@ test.each(cakeValueTable)(
     }
   }
 );
+
+test("toString with weird keys", () => {
+  const sym = Symbol("sym");
+  const cake = new ObjectCake({
+    [sym]: boolean,
+    "with space": number,
+    [Symbol.iterator]: string,
+  });
+  expect(cake.toString()).toStrictEqual(
+    `{"with space": number, [Symbol(sym)]: boolean, [Symbol(Symbol.iterator)]: string}`
+  );
+});
