@@ -1,4 +1,4 @@
-import { Result } from "../index-internal";
+import type { Result } from "../index-internal";
 
 import { CakeStringifier, Checker, Untagged } from "./index-internal";
 import type { CakeError } from "./index-internal";
@@ -29,8 +29,7 @@ abstract class Cake<in out T = any> extends Untagged {
   }
 
   check(value: unknown): Result<T, CakeError> {
-    const error = new Checker().check(this, value);
-    return error === null ? Result.ok(value as T) : Result.err(error);
+    return new Checker().check(this, value);
   }
 
   abstract dispatchCheck(

@@ -1,4 +1,4 @@
-import { deepGetResult, deepSet } from "../index-internal";
+import { deepGetResult, deepSet, Result } from "../index-internal";
 
 import {
   Cake,
@@ -22,8 +22,9 @@ class Checker {
     };
   }
 
-  check(cake: Cake, value: unknown): CakeError | null {
-    return this.checkVisit(cake, value);
+  check<T>(cake: Cake<T>, value: unknown): Result<T, CakeError> {
+    const error = this.checkVisit(cake, value);
+    return error === null ? Result.ok(value as T) : Result.err(error);
   }
 
   protected checkVisit(cake: Cake, value: unknown): CakeError | null {
