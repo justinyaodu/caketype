@@ -4,7 +4,7 @@
 
 ```ts
 
-// @public (undocumented)
+// @public
 export const any: TypePredicateCake<any>;
 
 // @public
@@ -24,10 +24,10 @@ export type Baked<B extends Bakeable> = B extends Cake ? B : B extends ObjectBak
     -readonly [K in keyof B]: B[K] extends OptionalTag<infer I extends Bakeable> ? OptionalTag<Baked<I>> : B[K] extends Bakeable ? Baked<B[K]> : never;
 }> : never;
 
-// @public (undocumented)
+// @public
 export const bigint: TypePredicateCake<bigint>;
 
-// @public (undocumented)
+// @public
 export const boolean: TypePredicateCake<boolean>;
 
 // Warning: (ae-forgotten-export) The symbol "Untagged" needs to be exported by the entry point index.d.ts
@@ -260,7 +260,7 @@ infer S extends object,
 ...infer R extends object[]
 ] ? Merged<[MergeTwo<F, S>, ...R]> : T extends [infer F extends object] ? MergeTwo<F, {}> : never;
 
-// @public (undocumented)
+// @public
 export const never: TypePredicateCake<never>;
 
 // @public
@@ -277,7 +277,7 @@ export class NotAnObjectCakeError extends CakeError {
     readonly value: unknown;
 }
 
-// @public (undocumented)
+// @public
 export const number: TypePredicateCake<number>;
 
 // @public
@@ -423,7 +423,7 @@ export const Result: ResultUtils;
 // @public
 export function sameValueZero(a: unknown, b: unknown): boolean;
 
-// @public (undocumented)
+// @public
 export const string: TypePredicateCake<string>;
 
 // @public
@@ -432,20 +432,20 @@ export function stringifyPrimitive(value: Primitive): string;
 // @public (undocumented)
 export type StringTree = string | readonly [string, readonly StringTree[]];
 
-// @public (undocumented)
+// @public
 export const symbol: TypePredicateCake<symbol>;
 
 // @public (undocumented)
 export class TypePredicateCake<T> extends Cake<T> {
-    constructor(name: string, predicate: (value: unknown) => value is T);
+    constructor(name: string, guard: (value: unknown) => value is T);
     // (undocumented)
     dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
     dispatchStringify(context: CakeDispatchStringifyContext): string;
     // (undocumented)
-    readonly name: string;
+    readonly guard: (value: unknown) => value is T;
     // (undocumented)
-    readonly predicate: (value: unknown) => value is T;
+    readonly name: string;
 }
 
 // @public (undocumented)
@@ -459,7 +459,7 @@ export class TypePredicateFailedCakeError extends CakeError {
     readonly value: unknown;
 }
 
-// @public (undocumented)
+// @public
 export const unknown: TypePredicateCake<unknown>;
 
 // @public

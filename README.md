@@ -13,7 +13,14 @@
   - [`Cake.toString`](#caketostring)
   - [`Infer`](#infer)
 - [Built-in Cakes](#built-in-cakes)
+  - [`any`](#any)
   - [`boolean`](#boolean)
+  - [`bigint`](#bigint)
+  - [`never`](#never)
+  - [`number`](#number)
+  - [`string`](#string)
+  - [`symbol`](#symbol)
+  - [`unknown`](#unknown)
 - [Tags](#tags)
   - [`optional`](#optional)
   - [`OptionalTag`](#optionaltag)
@@ -289,7 +296,98 @@ type Person = Infer<typeof Person>;
 
 ---
 
+#### `any`
+
+A [Cake](#cake) representing the `any` type. Every value satisfies this type.
+
+```ts
+any.is("hello"); // true
+any.is(null); // true
+```
+
+See [unknown](#unknown) to get the same runtime behavior, but an inferred type
+of `unknown` instead of `any`.
+
+---
+
 #### `boolean`
+
+A [Cake](#cake) representing the `boolean` type.
+
+```ts
+boolean.is(true); // true
+boolean.is(1); // false
+```
+
+---
+
+#### `bigint`
+
+A [Cake](#cake) representing the `bigint` type.
+
+```ts
+bigint.is(BigInt(5)); // true
+bigint.is(5); // false
+```
+
+---
+
+#### `never`
+
+A [Cake](#cake) representing the `never` type. No value satisfies this type.
+
+```ts
+never.is("hello"); // false
+never.is(undefined); // false
+```
+
+---
+
+#### `number`
+
+A [Cake](#cake) representing the `number` type.
+
+```ts
+number.is(5); // true
+number.is("5"); // false
+```
+
+---
+
+#### `string`
+
+A [Cake](#cake) representing the `string` type.
+
+```ts
+string.is("hello"); // true
+string.is(""); // true
+```
+
+---
+
+#### `symbol`
+
+A [Cake](#cake) representing the `symbol` type.
+
+```ts
+symbol.is(Symbol.iterator); // true
+symbol.is(Symbol("hi")); // true
+```
+
+---
+
+#### `unknown`
+
+A [Cake](#cake) representing the `unknown` type. Every value satisfies this
+type.
+
+```ts
+unknown.is("hello"); // true
+unknown.is(null); // true
+```
+
+See [any](#any) to get the same runtime behavior, but an inferred type
+of `any` instead of `unknown`.
 
 ---
 

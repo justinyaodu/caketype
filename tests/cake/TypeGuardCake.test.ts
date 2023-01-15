@@ -11,6 +11,48 @@ import {
   unknown,
 } from "../../src";
 
+describe("documentation examples", () => {
+  test("any", () => {
+    expect(any.is("hello")).toStrictEqual(true);
+    expect(any.is(null)).toStrictEqual(true);
+  });
+
+  test("boolean", () => {
+    expect(boolean.is(true)).toStrictEqual(true);
+    expect(boolean.is(1)).toStrictEqual(false);
+  });
+
+  test("bigint", () => {
+    expect(bigint.is(BigInt(5))).toStrictEqual(true);
+    expect(bigint.is(5)).toStrictEqual(false);
+  });
+
+  test("never", () => {
+    expect(never.is("hello")).toStrictEqual(false);
+    expect(never.is(undefined)).toStrictEqual(false);
+  });
+
+  test("number", () => {
+    expect(number.is(5)).toStrictEqual(true);
+    expect(number.is("5")).toStrictEqual(false);
+  });
+
+  test("string", () => {
+    expect(string.is("hello")).toStrictEqual(true);
+    expect(string.is("")).toStrictEqual(true);
+  });
+
+  test("symbol", () => {
+    expect(symbol.is(Symbol.iterator)).toStrictEqual(true);
+    expect(symbol.is(Symbol("hi"))).toStrictEqual(true);
+  });
+
+  test("unknown", () => {
+    expect(unknown.is("hello")).toStrictEqual(true);
+    expect(unknown.is(null)).toStrictEqual(true);
+  });
+});
+
 const cakes = {
   any,
   bigint,
