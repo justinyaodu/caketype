@@ -36,6 +36,8 @@ export const boolean: TypePredicateCake<boolean>;
 export abstract class Cake<in out T = any> extends Untagged {
     as(value: unknown): T;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
     check(value: unknown): Result<T, CakeError>;
     // (undocumented)
     abstract dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
@@ -57,11 +59,11 @@ export interface CakeDispatchStringifyContext {
     readonly recurse: (cake: Cake) => string;
 }
 
-// @public (undocumented)
+// @public
 export abstract class CakeError {
     // (undocumented)
     abstract dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
-    // (undocumented)
+    throw(): never;
     toString(): string;
 }
 
@@ -380,12 +382,12 @@ export function omitLoose<T extends object, K extends (string | symbol)[]>(objec
     [L in Exclude<keyof T, K[number]>]: T[L];
 };
 
-// @public (undocumented)
+// @public
 export function optional<T>(value: T): OptionalTag<T>;
 
 // Warning: (ae-forgotten-export) The symbol "Tag" needs to be exported by the entry point index.d.ts
 //
-// @public (undocumented)
+// @public
 export class OptionalTag<T> extends Tag<"optional", T> {
     constructor(untagged: T);
 }

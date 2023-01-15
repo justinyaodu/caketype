@@ -24,11 +24,8 @@
 - [Tags](#tags)
   - [`optional`](#optional)
   - [`OptionalTag`](#optionaltag)
-- [Cake Classes](#cake-classes)
-  - [`ObjectCake`](#objectcake)
 - [Cake Errors](#cake-errors)
   - [`CakeError`](#cakeerror)
-  - [`ObjectPropertiesCakeError`](#objectpropertiescakeerror)
 - [Comparison Utilities](#comparison-utilities)
   - [`sameValueZero`](#samevaluezero)
 - [Map Utilities](#map-utilities)
@@ -220,6 +217,22 @@ square("oops");
 // Value does not satisfy type 'number': type guard failed.
 ```
 
+[Result.valueOr](#resultvalueor) can be used to return a default value when
+the provided value is invalid:
+
+```ts
+number.check(3).valueOr(0); // 3
+number.check("oops").valueOr(0); // 0
+```
+
+[Result.errorOr](#resulterroror) can be used to get the [CakeError](#cakeerror)
+directly, or a default value if no error occurred:
+
+```ts
+number.check(3).errorOr(null); // null
+number.check("oops").errorOr(null); // <CakeError>
+```
+
 See [Cake.as](#cakeas) to throw an error if the type is not satisfied.
 
 ---
@@ -397,17 +410,23 @@ of `any` instead of `unknown`.
 
 #### `optional`
 
+Used to indicate that a property is optional.
+
+```ts
+const Person = bake({
+  name: string,
+  age: optional(number),
+} as const);
+
+type Person = Infer<typeof Person>;
+// { name: string, age?: number | undefined }
+```
+
 ---
 
 #### `OptionalTag`
 
----
-
-### CAKE CLASSES
-
----
-
-#### `ObjectCake`
+Returned by [optional](#optional).
 
 ---
 
@@ -417,9 +436,32 @@ of `any` instead of `unknown`.
 
 #### `CakeError`
 
+Represent the reason why a value did not satisfy the type represented by a
+[Cake](#cake).
+
 ---
 
-#### `ObjectPropertiesCakeError`
+#### `CakeError.throw`
+
+Throw a TypeError created from this CakeError.
+
+```ts
+error.throw();
+// TypeError: Value does not satisfy type '{name: string}': object properties are invalid.
+//   Property "name": Required property is missing.
+```
+
+---
+
+#### `CakeError.toString`
+
+Return a human-readable string representation of this CakeError.
+
+```ts
+console.log(error.toString());
+// Value does not satisfy type '{name: string}': object properties are invalid.
+//   Property "name": Required property is missing.
+```
 
 ---
 

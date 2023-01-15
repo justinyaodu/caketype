@@ -81,6 +81,22 @@ abstract class Cake<in out T = any> extends Untagged {
    * // Value does not satisfy type 'number': type guard failed.
    * ```
    *
+   * @example {@link Result.valueOr} can be used to return a default value when
+   * the provided value is invalid:
+   *
+   * ```ts
+   * number.check(3).valueOr(0); // 3
+   * number.check("oops").valueOr(0); // 0
+   * ```
+   *
+   * @example {@link Result.errorOr} can be used to get the {@link CakeError}
+   * directly, or a default value if no error occurred:
+   *
+   * ```ts
+   * number.check(3).errorOr(null); // null
+   * number.check("oops").errorOr(null); // <CakeError>
+   * ```
+   *
    * @see {@link Cake.as} to throw an error if the type is not satisfied.
    */
   check(value: unknown): Result<T, CakeError> {

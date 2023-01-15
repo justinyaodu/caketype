@@ -20,6 +20,8 @@ class Tag<L, T> implements TagLike<L, T> {
 }
 
 /**
+ * Returned by {@link optional}.
+ *
  * @public
  */
 class OptionalTag<T> extends Tag<"optional", T> {
@@ -29,6 +31,19 @@ class OptionalTag<T> extends Tag<"optional", T> {
 }
 
 /**
+ * Used to indicate that a property is optional.
+ *
+ * @example
+ * ```ts
+ * const Person = bake({
+ *   name: string,
+ *   age: optional(number),
+ * } as const);
+ *
+ * type Person = Infer<typeof Person>;
+ * // { name: string, age?: number | undefined }
+ * ```
+ *
  * @public
  */
 function optional<T>(value: T): OptionalTag<T> {

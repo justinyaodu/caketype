@@ -39,6 +39,16 @@ describe("documentation examples", () => {
     );
   });
 
+  test("check and Result.valueOr", () => {
+    expect(number.check(3).valueOr(0)).toStrictEqual(3);
+    expect(number.check("oops").valueOr(0)).toStrictEqual(0);
+  });
+
+  test("check and Result.errorOr", () => {
+    expect(number.check(3).errorOr(null)).toStrictEqual(null);
+    expect(number.check("oops").errorOr(null)).toBeInstanceOf(CakeError);
+  });
+
   test("is returns boolean", () => {
     expect(number.is(3)).toStrictEqual(true);
     expect(number.is("oops")).toStrictEqual(false);
