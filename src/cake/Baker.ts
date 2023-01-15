@@ -64,6 +64,7 @@ class Baker {
   }
 }
 
+// TODO: add note about using `as const`
 /**
  * Create a {@link Cake} from a {@link Bakeable} type definition.
  *

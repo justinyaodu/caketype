@@ -13,6 +13,17 @@ export type Assert<T extends true> = never;
 // @public
 export type AssertExtends<T extends U, U> = never;
 
+// @public
+export function bake<B extends Bakeable>(bakeable: B): Baked<B>;
+
+// @public
+export type Bakeable = Cake | ObjectBakeable;
+
+// @public
+export type Baked<B extends Bakeable> = B extends Cake ? B : B extends ObjectBakeable ? ObjectCake<{
+    -readonly [K in keyof B]: B[K] extends OptionalTag<infer I extends Bakeable> ? OptionalTag<Baked<I>> : B[K] extends Bakeable ? Baked<B[K]> : never;
+}> : never;
+
 // @public (undocumented)
 export const bigint: TypePredicateCake<bigint>;
 
@@ -21,19 +32,16 @@ export const boolean: TypePredicateCake<boolean>;
 
 // Warning: (ae-forgotten-export) The symbol "Untagged" needs to be exported by the entry point index.d.ts
 //
-// @public (undocumented)
+// @public
 export abstract class Cake<in out T = any> extends Untagged {
-    // (undocumented)
     as(value: unknown): T;
-    // (undocumented)
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
     check(value: unknown): Result<T, CakeError>;
     // (undocumented)
     abstract dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
     abstract dispatchStringify(context: CakeDispatchStringifyContext): string;
-    // (undocumented)
     is(value: unknown): value is T;
-    // (undocumented)
     toString(): string;
 }
 
@@ -185,7 +193,7 @@ export function getResult<K, V>(map: MapLike<K, V>, key: K): Result<V, undefined
 // @public
 export type If<T extends boolean, U, V> = T extends true ? U : V;
 
-// @public (undocumented)
+// @public
 export type Infer<C extends Cake> = C extends Cake<infer T> ? T : never;
 
 // @public
@@ -272,6 +280,11 @@ export class NotAnObjectCakeError extends CakeError {
 // @public (undocumented)
 export const number: TypePredicateCake<number>;
 
+// @public
+export type ObjectBakeable = {
+    [key: string | symbol]: Bakeable | OptionalTag<Bakeable>;
+};
+
 // Warning: (ae-forgotten-export) The symbol "OnlyRequiredKeys" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "OnlyOptionalKeys" needs to be exported by the entry point index.d.ts
 //
@@ -279,17 +292,17 @@ export const number: TypePredicateCake<number>;
 export class ObjectCake<P extends ObjectCakeProperties> extends Cake<({
     -readonly [K in OnlyRequiredKeys<P>]: P[K] extends Cake ? Infer<P[K]> : never;
 } & {
-    -readonly [K in OnlyOptionalKeys<P>]?: P[K] extends OptionalTag<infer I extends Cake> ? Infer<I> : never;
+    -readonly [K in OnlyOptionalKeys<P>]?: P[K] extends OptionalTag<infer I extends Cake> ? Infer<I> | undefined : never;
 } extends infer I ? {
     [K in keyof I]: I[K];
 } : never) & object> {
-    constructor(properties: P);
+    constructor(properties: Readonly<P>);
     // (undocumented)
     dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
     dispatchStringify(context: CakeDispatchStringifyContext): string;
     // (undocumented)
-    readonly properties: P;
+    readonly properties: Readonly<P>;
 }
 
 // @public (undocumented)

@@ -1,5 +1,27 @@
 ## API Reference
 
+- [Baking](#baking)
+  - [`bake`](#bake)
+  - [`Bakeable`](#bakeable)
+  - [`ObjectBakeable`](#objectbakeable)
+  - [`Baked`](#baked)
+- [Cakes](#cakes)
+  - [`Cake`](#cake)
+  - [`Cake.as`](#cakeas)
+  - [`Cake.check`](#cakecheck)
+  - [`Cake.is`](#cakeis)
+  - [`Cake.toString`](#caketostring)
+  - [`Infer`](#infer)
+- [Built-in Cakes](#built-in-cakes)
+  - [`boolean`](#boolean)
+- [Tags](#tags)
+  - [`optional`](#optional)
+  - [`OptionalTag`](#optionaltag)
+- [Cake Classes](#cake-classes)
+  - [`ObjectCake`](#objectcake)
+- [Cake Errors](#cake-errors)
+  - [`CakeError`](#cakeerror)
+  - [`ObjectPropertiesCakeError`](#objectpropertiescakeerror)
 - [Comparison Utilities](#comparison-utilities)
   - [`sameValueZero`](#samevaluezero)
 - [Map Utilities](#map-utilities)
@@ -44,17 +66,16 @@
   - [`Result`](#result)
   - [`Result.ok`](#resultok)
   - [`Result.err`](#resulterr)
-  - [`Result` Instance Methods](#result-instance-methods)
-    - [`Result.valueOr`](#resultvalueor)
-    - [`Result.errorOr`](#resulterroror)
-    - [`Result.toString`](#resulttostring)
+  - [`Result.valueOr`](#resultvalueor)
+  - [`Result.errorOr`](#resulterroror)
+  - [`Result.toString`](#resulttostring)
   - [`Ok`](#ok)
-    - [`Ok.ok`](#okok)
-    - [`Ok.value`](#okvalue)
+  - [`Ok.ok`](#okok)
+  - [`Ok.value`](#okvalue)
   - [`Err`](#err)
-    - [`Err.ok`](#errok)
-    - [`Err.error`](#errerror)
-- [Type-Level Assertions](#type-level-assertions)
+  - [`Err.ok`](#errok)
+  - [`Err.error`](#errerror)
+- [Type-level Assertions](#type-level-assertions)
   - [`Assert`](#assert)
   - [`AssertExtends`](#assertextends)
   - [`Equivalent`](#equivalent)
@@ -63,6 +84,244 @@
   - [`Not`](#not)
 - [Utility Types](#utility-types)
   - [`Class`](#class)
+
+---
+
+### BAKING
+
+---
+
+#### `bake`
+
+Create a [Cake](#cake) from a [Bakeable](#bakeable) type definition.
+
+```ts
+const Person = bake({
+  name: string,
+  age: optional(number),
+} as const);
+
+const aliceIsPerson = Person.is({ name: "Alice" });
+// true
+```
+
+Use [Infer](#infer) to get the TypeScript type represented by a Cake:
+
+```ts
+type Person = Infer<typeof Person>;
+// { name: string, age?: number | undefined }
+
+const bob: Person = { name: "Bob", age: 42 };
+```
+
+---
+
+#### `Bakeable`
+
+A convenient syntax for type definitions. Used by [bake](#bake).
+
+```ts
+type Bakeable = Cake | ObjectBakeable;
+```
+
+---
+
+#### `ObjectBakeable`
+
+Define an object type that can be [bake](#bake)d into an [ObjectCake](#objectcake).
+
+```ts
+type ObjectBakeable = {
+  [key: string | symbol]: Bakeable | OptionalTag<Bakeable>;
+};
+```
+
+---
+
+#### `Baked`
+
+The return type of [bake](#bake) for a given [Bakeable](#bakeable).
+
+---
+
+### CAKES
+
+---
+
+#### `Cake`
+
+Represent a TypeScript type at runtime.
+
+```ts
+abstract class Cake<in out T = any>
+```
+
+> `T`: The TypeScript type represented by this Cake.
+
+See [bake](#bake) to create a Cake.
+
+---
+
+#### `Cake.as`
+
+Return the provided value if it satisfies the type represented by this
+Cake, and throw a TypeError otherwise.
+
+```ts
+Cake<T>.as(value: unknown): T;
+```
+
+Using the built-in [number](#number) Cake:
+
+```ts
+number.as(3); // 3
+
+number.as("oops");
+// TypeError: Value does not satisfy type 'number': type predicate failed.
+```
+
+See [Cake.check](#cakecheck) to return the error instead of throwing it.
+
+---
+
+#### `Cake.check`
+
+Return a [Result](#result) with the provided value if it satisfies the type
+represented by this Cake, or a [CakeError](#cakeerror) otherwise.
+
+```ts
+Cake<T>.check(value: unknown): Result<T, CakeError>;
+```
+
+Using the built-in [number](#number) Cake:
+
+```ts
+function square(input: unknown) {
+  const result = number.check(input);
+  if (result.ok) {
+    // result.value is a number
+    return result.value ** 2;
+  } else {
+    // result.error is a CakeError
+    console.error(result.error);
+  }
+}
+
+square(3); // 9
+
+square("oops");
+// Value does not satisfy type 'number': type predicate failed.
+```
+
+See [Cake.as](#cakeas) to throw an error if the type is not satisfied.
+
+---
+
+#### `Cake.is`
+
+Return whether a value satisfies the type represented by this Cake.
+
+```ts
+Cake<T>.is(value: unknown): value is T;
+```
+
+Using the built-in [number](#number) Cake:
+
+```ts
+number.is(3); // true
+number.is("oops"); // false
+```
+
+This can be used as a
+[type guard](https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates)
+for control flow narrowing:
+
+```ts
+const value: unknown = 7;
+if (number.is(value)) {
+  // here, value has type 'number'
+}
+```
+
+---
+
+#### `Cake.toString`
+
+Return a human-readable string representation of the type represented by
+this Cake.
+
+```ts
+const Person = bake({
+  name: string,
+  height: optional(number),
+} as const);
+
+Person.toString();
+// {name: string, height?: (number) | undefined}
+```
+
+The string representation is designed to be unambiguous and simple to
+generate, so it may contain redundant parentheses.
+
+The format of the return value may change between versions.
+
+---
+
+#### `Infer`
+
+_type_
+
+Get the TypeScript type represented by a [Cake](#cake).
+
+```ts
+const Person = bake({
+  name: string,
+  age: optional(number),
+} as const);
+
+type Person = Infer<typeof Person>;
+// { name: string, age?: number | undefined }
+```
+
+---
+
+### BUILT-IN CAKES
+
+---
+
+#### `boolean`
+
+---
+
+### TAGS
+
+---
+
+#### `optional`
+
+---
+
+#### `OptionalTag`
+
+---
+
+### CAKE CLASSES
+
+---
+
+#### `ObjectCake`
+
+---
+
+### CAKE ERRORS
+
+---
+
+#### `CakeError`
+
+---
+
+#### `ObjectPropertiesCakeError`
 
 ---
 
@@ -828,6 +1087,8 @@ parseBinary(""); // Err(empty string)
 
 #### `Result.ok`
 
+_function_
+
 Return an [Ok](#ok) with the provided value, using undefined if no value is
 provided.
 
@@ -840,6 +1101,8 @@ Result.ok(); // Ok(undefined)
 
 #### `Result.err`
 
+_function_
+
 Return an [Err](#err) with the provided error, using undefined if no error is
 provided.
 
@@ -850,9 +1113,9 @@ Result.err(); // Err(undefined)
 
 ---
 
-#### `Result` Instance Methods
+#### `Result.valueOr`
 
-##### `Result.valueOr`
+_method_
 
 Return [Ok.value](#okvalue), or the provided argument if this is not an Ok.
 
@@ -861,7 +1124,11 @@ Result.ok(5).valueOr(0); // 5
 Result.err("oops").valueOr(0); // 0
 ```
 
-##### `Result.errorOr`
+---
+
+#### `Result.errorOr`
+
+_method_
 
 Return [Err.error](#errerror), or the provided argument if this is not an Err.
 
@@ -870,7 +1137,11 @@ Result.err("oops").errorOr("no error"); // "oops"
 Result.ok(5).errorOr("no error"); // "no error"
 ```
 
-##### `Result.toString`
+---
+
+#### `Result.toString`
+
+_method_
 
 Return a string representation of this Result.
 
@@ -883,15 +1154,25 @@ Result.err({}).toString(); // "Err([object Object])"
 
 #### `Ok`
 
+_class_
+
 The result of a successful operation.
 
 See [Result.ok](#resultok) to construct an Ok.
 
-##### `Ok.ok`
+---
+
+#### `Ok.ok`
+
+_property_
 
 Always true. In contrast, [Err.ok](#errok) is always false.
 
-##### `Ok.value`
+---
+
+#### `Ok.value`
+
+_property_
 
 The value returned by the successful operation.
 
@@ -899,15 +1180,25 @@ The value returned by the successful operation.
 
 #### `Err`
 
+_class_
+
 The result of an unsuccessful operation.
 
 See [Result.err](#resulterr) to construct an Err.
 
-##### `Err.ok`
+---
+
+#### `Err.ok`
+
+_property_
 
 Always false. In contrast, [Ok.ok](#okok) is always true.
 
-##### `Err.error`
+---
+
+#### `Err.error`
+
+_property_
 
 The value returned by the unsuccessful operation.
 
@@ -1065,11 +1356,9 @@ an instance).
 interface Class<T = any, A extends unknown[] = any>
 ```
 
-_Type Parameters_
-
-`T` - Type of the class instances.
-
-`A` - Type of the constructor arguments.
+> `T` - Type of the class instances.
+>
+> `A` - Type of the constructor arguments.
 
 _Example_
 

@@ -14,7 +14,7 @@ function extractHeadings(lines) {
 
 function capsToTitleCase(text) {
   return text.replaceAll(
-    /\b[A-Z]+\b/g,
+    /\b[A-Z-]+\b/g,
     (s) => s[0].toUpperCase() + s.slice(1).toLowerCase()
   );
 }
