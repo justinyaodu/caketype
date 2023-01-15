@@ -126,15 +126,7 @@ A convenient syntax for type definitions. Used by [bake](#bake).
 
 ```ts
 type Bakeable = Cake | ObjectBakeable;
-```
 
----
-
-#### `ObjectBakeable`
-
-Define an object type that can be [bake](#bake)d into an [ObjectCake](#objectcake).
-
-```ts
 type ObjectBakeable = {
   [key: string | symbol]: Bakeable | OptionalTag<Bakeable>;
 };
