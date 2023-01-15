@@ -67,11 +67,11 @@ describe("documentation examples", () => {
   test("toString", () => {
     const Person = bake({
       name: string,
-      height: optional(number),
+      age: optional(number),
     } as const);
 
     expect(Person.toString()).toStrictEqual(
-      "{name: string, height?: (number) | undefined}"
+      "{name: string, age?: (number) | undefined}"
     );
   });
 

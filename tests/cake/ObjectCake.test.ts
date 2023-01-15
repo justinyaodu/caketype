@@ -30,14 +30,14 @@ const circularName: Cake<CircularName> = new ObjectCake({
 const cakes = {
   person: new ObjectCake({
     name: string,
-    height: optional(number),
+    age: optional(number),
   }),
   empty: new ObjectCake({}),
   circularName,
 } as const;
 
 const toStrings: { [K in keyof typeof cakes]: string } = {
-  person: "{name: string, height?: (number) | undefined}",
+  person: "{name: string, age?: (number) | undefined}",
   empty: "{}",
   circularName: "{name?: (reference(() => [Circular])) | undefined}",
 };
@@ -70,13 +70,13 @@ const values: {
       "oops",
       (c, o) => new NotAnObjectCakeError(c, o),
       [
-        `Value does not satisfy type '{name: string, height?: (number) | undefined}': value is not an object.`,
+        `Value does not satisfy type '{name: string, age?: (number) | undefined}': value is not an object.`,
       ].join("\n"),
     ],
     optionalPresent: [
       {
         name: "Alice",
-        height: 0,
+        age: 0,
       },
       () => null,
     ],
@@ -89,7 +89,7 @@ const values: {
     optionalUndefined: [
       {
         name: "Alice",
-        height: undefined,
+        age: undefined,
       },
       () => null,
     ],
@@ -100,7 +100,7 @@ const values: {
           name: new ObjectRequiredPropertyMissingCakeError(c.properties.name),
         }),
       [
-        `Value does not satisfy type '{name: string, height?: (number) | undefined}': object properties are invalid.`,
+        `Value does not satisfy type '{name: string, age?: (number) | undefined}': object properties are invalid.`,
         `  Property "name": Required property is missing.`,
       ].join("\n"),
     ],
@@ -116,33 +116,27 @@ const values: {
     optionalWrong: [
       {
         name: "Alice",
-        height: null,
+        age: null,
       },
       (c, o) =>
         new ObjectPropertiesCakeError(c, o as object, {
-          height: new TypeGuardFailedCakeError(
-            c.properties.height.untagged,
-            null
-          ),
+          age: new TypeGuardFailedCakeError(c.properties.age.untagged, null),
         }),
     ],
     bothWrong: [
       {
         name: 1234,
-        height: "oops",
+        age: "oops",
       },
       (c, o) =>
         new ObjectPropertiesCakeError(c, o as object, {
           name: new TypeGuardFailedCakeError(c.properties.name, 1234),
-          height: new TypeGuardFailedCakeError(
-            c.properties.height.untagged,
-            "oops"
-          ),
+          age: new TypeGuardFailedCakeError(c.properties.age.untagged, "oops"),
         }),
       [
-        `Value does not satisfy type '{name: string, height?: (number) | undefined}': object properties are invalid.`,
+        `Value does not satisfy type '{name: string, age?: (number) | undefined}': object properties are invalid.`,
         `  Property "name": Value does not satisfy type 'string': type guard failed.`,
-        `  Property "height": Value does not satisfy type 'number': type guard failed.`,
+        `  Property "age": Value does not satisfy type 'number': type guard failed.`,
       ].join("\n"),
     ],
     circularNameObj: [

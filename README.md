@@ -266,11 +266,11 @@ this Cake.
 ```ts
 const Person = bake({
   name: string,
-  height: optional(number),
+  age: optional(number),
 } as const);
 
 Person.toString();
-// {name: string, height?: (number) | undefined}
+// {name: string, age?: (number) | undefined}
 ```
 
 The string representation is designed to be unambiguous and simple to
