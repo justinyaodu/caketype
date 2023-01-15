@@ -5,7 +5,7 @@
 ```ts
 
 // @public
-export const any: TypePredicateCake<any>;
+export const any: TypeGuardCake<any>;
 
 // @public
 export type Assert<T extends true> = never;
@@ -25,10 +25,10 @@ export type Baked<B extends Bakeable> = B extends Cake ? B : B extends ObjectBak
 }> : never;
 
 // @public
-export const bigint: TypePredicateCake<bigint>;
+export const bigint: TypeGuardCake<bigint>;
 
 // @public
-export const boolean: TypePredicateCake<boolean>;
+export const boolean: TypeGuardCake<boolean>;
 
 // Warning: (ae-forgotten-export) The symbol "Untagged" needs to be exported by the entry point index.d.ts
 //
@@ -263,7 +263,7 @@ infer S extends object,
 ] ? Merged<[MergeTwo<F, S>, ...R]> : T extends [infer F extends object] ? MergeTwo<F, {}> : never;
 
 // @public
-export const never: TypePredicateCake<never>;
+export const never: TypeGuardCake<never>;
 
 // @public
 export type Not<T extends boolean> = T extends true ? false : true;
@@ -280,7 +280,7 @@ export class NotAnObjectCakeError extends CakeError {
 }
 
 // @public
-export const number: TypePredicateCake<number>;
+export const number: TypeGuardCake<number>;
 
 // @public
 export type ObjectBakeable = {
@@ -426,7 +426,7 @@ export const Result: ResultUtils;
 export function sameValueZero(a: unknown, b: unknown): boolean;
 
 // @public
-export const string: TypePredicateCake<string>;
+export const string: TypeGuardCake<string>;
 
 // @public
 export function stringifyPrimitive(value: Primitive): string;
@@ -435,10 +435,10 @@ export function stringifyPrimitive(value: Primitive): string;
 export type StringTree = string | readonly [string, readonly StringTree[]];
 
 // @public
-export const symbol: TypePredicateCake<symbol>;
+export const symbol: TypeGuardCake<symbol>;
 
 // @public (undocumented)
-export class TypePredicateCake<T> extends Cake<T> {
+export class TypeGuardCake<T> extends Cake<T> {
     constructor(name: string, guard: (value: unknown) => value is T);
     // (undocumented)
     dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
@@ -451,10 +451,10 @@ export class TypePredicateCake<T> extends Cake<T> {
 }
 
 // @public (undocumented)
-export class TypePredicateFailedCakeError extends CakeError {
-    constructor(cake: TypePredicateCake<any>, value: unknown);
+export class TypeGuardFailedCakeError extends CakeError {
+    constructor(cake: TypeGuardCake<any>, value: unknown);
     // (undocumented)
-    readonly cake: TypePredicateCake<any>;
+    readonly cake: TypeGuardCake<any>;
     // (undocumented)
     dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
     // (undocumented)
@@ -462,7 +462,7 @@ export class TypePredicateFailedCakeError extends CakeError {
 }
 
 // @public
-export const unknown: TypePredicateCake<unknown>;
+export const unknown: TypeGuardCake<unknown>;
 
 // @public
 export function values(object: object): unknown[];

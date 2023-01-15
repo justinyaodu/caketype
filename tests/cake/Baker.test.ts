@@ -8,7 +8,7 @@ import {
   optional,
   OptionalTag,
   string,
-  TypePredicateCake,
+  TypeGuardCake,
 } from "../../src";
 
 describe("documentation examples", () => {
@@ -21,8 +21,8 @@ describe("documentation examples", () => {
       Equivalent<
         typeof Person,
         ObjectCake<{
-          name: TypePredicateCake<string>;
-          age: OptionalTag<TypePredicateCake<number>>;
+          name: TypeGuardCake<string>;
+          age: OptionalTag<TypeGuardCake<number>>;
         }>
       >
     >;

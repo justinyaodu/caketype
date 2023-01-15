@@ -5,5 +5,5 @@ export * from "./MapUtils";
 export * from "./ObjectUtils";
 export * from "./Primitive";
 export * from "./Result";
-export * from "./type-predicates";
+export * from "./type-guards";
 export * from "./typescript-flags";

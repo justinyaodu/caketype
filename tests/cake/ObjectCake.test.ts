@@ -5,7 +5,7 @@ import {
   number,
   ObjectCake,
   string,
-  TypePredicateFailedCakeError,
+  TypeGuardFailedCakeError,
   NotAnObjectCakeError,
   ObjectPropertiesCakeError,
   ObjectRequiredPropertyMissingCakeError,
@@ -110,7 +110,7 @@ const values: {
       },
       (c, o) =>
         new ObjectPropertiesCakeError(c, o as object, {
-          name: new TypePredicateFailedCakeError(c.properties.name, false),
+          name: new TypeGuardFailedCakeError(c.properties.name, false),
         }),
     ],
     optionalWrong: [
@@ -120,7 +120,7 @@ const values: {
       },
       (c, o) =>
         new ObjectPropertiesCakeError(c, o as object, {
-          height: new TypePredicateFailedCakeError(
+          height: new TypeGuardFailedCakeError(
             c.properties.height.untagged,
             null
           ),
@@ -133,8 +133,8 @@ const values: {
       },
       (c, o) =>
         new ObjectPropertiesCakeError(c, o as object, {
-          name: new TypePredicateFailedCakeError(c.properties.name, 1234),
-          height: new TypePredicateFailedCakeError(
+          name: new TypeGuardFailedCakeError(c.properties.name, 1234),
+          height: new TypeGuardFailedCakeError(
             c.properties.height.untagged,
             "oops"
           ),
@@ -149,7 +149,7 @@ const values: {
       circularNameObj,
       (c, o) =>
         new ObjectPropertiesCakeError(c, o as object, {
-          name: new TypePredicateFailedCakeError(c.properties.name, o),
+          name: new TypeGuardFailedCakeError(c.properties.name, o),
         }),
     ],
   },

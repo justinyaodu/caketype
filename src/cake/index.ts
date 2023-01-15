@@ -29,9 +29,9 @@ export {
   // tags.ts
   OptionalTag,
   optional,
-  // TypePredicateCake.ts
-  TypeGuardCake as TypePredicateCake,
-  TypeGuardFailedCakeError as TypePredicateFailedCakeError,
+  // TypeGuardCake.ts
+  TypeGuardCake as TypeGuardCake,
+  TypeGuardFailedCakeError as TypeGuardFailedCakeError,
   any,
   boolean,
   bigint,
