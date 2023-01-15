@@ -27,7 +27,7 @@ import {
   valuesIncludingSymbolsUnsound,
   valuesUnsound,
 } from "../src";
-import { FlagExactOptionalPropertyTypes } from "../src/index-internal";
+import type { FlagExactOptionalPropertyTypes } from "../src/index-internal";
 
 import { typeCheckOnly } from "./test-helpers";
 

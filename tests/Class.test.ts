@@ -1,4 +1,4 @@
-import { Assert, AssertExtends, Extends, Not, Class } from "../src";
+import type { Assert, AssertExtends, Extends, Not, Class } from "../src";
 
 test("documentation examples", () => {
   const _a: Class[] = [Date, Array, RegExp];

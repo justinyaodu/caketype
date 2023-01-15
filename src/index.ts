@@ -1,3 +1,5 @@
+export * from "./cake/index";
+
 export {
   // assert-types.ts
   Assert,
