@@ -30,8 +30,8 @@ export {
   OptionalTag,
   optional,
   // TypePredicateCake.ts
-  TypePredicateCake,
-  TypePredicateFailedCakeError,
+  TypeGuardCake as TypePredicateCake,
+  TypeGuardFailedCakeError as TypePredicateFailedCakeError,
   any,
   boolean,
   bigint,

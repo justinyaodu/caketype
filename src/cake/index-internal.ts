@@ -10,4 +10,4 @@ export * from "./Checker";
 export * from "./ObjectCake";
 export * from "./ReferenceCake";
 export * from "./StringTree";
-export * from "./TypePredicateCake";
+export * from "./TypeGuardCake";

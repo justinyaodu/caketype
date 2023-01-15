@@ -21,10 +21,10 @@ import {
 /**
  * @public
  */
-class TypePredicateCake<T> extends Cake<T> {
+class TypeGuardCake<T> extends Cake<T> {
   constructor(
     readonly name: string,
-    readonly predicate: (value: unknown) => value is T
+    readonly guard: (value: unknown) => value is T
   ) {
     super();
   }
@@ -34,10 +34,10 @@ class TypePredicateCake<T> extends Cake<T> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     context: CakeDispatchCheckContext
   ): CakeError | null {
-    if (this.predicate(value)) {
+    if (this.guard(value)) {
       return null;
     }
-    return new TypePredicateFailedCakeError(this, value);
+    return new TypeGuardFailedCakeError(this, value);
   }
 
   dispatchStringify(
@@ -51,9 +51,9 @@ class TypePredicateCake<T> extends Cake<T> {
 /**
  * @public
  */
-class TypePredicateFailedCakeError extends CakeError {
+class TypeGuardFailedCakeError extends CakeError {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(readonly cake: TypePredicateCake<any>, readonly value: unknown) {
+  constructor(readonly cake: TypeGuardCake<any>, readonly value: unknown) {
     super();
   }
 
@@ -61,53 +61,53 @@ class TypePredicateFailedCakeError extends CakeError {
     const { stringifyCake } = context;
     return `Value does not satisfy type '${stringifyCake(
       this.cake
-    )}': type predicate failed.`;
+    )}': type guard failed.`;
   }
 }
 
 /**
  * @public
  */
-const any = new TypePredicateCake("any", is_any);
+const any = new TypeGuardCake("any", is_any);
 
 /**
  * @public
  */
-const boolean = new TypePredicateCake("boolean", is_boolean);
+const boolean = new TypeGuardCake("boolean", is_boolean);
 
 /**
  * @public
  */
-const bigint = new TypePredicateCake("bigint", is_bigint);
+const bigint = new TypeGuardCake("bigint", is_bigint);
 
 /**
  * @public
  */
-const never = new TypePredicateCake("never", is_never);
+const never = new TypeGuardCake("never", is_never);
 
 /**
  * @public
  */
-const number = new TypePredicateCake("number", is_number);
+const number = new TypeGuardCake("number", is_number);
 
 /**
  * @public
  */
-const string = new TypePredicateCake("string", is_string);
+const string = new TypeGuardCake("string", is_string);
 
 /**
  * @public
  */
-const symbol = new TypePredicateCake("symbol", is_symbol);
+const symbol = new TypeGuardCake("symbol", is_symbol);
 
 /**
  * @public
  */
-const unknown = new TypePredicateCake("unknown", is_unknown);
+const unknown = new TypeGuardCake("unknown", is_unknown);
 
 export {
-  TypePredicateCake,
-  TypePredicateFailedCakeError,
+  TypeGuardCake,
+  TypeGuardFailedCakeError,
   any,
   boolean,
   bigint,

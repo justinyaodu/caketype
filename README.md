@@ -177,7 +177,7 @@ Using the built-in [number](#number) Cake:
 number.as(3); // 3
 
 number.as("oops");
-// TypeError: Value does not satisfy type 'number': type predicate failed.
+// TypeError: Value does not satisfy type 'number': type guard failed.
 ```
 
 See [Cake.check](#cakecheck) to return the error instead of throwing it.
@@ -210,7 +210,7 @@ function square(input: unknown) {
 square(3); // 9
 
 square("oops");
-// Value does not satisfy type 'number': type predicate failed.
+// Value does not satisfy type 'number': type guard failed.
 ```
 
 See [Cake.as](#cakeas) to throw an error if the type is not satisfied.

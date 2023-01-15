@@ -141,8 +141,8 @@ const values: {
         }),
       [
         `Value does not satisfy type '{name: string, height?: (number) | undefined}': object properties are invalid.`,
-        `  Property "name": Value does not satisfy type 'string': type predicate failed.`,
-        `  Property "height": Value does not satisfy type 'number': type predicate failed.`,
+        `  Property "name": Value does not satisfy type 'string': type guard failed.`,
+        `  Property "height": Value does not satisfy type 'number': type guard failed.`,
       ].join("\n"),
     ],
     circularNameObj: [

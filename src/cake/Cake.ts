@@ -44,7 +44,7 @@ abstract class Cake<in out T = any> extends Untagged {
    * number.as(3); // 3
    *
    * number.as("oops");
-   * // TypeError: Value does not satisfy type 'number': type predicate failed.
+   * // TypeError: Value does not satisfy type 'number': type guard failed.
    * ```
    *
    * @see {@link Cake.check} to return the error instead of throwing it.
@@ -78,7 +78,7 @@ abstract class Cake<in out T = any> extends Untagged {
    * square(3); // 9
    *
    * square("oops");
-   * // Value does not satisfy type 'number': type predicate failed.
+   * // Value does not satisfy type 'number': type guard failed.
    * ```
    *
    * @see {@link Cake.as} to throw an error if the type is not satisfied.
