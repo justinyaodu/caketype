@@ -134,6 +134,10 @@ class ObjectCake<P extends ObjectCakeProperties>
       return stringifyPrimitive(key);
     }
   }
+
+  withName(name: string | null): ObjectCake<P> {
+    return new ObjectCake({ ...this, name });
+  }
 }
 
 /**

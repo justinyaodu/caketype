@@ -40,6 +40,10 @@ class ReferenceCake<C extends Cake>
     const { recurse } = context;
     return `reference(() => ${recurse(this.get())})`;
   }
+
+  withName(name: string | null): ReferenceCake<C> {
+    return new ReferenceCake({ ...this, name });
+  }
 }
 
 /**
