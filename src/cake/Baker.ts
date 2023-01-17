@@ -53,13 +53,13 @@ class Baker {
     if (bakeable instanceof Cake) {
       return bakeable as Baked<B>;
     } else {
-      return new ObjectCake(
-        mapValuesUnsound(bakeable as ObjectBakeable, (value) =>
+      return new ObjectCake({
+        properties: mapValuesUnsound(bakeable as ObjectBakeable, (value) =>
           value instanceof OptionalTag
             ? optional(this.bakeVisit(value.untagged))
             : this.bakeVisit(value)
-        )
-      ) as Baked<B>;
+        ),
+      }) as Baked<B>;
     }
   }
 }

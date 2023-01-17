@@ -8,6 +8,7 @@ export {
   Cake,
   CakeDispatchCheckContext,
   CakeDispatchStringifyContext,
+  CakeRecipe,
   Infer,
   // CakeError.ts
   CakeError,
@@ -18,11 +19,13 @@ export {
   // ObjectCake.ts
   ObjectCake,
   ObjectCakeProperties,
+  ObjectCakeRecipe,
   NotAnObjectCakeError,
   ObjectPropertiesCakeError,
   ObjectRequiredPropertyMissingCakeError,
   // ReferenceCake.ts
   ReferenceCake,
+  ReferenceCakeRecipe,
   reference,
   // StringTree.ts
   StringTree,
@@ -30,8 +33,10 @@ export {
   OptionalTag,
   optional,
   // TypeGuardCake.ts
-  TypeGuardCake as TypeGuardCake,
-  TypeGuardFailedCakeError as TypeGuardFailedCakeError,
+  TypeGuardCake,
+  TypeGuardCakeRecipe,
+  TypeGuardFailedCakeError,
+  typeGuard,
   any,
   boolean,
   bigint,

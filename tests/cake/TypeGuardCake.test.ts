@@ -8,6 +8,7 @@ import {
   number,
   string,
   symbol,
+  TypeGuardCake,
   unknown,
 } from "../../src";
 
@@ -115,3 +116,12 @@ test.each(cakeValueTable.filter((tuple) => !tuple[2]))(
     expect(() => cakes[cake].as(value)).toThrow(TypeError);
   }
 );
+
+test("stringify unnamed", () => {
+  function myGuard(value: unknown): value is boolean {
+    return typeof value === "boolean";
+  }
+
+  const guard = new TypeGuardCake({ guard: myGuard });
+  expect(guard.toString()).toStrictEqual("(type guard myGuard)");
+});
