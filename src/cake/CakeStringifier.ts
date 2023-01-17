@@ -34,7 +34,9 @@ class CakeStringifier {
   }
 
   protected stringifyDispatch(cake: Cake): string {
-    return cake.dispatchStringify(this.context);
+    return cake.name !== null
+      ? cake.name
+      : cake.dispatchStringify(this.context);
   }
 }
 

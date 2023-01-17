@@ -15,6 +15,7 @@ import {
   OptionalTag,
   StringTree,
   prependStringTree,
+  CakeRecipe,
 } from "./index-internal";
 
 /**
@@ -23,6 +24,13 @@ import {
 type ObjectCakeProperties = {
   readonly [key: string | symbol]: Cake | OptionalTag<Cake>;
 };
+
+/**
+ * @public
+ */
+interface ObjectCakeRecipe<P extends ObjectCakeProperties> extends CakeRecipe {
+  readonly properties: Readonly<P>;
+}
 
 // Helpers needed to circumvent error:
 // "Two different types with this name exist, but they are unrelated".
@@ -36,24 +44,30 @@ type OnlyOptionalKeys<P extends ObjectCakeProperties> = keyof {
 /**
  * @public
  */
-class ObjectCake<P extends ObjectCakeProperties> extends Cake<
-  ({
-    -readonly [K in OnlyRequiredKeys<P>]: P[K] extends Cake
-      ? Infer<P[K]>
-      : never;
-  } & {
-    -readonly [K in OnlyOptionalKeys<P>]?: P[K] extends OptionalTag<
-      infer I extends Cake
-    >
-      ? Infer<I> | undefined
-      : never;
-  } extends infer I
-    ? { [K in keyof I]: I[K] }
-    : never) &
-    object
-> {
-  constructor(readonly properties: Readonly<P>) {
-    super();
+class ObjectCake<P extends ObjectCakeProperties>
+  extends Cake<
+    ({
+      -readonly [K in OnlyRequiredKeys<P>]: P[K] extends Cake
+        ? Infer<P[K]>
+        : never;
+    } & {
+      -readonly [K in OnlyOptionalKeys<P>]?: P[K] extends OptionalTag<
+        infer I extends Cake
+      >
+        ? Infer<I> | undefined
+        : never;
+    } extends infer I
+      ? { [K in keyof I]: I[K] }
+      : never) &
+      object
+  >
+  implements ObjectCakeRecipe<P>
+{
+  readonly properties: Readonly<P>;
+
+  constructor(recipe: ObjectCakeRecipe<P>) {
+    super(recipe);
+    this.properties = recipe.properties;
   }
 
   dispatchCheck(
@@ -183,6 +197,7 @@ class ObjectPropertiesCakeError extends CakeError {
 export {
   ObjectCake,
   ObjectCakeProperties,
+  ObjectCakeRecipe,
   NotAnObjectCakeError,
   ObjectPropertiesCakeError,
   ObjectRequiredPropertyMissingCakeError,

@@ -23,16 +23,20 @@ interface CircularName {
   name?: CircularName | undefined;
 }
 const circularName: Cake<CircularName> = new ObjectCake({
-  name: optional(reference<CircularName>(() => circularName)),
+  properties: {
+    name: optional(reference<CircularName>(() => circularName)),
+  },
 });
 
 // TODO: nested objects, symbol keys
 const cakes = {
   person: new ObjectCake({
-    name: string,
-    age: optional(number),
+    properties: {
+      name: string,
+      age: optional(number),
+    },
   }),
-  empty: new ObjectCake({}),
+  empty: new ObjectCake({ properties: {} }),
   circularName,
 } as const;
 
@@ -204,9 +208,11 @@ test.each(cakeValueTable)(
 test("toString with weird keys", () => {
   const sym = Symbol("sym");
   const cake = new ObjectCake({
-    [sym]: boolean,
-    "with space": number,
-    [Symbol.iterator]: string,
+    properties: {
+      [sym]: boolean,
+      "with space": number,
+      [Symbol.iterator]: string,
+    },
   });
   expect(cake.toString()).toStrictEqual(
     `{"with space": number, [Symbol(sym)]: boolean, [Symbol(Symbol.iterator)]: string}`

@@ -24,6 +24,13 @@ interface CakeDispatchStringifyContext {
 }
 
 /**
+ * @public
+ */
+interface CakeRecipe {
+  readonly name?: string | null;
+}
+
+/**
  * Represent a TypeScript type at runtime.
  *
  * @typeParam T - The TypeScript type represented by this Cake.
@@ -33,7 +40,14 @@ interface CakeDispatchStringifyContext {
  * @public
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-abstract class Cake<in out T = any> extends Untagged {
+abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
+  readonly name: string | null;
+
+  constructor(recipe: CakeRecipe) {
+    super();
+    this.name = recipe.name === undefined ? null : recipe.name;
+  }
+
   /**
    * Return the provided value if it satisfies the type represented by this
    * Cake, and throw a TypeError otherwise.
@@ -184,4 +198,10 @@ abstract class Cake<in out T = any> extends Untagged {
  */
 type Infer<C extends Cake> = C extends Cake<infer T> ? T : never;
 
-export { Cake, CakeDispatchCheckContext, CakeDispatchStringifyContext, Infer };
+export {
+  Cake,
+  CakeDispatchCheckContext,
+  CakeDispatchStringifyContext,
+  CakeRecipe,
+  Infer,
+};

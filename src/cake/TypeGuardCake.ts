@@ -16,17 +16,25 @@ import {
   CakeDispatchStringifyContext,
   StringTree,
   CakeDispatchCheckContext,
+  CakeRecipe,
 } from "./index-internal";
 
 /**
  * @public
  */
-class TypeGuardCake<T> extends Cake<T> {
-  constructor(
-    readonly name: string,
-    readonly guard: (value: unknown) => value is T
-  ) {
-    super();
+interface TypeGuardCakeRecipe<T> extends CakeRecipe {
+  readonly guard: (value: unknown) => value is T;
+}
+
+/**
+ * @public
+ */
+class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeRecipe<T> {
+  readonly guard: (value: unknown) => value is T;
+
+  constructor(recipe: TypeGuardCakeRecipe<T>) {
+    super(recipe);
+    this.guard = recipe.guard;
   }
 
   dispatchCheck(
@@ -44,7 +52,7 @@ class TypeGuardCake<T> extends Cake<T> {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     context: CakeDispatchStringifyContext
   ): string {
-    return this.name;
+    return `(type guard ${this.guard.name})`;
   }
 }
 
@@ -66,6 +74,16 @@ class TypeGuardFailedCakeError extends CakeError {
 }
 
 /**
+ * @public
+ */
+function typeGuard<T>(
+  name: string,
+  guard: (value: unknown) => value is T
+): TypeGuardCake<T> {
+  return new TypeGuardCake({ name, guard });
+}
+
+/**
  * A {@link Cake} representing the `any` type. Every value satisfies this type.
  *
  * @example
@@ -79,7 +97,7 @@ class TypeGuardFailedCakeError extends CakeError {
  *
  * @public
  */
-const any = new TypeGuardCake("any", is_any);
+const any = typeGuard("any", is_any);
 
 /**
  * A {@link Cake} representing the `boolean` type.
@@ -92,7 +110,7 @@ const any = new TypeGuardCake("any", is_any);
  *
  * @public
  */
-const boolean = new TypeGuardCake("boolean", is_boolean);
+const boolean = typeGuard("boolean", is_boolean);
 
 /**
  * A {@link Cake} representing the `bigint` type.
@@ -105,7 +123,7 @@ const boolean = new TypeGuardCake("boolean", is_boolean);
  *
  * @public
  */
-const bigint = new TypeGuardCake("bigint", is_bigint);
+const bigint = typeGuard("bigint", is_bigint);
 
 /**
  * A {@link Cake} representing the `never` type. No value satisfies this type.
@@ -118,7 +136,7 @@ const bigint = new TypeGuardCake("bigint", is_bigint);
  *
  * @public
  */
-const never = new TypeGuardCake("never", is_never);
+const never = typeGuard("never", is_never);
 
 /**
  * A {@link Cake} representing the `number` type.
@@ -131,7 +149,7 @@ const never = new TypeGuardCake("never", is_never);
  *
  * @public
  */
-const number = new TypeGuardCake("number", is_number);
+const number = typeGuard("number", is_number);
 
 /**
  * A {@link Cake} representing the `string` type.
@@ -144,7 +162,7 @@ const number = new TypeGuardCake("number", is_number);
  *
  * @public
  */
-const string = new TypeGuardCake("string", is_string);
+const string = typeGuard("string", is_string);
 
 /**
  * A {@link Cake} representing the `symbol` type.
@@ -157,7 +175,7 @@ const string = new TypeGuardCake("string", is_string);
  *
  * @public
  */
-const symbol = new TypeGuardCake("symbol", is_symbol);
+const symbol = typeGuard("symbol", is_symbol);
 
 /**
  * A {@link Cake} representing the `unknown` type. Every value satisfies this
@@ -174,11 +192,13 @@ const symbol = new TypeGuardCake("symbol", is_symbol);
  *
  * @public
  */
-const unknown = new TypeGuardCake("unknown", is_unknown);
+const unknown = typeGuard("unknown", is_unknown);
 
 export {
   TypeGuardCake,
+  TypeGuardCakeRecipe,
   TypeGuardFailedCakeError,
+  typeGuard,
   any,
   boolean,
   bigint,

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Checker, number, ObjectCake } from "../../src";
+import { bake, Checker, number } from "../../src";
 
 test("Checker caches duplicate invocations", () => {
   const checker = new Checker();
-  const cake = new ObjectCake({ age: number });
+  const cake = bake({ age: number });
   const obj = { age: "oops" };
   const error1 = checker.check(cake, obj).errorOr(null);
   const error2 = checker.check(cake, obj).errorOr(null);
