@@ -54,6 +54,10 @@ class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeRecipe<T> {
   ): string {
     return `(type guard ${this.guard.name})`;
   }
+
+  withName(name: string | null): TypeGuardCake<T> {
+    return new TypeGuardCake({ ...this, name });
+  }
 }
 
 /**

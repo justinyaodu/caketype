@@ -48,6 +48,8 @@ export abstract class Cake<in out T = any> extends Untagged implements CakeRecip
     // (undocumented)
     readonly name: string | null;
     toString(): string;
+    // (undocumented)
+    abstract withName(name: string | null): Cake<T>;
 }
 
 // @public (undocumented)
@@ -314,6 +316,8 @@ export class ObjectCake<P extends ObjectCakeProperties> extends Cake<({
     dispatchStringify(context: CakeDispatchStringifyContext): string;
     // (undocumented)
     readonly properties: Readonly<P>;
+    // (undocumented)
+    withName(name: string | null): ObjectCake<P>;
 }
 
 // @public (undocumented)
@@ -427,6 +431,8 @@ export class ReferenceCake<C extends Cake> extends Cake<Infer<C>> implements Ref
     dispatchStringify(context: CakeDispatchStringifyContext): string;
     // (undocumented)
     readonly get: () => C;
+    // (undocumented)
+    withName(name: string | null): ReferenceCake<C>;
 }
 
 // @public (undocumented)
@@ -470,6 +476,8 @@ export class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeRecipe<T> 
     dispatchStringify(context: CakeDispatchStringifyContext): string;
     // (undocumented)
     readonly guard: (value: unknown) => value is T;
+    // (undocumented)
+    withName(name: string | null): TypeGuardCake<T>;
 }
 
 // @public (undocumented)

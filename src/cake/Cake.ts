@@ -178,6 +178,8 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
    * @public
    */
   abstract dispatchStringify(context: CakeDispatchStringifyContext): string;
+
+  abstract withName(name: string | null): Cake<T>;
 }
 
 /**
