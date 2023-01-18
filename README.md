@@ -7,8 +7,11 @@
 - [Cakes](#cakes)
   - [`Cake`](#cake)
   - [`Cake.as`](#cakeas)
+  - [`Cake.asStrict`](#cakeasstrict)
   - [`Cake.check`](#cakecheck)
+  - [`Cake.checkStrict`](#cakecheckstrict)
   - [`Cake.is`](#cakeis)
+  - [`Cake.isStrict`](#cakeisstrict)
   - [`Cake.toString`](#caketostring)
   - [`Infer`](#infer)
 - [Built-in Cakes](#built-in-cakes)
@@ -181,6 +184,27 @@ See [Cake.check](#cakecheck) to return the error instead of throwing it.
 
 ---
 
+#### `Cake.asStrict`
+
+Like [Cake.as](#cakeas), but perform additional checks suitable for JSON
+validation.
+
+Excess object properties are allowed by default, but not allowed
+with strict checking:
+
+```ts
+const Person = bake({ name: string } as const);
+const alice = { name: "Alice", extra: "oops" };
+
+Person.as(alice); // { name: "Alice", extra: "oops" }
+
+Person.asStrict(alice);
+// TypeError: Value does not satisfy type '{name: string}': object properties are invalid.
+//   Property "extra": Property is not declared in type and excess properties are not allowed.
+```
+
+---
+
 #### `Cake.check`
 
 Return a [Result](#result) with the provided value if it satisfies the type
@@ -230,6 +254,23 @@ See [Cake.as](#cakeas) to throw an error if the type is not satisfied.
 
 ---
 
+#### `Cake.checkStrict`
+
+Like [Cake.check](#cakecheck), but perform additional checks suitable for JSON
+validation.
+
+Excess object properties are allowed by default, but not allowed
+with strict checking:
+
+```ts
+const Person = bake({ name: string } as const);
+const alice = { name: "Alice", extra: "oops" };
+Person.check(alice); // Ok(alice)
+Person.checkStrict(alice); // Err(<CakeError>)
+```
+
+---
+
 #### `Cake.is`
 
 Return whether a value satisfies the type represented by this Cake.
@@ -254,6 +295,23 @@ const value: unknown = 7;
 if (number.is(value)) {
   // here, value has type 'number'
 }
+```
+
+---
+
+#### `Cake.isStrict`
+
+Like [Cake.is](#cakeis), but perform additional checks suitable for JSON
+validation.
+
+Excess object properties are allowed by default, but not allowed
+with strict checking:
+
+```ts
+const Person = bake({ name: string } as const);
+const alice = { name: "Alice", extra: "oops" };
+Person.is(alice); // true
+Person.isStrict(alice); // false
 ```
 
 ---
