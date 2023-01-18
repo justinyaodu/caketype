@@ -5,9 +5,12 @@ import {
   Equivalent,
   Infer,
   number,
+  ObjectPropertiesCakeError,
   optional,
+  Result,
   string,
 } from "../../src";
+import { ObjectExcessPropertyCakeError } from "../../src/cake/ObjectCake";
 import { expectTypeError, typeCheckOnly } from "../test-helpers";
 
 describe("documentation examples", () => {
@@ -18,6 +21,25 @@ describe("documentation examples", () => {
       () => number.as("oops"),
       "Value does not satisfy type 'number': type guard failed."
     );
+  });
+
+  test("asStrict", () => {
+    const Person = bake({ name: string } as const);
+    const alice = { name: "Alice", extra: "oops" };
+
+    expect(Person.as(alice)).toStrictEqual({ name: "Alice", extra: "oops" });
+
+    expectTypeError(
+      () => Person.asStrict(alice),
+      [
+        `Value does not satisfy type '{name: string}': object properties are invalid.`,
+        `  Property "extra": Property is not declared in type and excess properties are not allowed.`,
+      ].join("\n")
+    );
+
+    // Extra test for the successful case:
+    const bob = { name: "Bob" };
+    expect(Person.asStrict(bob)).toStrictEqual(bob);
   });
 
   test("check", () => {
@@ -36,6 +58,19 @@ describe("documentation examples", () => {
 
     expect(square("oops")).toStrictEqual(
       "Value does not satisfy type 'number': type guard failed."
+    );
+  });
+
+  test("checkStrict", () => {
+    const Person = bake({ name: string } as const);
+    const alice = { name: "Alice", extra: "oops" };
+    expect(Person.check(alice)).toStrictEqual(Result.ok(alice));
+    expect(Person.checkStrict(alice)).toStrictEqual(
+      Result.err(
+        new ObjectPropertiesCakeError(Person, alice, {
+          extra: new ObjectExcessPropertyCakeError("oops"),
+        })
+      )
     );
   });
 
@@ -63,6 +98,13 @@ describe("documentation examples", () => {
       }
     })
   );
+
+  test("isStrict", () => {
+    const Person = bake({ name: string } as const);
+    const alice = { name: "Alice", extra: "oops" };
+    expect(Person.is(alice)).toStrictEqual(true);
+    expect(Person.isStrict(alice)).toStrictEqual(false);
+  });
 
   test("toString", () => {
     const Person = bake({
