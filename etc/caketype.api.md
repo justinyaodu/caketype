@@ -36,17 +36,24 @@ export const boolean: TypeGuardCake<boolean>;
 export abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
     constructor(recipe: CakeRecipe);
     as(value: unknown): T;
+    asStrict(value: unknown): T;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
     check(value: unknown): Result<T, CakeError>;
+    checkStrict(value: unknown): Result<T, CakeError>;
     // (undocumented)
     abstract dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
     abstract dispatchStringify(context: CakeDispatchStringifyContext): string;
     is(value: unknown): value is T;
+    isStrict(value: unknown): boolean;
     // (undocumented)
     readonly name: string | null;
+    // Warning: (ae-forgotten-export) The symbol "CheckOptions" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    readonly options: Partial<CheckOptions>;
     toString(): string;
     // (undocumented)
     abstract withName(name: string | null): Cake<T>;
@@ -54,6 +61,8 @@ export abstract class Cake<in out T = any> extends Untagged implements CakeRecip
 
 // @public (undocumented)
 export interface CakeDispatchCheckContext {
+    // (undocumented)
+    readonly getOption: <K extends keyof CheckOptions>(self: Cake, key: K) => CheckOptions[K];
     // (undocumented)
     readonly recurse: (cake: Cake, value: unknown) => CakeError | null;
 }
@@ -84,13 +93,15 @@ export interface CakeErrorDispatchFormatContext {
 export interface CakeRecipe {
     // (undocumented)
     readonly name?: string | null;
+    // (undocumented)
+    readonly options?: Partial<CheckOptions>;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "Checker" should be prefixed with an underscore because the declaration is marked as @internal
 //
 // @internal (undocumented)
 export class Checker {
-    constructor();
+    constructor(options?: CheckOptions);
     // (undocumented)
     protected readonly cache: Map<Cake, Map<unknown, CakeError | null | undefined>>;
     // (undocumented)
@@ -101,6 +112,10 @@ export class Checker {
     protected checkVisit(cake: Cake, value: unknown): CakeError | null;
     // (undocumented)
     protected readonly context: CakeDispatchCheckContext;
+    // (undocumented)
+    protected getOption<K extends keyof CheckOptions>(self: Cake, key: K): CheckOptions[K];
+    // (undocumented)
+    protected readonly options: CheckOptions;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "CircularReferenceCakeError" should be prefixed with an underscore because the declaration is marked as @internal

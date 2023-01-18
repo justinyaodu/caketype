@@ -1,4 +1,5 @@
 import {
+  entriesIncludingSymbols,
   entriesUnsound,
   is_object,
   keysIncludingSymbols,
@@ -74,12 +75,23 @@ class ObjectCake<P extends ObjectCakeProperties>
     value: unknown,
     context: CakeDispatchCheckContext
   ): CakeError | null {
-    const { recurse } = context;
     if (!is_object(value)) {
       return new NotAnObjectCakeError(this, value);
     }
+
+    const { recurse, getOption } = context;
     const errors: Record<string | symbol, CakeError> = {};
     let hasError = false;
+
+    if (getOption(this, "objectExcessProperties") === "error") {
+      for (const [key, propertyValue] of entriesIncludingSymbols(value)) {
+        if (!(key in this.properties)) {
+          errors[key] = new ObjectExcessPropertyCakeError(propertyValue);
+          hasError = true;
+        }
+      }
+    }
+
     for (const key of keysIncludingSymbols(this.properties)) {
       const error = this.checkProperty(value, key, recurse);
       if (error !== null) {
@@ -159,6 +171,22 @@ class NotAnObjectCakeError extends CakeError {
 /**
  * @public
  */
+class ObjectExcessPropertyCakeError extends CakeError {
+  constructor(readonly value: unknown) {
+    super();
+  }
+
+  dispatchFormat(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    context: CakeErrorDispatchFormatContext
+  ): StringTree {
+    return "Property is not declared in type and excess properties are not allowed.";
+  }
+}
+
+/**
+ * @public
+ */
 class ObjectRequiredPropertyMissingCakeError extends CakeError {
   constructor(readonly cake: Cake) {
     super();
@@ -203,6 +231,7 @@ export {
   ObjectCakeProperties,
   ObjectCakeRecipe,
   NotAnObjectCakeError,
+  ObjectExcessPropertyCakeError,
   ObjectPropertiesCakeError,
   ObjectRequiredPropertyMissingCakeError,
 };

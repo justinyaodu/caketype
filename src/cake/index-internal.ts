@@ -7,6 +7,7 @@ export * from "./CakeError";
 export * from "./CakeErrorStringifier";
 export * from "./CakeStringifier";
 export * from "./Checker";
+export * from "./CheckOptions";
 export * from "./ObjectCake";
 export * from "./ReferenceCake";
 export * from "./StringTree";

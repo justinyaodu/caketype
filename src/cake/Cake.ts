@@ -1,6 +1,11 @@
 import type { Result } from "../index-internal";
 
-import { CakeStringifier, Checker, Untagged } from "./index-internal";
+import {
+  CakeStringifier,
+  Checker,
+  CheckOptions,
+  Untagged,
+} from "./index-internal";
 import type {
   CakeError,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -14,6 +19,10 @@ import type {
  */
 interface CakeDispatchCheckContext {
   readonly recurse: (cake: Cake, value: unknown) => CakeError | null;
+  readonly getOption: <K extends keyof CheckOptions>(
+    self: Cake,
+    key: K
+  ) => CheckOptions[K];
 }
 
 /**
@@ -28,6 +37,7 @@ interface CakeDispatchStringifyContext {
  */
 interface CakeRecipe {
   readonly name?: string | null;
+  readonly options?: Partial<CheckOptions>;
 }
 
 /**
@@ -42,10 +52,12 @@ interface CakeRecipe {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
   readonly name: string | null;
+  readonly options: Partial<CheckOptions>;
 
   constructor(recipe: CakeRecipe) {
     super();
     this.name = recipe.name === undefined ? null : recipe.name;
+    this.options = recipe.options === undefined ? {} : recipe.options;
   }
 
   /**
@@ -61,6 +73,7 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
    * // TypeError: Value does not satisfy type 'number': type guard failed.
    * ```
    *
+   * @see {@link Cake.asStrict} for stricter type-checking.
    * @see {@link Cake.check} to return the error instead of throwing it.
    */
   as(value: unknown): T {
@@ -68,7 +81,33 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
     if (result.ok) {
       return result.value;
     }
-    throw new TypeError(result.error.toString());
+    return result.error.throw();
+  }
+
+  /**
+   * Like {@link Cake.as}, but perform additional checks suitable for JSON
+   * validation.
+   *
+   * @example Excess object properties are allowed by default, but not allowed
+   * with strict checking:
+   *
+   * ```ts
+   * const Person = bake({ name: string } as const);
+   * const alice = { name: "Alice", extra: "oops" };
+   *
+   * Person.as(alice); // { name: "Alice", extra: "oops" }
+   *
+   * Person.asStrict(alice);
+   * // TypeError: Value does not satisfy type '{name: string}': object properties are invalid.
+   * //   Property "extra": Property is not declared in type and excess properties are not allowed.
+   * ```
+   */
+  asStrict(value: unknown): T {
+    const result = this.checkStrict(value);
+    if (result.ok) {
+      return result.value;
+    }
+    return result.error.throw();
   }
 
   /**
@@ -111,10 +150,29 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
    * number.check("oops").errorOr(null); // <CakeError>
    * ```
    *
+   * @see {@link Cake.checkStrict} for stricter type-checking.
    * @see {@link Cake.as} to throw an error if the type is not satisfied.
    */
   check(value: unknown): Result<T, CakeError> {
     return new Checker().check(this, value);
+  }
+
+  /**
+   * Like {@link Cake.check}, but perform additional checks suitable for JSON
+   * validation.
+   *
+   * @example Excess object properties are allowed by default, but not allowed
+   * with strict checking:
+   *
+   * ```ts
+   * const Person = bake({ name: string } as const);
+   * const alice = { name: "Alice", extra: "oops" };
+   * Person.check(alice); // Ok(alice)
+   * Person.checkStrict(alice); // Err(<CakeError>)
+   * ```
+   */
+  checkStrict(value: unknown): Result<T, CakeError> {
+    return new Checker(CheckOptions.STRICT).check(this, value);
   }
 
   /**
@@ -137,9 +195,29 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
    *   // here, value has type 'number'
    * }
    * ```
+   *
+   * @see {@link Cake.isStrict} for stricter type-checking.
    */
   is(value: unknown): value is T {
     return this.check(value).ok;
+  }
+
+  /**
+   * Like {@link Cake.is}, but perform additional checks suitable for JSON
+   * validation.
+   *
+   * @example Excess object properties are allowed by default, but not allowed
+   * with strict checking:
+   *
+   * ```ts
+   * const Person = bake({ name: string } as const);
+   * const alice = { name: "Alice", extra: "oops" };
+   * Person.is(alice); // true
+   * Person.isStrict(alice); // false
+   * ```
+   */
+  isStrict(value: unknown): boolean {
+    return this.checkStrict(value).ok;
   }
 
   /**

@@ -1,10 +1,17 @@
-import { deepGetResult, deepSet, Result } from "../index-internal";
+import {
+  deepGetResult,
+  deepSet,
+  lookup,
+  merge,
+  Result,
+} from "../index-internal";
 
 import {
   Cake,
   CakeDispatchCheckContext,
   CakeError,
   CakeErrorDispatchFormatContext,
+  CheckOptions,
   StringTree,
 } from "./index-internal";
 
@@ -12,16 +19,19 @@ import {
  * @internal
  */
 class Checker {
+  protected readonly options: CheckOptions;
   protected readonly cache: Map<
     Cake,
     Map<unknown, CakeError | null | undefined>
   >;
   protected readonly context: CakeDispatchCheckContext;
 
-  constructor() {
+  constructor(options?: CheckOptions) {
+    this.options = merge(CheckOptions.DEFAULT, options || {});
     this.cache = new Map();
     this.context = {
       recurse: (cake, value) => this.checkVisit(cake, value),
+      getOption: (self, key) => this.getOption(self, key),
     };
   }
 
@@ -48,6 +58,13 @@ class Checker {
 
   protected checkDispatch(cake: Cake, value: unknown): CakeError | null {
     return cake.dispatchCheck(value, this.context);
+  }
+
+  protected getOption<K extends keyof CheckOptions>(
+    self: Cake,
+    key: K
+  ): CheckOptions[K] {
+    return lookup(key, self.options, this.options);
   }
 }
 
