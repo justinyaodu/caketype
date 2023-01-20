@@ -31,7 +31,7 @@ This helps us find type errors in our code:
 
 ```ts
 const bob: Person = {};
-// Property 'name' is missing
+// Property 'name' is missing.
 ```
 
 However, TypeScript types are [removed when your code is compiled](https://github.com/microsoft/TypeScript/wiki/FAQ#what-is-type-erasure). If you're working with parsed JSON or other unknown values at runtime, all bets are off:
@@ -41,7 +41,7 @@ const bob: Person = JSON.parse("{}");
 // no type errors, and no exceptions at runtime
 ```
 
-This is a problem. The rest of our code assumes that `bob` is a `Person`, but at runtime, the `name` property is missing. In order for our code to be type-safe, we need to check whether the parsed JSON object matches the `Person` type **at runtime**.
+This is a problem: the rest of our code assumes that `bob` is a Person, but at runtime, the `name` property is missing. In order for our code to be type-safe, we need to check whether the parsed JSON object matches the Person type _at runtime_.
 
 Wouldn't it be great if we could write something like this instead?
 
@@ -58,7 +58,7 @@ Let's see how we can achieve this.
 
 ### Introducing Cakes
 
-A Cake is an object that represents a TypeScript type. Here's our `Person` type from earlier:
+A Cake is an object that represents a TypeScript type. Here's our Person type from earlier:
 
 ```ts
 type Person = {
@@ -105,7 +105,7 @@ const bob = Person.as({});
 const alice = JSON.parse('{"name": "Alice"}');
 
 if (Person.is(alice)) {
-  // Here, the type of alice is Person
+  // here, the type of alice is Person
   console.log(alice.name);
 }
 ```
@@ -138,7 +138,7 @@ This is often a good approach when validating parsed JSON objects.
 
 ### Inferring TypeScript Types from Cakes
 
-If you don't want the `Person` type and the `Person` Cake to duplicate each other, you can delete the existing definition of the `Person` type, and infer the `Person` type from the `Person` Cake:
+If you don't want the Person type and its Cake to duplicate each other, you can delete the existing definition of the Person type, and infer the Person type from its Cake:
 
 ```ts
 import { Infer } from "caketype";
@@ -155,7 +155,7 @@ type Person = Infer<typeof Person>;
 
 ### More Cakes
 
-When you created the `Person` Cake, you imported the [string](#string) and [number](#number) Cakes to define the types of `Person`'s properties. However, you can also use these Cakes directly:
+When you created the `Person` Cake, you imported the [string](#string) and [number](#number) Cakes to define the types of a Person's properties. However, you can also use these Cakes directly:
 
 ```ts
 number.is(7); // true
