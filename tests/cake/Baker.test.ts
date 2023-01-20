@@ -27,8 +27,7 @@ describe("documentation examples", () => {
       >
     >;
 
-    const aliceIsPerson = Person.is({ name: "Alice" });
-    expect(aliceIsPerson).toStrictEqual(true);
+    expect(Person.is({ name: "Alice" })).toStrictEqual(true);
 
     type Person = Infer<typeof Person>;
     type _2 = Assert<
