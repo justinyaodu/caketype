@@ -1813,6 +1813,17 @@ const c: Class<Date, [number]> = Date;
 
 ## Changelog
 
+### v0.3.0 - 2023-01-19
+
+#### Added
+
+- [bake](#bake) and associated types
+- [Cake](#cake)
+- Cake subclasses: ObjectCake, ReferenceCake, TypeGuardCake
+- [Built-in Cakes](#built-in-cakes): any, boolean, bigint, never, number, string, symbol, unknown
+- [optional](#optional)
+- [CakeError](#cakeerror)
+
 ### v0.2.0 - 2023-01-11
 
 #### Added
