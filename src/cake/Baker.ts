@@ -75,8 +75,7 @@ class Baker {
  *   age: optional(number),
  * } as const);
  *
- * const aliceIsPerson = Person.is({ name: "Alice" });
- * // true
+ * Person.is({ name: "Alice" }); // true
  * ```
  *
  * @example Use {@link Infer} to get the TypeScript type represented by a Cake:

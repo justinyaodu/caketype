@@ -1,3 +1,250 @@
+# caketype
+
+A delicious runtime type-checking library for TypeScript.
+
+[Installation](#installation) | [Getting Started](#getting-started) | [Quick Reference](#quick-reference) | [API Reference](#api-reference)
+
+## Installation
+
+Install the `caketype` package:
+
+```
+npm i caketype
+```
+
+`caketype` has only been tested on TypeScript 4.9+, but TypeScript versions as old as 4.7 might still work.
+
+## Getting Started
+
+In TypeScript, types describe the structure of your data:
+
+```ts
+type Person = {
+  name: string;
+  age?: number;
+};
+
+const alice: Person = { name: "Alice" };
+```
+
+This helps us find type errors in our code:
+
+```ts
+const bob: Person = {};
+// Property 'name' is missing
+```
+
+However, TypeScript types are [removed when your code is compiled](https://github.com/microsoft/TypeScript/wiki/FAQ#what-is-type-erasure). If you're working with parsed JSON or other unknown values at runtime, all bets are off:
+
+```ts
+const bob: Person = JSON.parse("{}");
+// no type errors, and no exceptions at runtime
+```
+
+This is a problem. The rest of our code assumes that `bob` is a `Person`, but at runtime, the `name` property is missing. In order for our code to be type-safe, we need to check whether the parsed JSON object matches the `Person` type **at runtime**.
+
+Wouldn't it be great if we could write something like this instead?
+
+```ts
+const alice = Person.as(JSON.parse('{"name": "Alice"}'));
+// OK
+
+const bob = Person.as(JSON.parse("{}"));
+// TypeError: Value does not satisfy type '{name: string, age?: (number) | undefined}': object properties are invalid.
+//   Property "name": Required property is missing.
+```
+
+Let's see how we can achieve this.
+
+### Introducing Cakes
+
+A Cake is an object that represents a TypeScript type. Here's our `Person` type from earlier:
+
+```ts
+type Person = {
+  name: string;
+  age?: number;
+};
+```
+
+The equivalent Cake looks like this:
+
+```ts
+import { bake, number, optional, string } from "caketype";
+
+const Person = bake({
+  name: string,
+  age: optional(number),
+} as const);
+```
+
+> Cakes are designed to resemble TypeScript types as much as possible, but there are still some differences:
+>
+> - A Cake is an object, not a type, so we use `const Person` instead of `type Person`. Giving the Cake the same name as the type is not required, but it makes imports more convenient, because importing `Person` in other files will import both the type and the Cake.
+> - The [bake](#bake) function takes an object that looks like a TypeScript type, and creates a Cake.
+> - Here, [string](#string) and [number](#number) refer to built-in Cakes, not types.
+> - To indicate that a property is optional, we use [optional](#optional) instead of `?`.
+> - `as const` is a [const assertion](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions), which can improve type inference in some cases. It doesn't affect the runtime behavior and isn't always necessary, but it doesn't hurt to have it.
+
+### Runtime Type-Checking with Cakes
+
+To do runtime type-checking, we can use a Cake's [as](#cakeas), [is](#cakeis), and [check](#cakecheck) methods. [Cake.as](#cakeas) returns the value if it satisfies the Cake's type, and throws a TypeError otherwise:
+
+```ts
+const alice = Person.as({ name: "Alice" });
+// OK
+
+const bob = Person.as({});
+// TypeError: Value does not satisfy type '{name: string, age?: (number) | undefined}': object properties are invalid.
+//   Property "name": Required property is missing.
+```
+
+[Cake.is](#cakeis) returns whether the value satisfies the Cake's type:
+
+```ts
+const alice = JSON.parse('{"name": "Alice"}');
+
+if (Person.is(alice)) {
+  // Here, the type of alice is Person
+  console.log(alice.name);
+}
+```
+
+Lastly, [Cake.check](#cakecheck) is similar to [Cake.as](#cakeas), but it returns the error instead of throwing it. See the [API reference](#cakecheck) for details.
+
+### Stricter Type-Checking
+
+By default, runtime type-checking is designed to closely mimic TypeScript's behavior. In particular, objects can contain excess properties that are not declared in their type:
+
+```ts
+const carol = { name: "Carol", lovesCake: true };
+
+const person: Person = carol;
+// OK, even though lovesCake is not declared in the Person type
+
+Person.as(carol);
+// { name: "Carol", lovesCake: true }
+```
+
+If you want to disallow excess properties, use the [asStrict](#cakeasstrict), [isStrict](#cakeisstrict), and [checkStrict](#cakecheckstrict) methods instead:
+
+```ts
+Person.asStrict(carol);
+// TypeError: Value does not satisfy type '{name: string, age?: (number) | undefined}': object properties are invalid.
+//   Property "lovesCake": Property is not declared in type and excess properties are not allowed.
+```
+
+This is often a good approach when validating parsed JSON objects.
+
+### Inferring TypeScript Types from Cakes
+
+If you don't want the `Person` type and the `Person` Cake to duplicate each other, you can delete the existing definition of the `Person` type, and infer the `Person` type from the `Person` Cake:
+
+```ts
+import { Infer } from "caketype";
+
+type Person = Infer<typeof Person>;
+// { name: string, age?: number | undefined }
+```
+
+> If you want to keep the explicit type definition, or the type is defined externally, use a type annotation to ensure that your Cake represents the desired type:
+>
+> ```ts
+> const Person: Cake<Person> = bake(...);
+> ```
+
+### More Cakes
+
+When you created the `Person` Cake, you imported the [string](#string) and [number](#number) Cakes to define the types of `Person`'s properties. However, you can also use these Cakes directly:
+
+```ts
+number.is(7); // true
+```
+
+Many basic TypeScript types have corresponding Cakes that you can import: [any](#any), [boolean](#boolean), [bigint](#bigint), [never](#never), [number](#number), [string](#string), [symbol](#symbol), and [unknown](#unknown).
+
+<!-- TODO: mention that null and undefined can be used with bake() once LiteralTart is added -->
+
+## Quick Reference
+
+<table>
+<tr>
+  <th>TypeScript Type</th>
+  <th>Cake</th>
+</tr>
+<tr><td>
+
+A built-in type:
+
+```
+number
+```
+
+More built-in types:
+
+```
+any
+boolean
+bigint
+never
+string
+symbol
+unknown
+```
+
+</td><td>
+
+Import the corresponding Cake:
+
+```ts
+import { number } from "caketype";
+
+number.is(7); // true
+```
+
+See [any](#any), [boolean](#boolean), [bigint](#bigint), [never](#never), [number](#number), [string](#string), [symbol](#symbol), and [unknown](#unknown).
+
+</td></tr>
+<tr><td>
+
+An object type:
+
+```ts
+type Person = {
+  name: string;
+  age?: number;
+};
+```
+
+</td><td>
+
+Use [bake](#bake) to create the corresponding Cake:
+
+```ts
+import { bake, number, optional, string } from "caketype";
+
+const Person = bake({
+  name: string,
+  age: optional(number),
+} as const);
+
+Person.is({ name: Alice }); // true
+```
+
+Use [Infer](#infer) to infer the TypeScript type from the Cake:
+
+```ts
+import { Infer } from "caketype";
+
+type Person = Infer<typeof Person>;
+// { name: string, age?: number | undefined }
+
+const bob: Person = { name: "Bob", age: 42 };
+```
+
+</td></tr>
+</table>
+
 ## API Reference
 
 - [Baking](#baking)
@@ -109,8 +356,7 @@ const Person = bake({
   age: optional(number),
 } as const);
 
-const aliceIsPerson = Person.is({ name: "Alice" });
-// true
+Person.is({ name: "Alice" }); // true
 ```
 
 Use [Infer](#infer) to get the TypeScript type represented by a Cake:
