@@ -16,4 +16,5 @@ module.exports = {
   },
   coveragePathIgnorePatterns: ["/node_modules/", "/index(-internal)?.ts$"],
   slowTestThreshold: 10,
+  maxWorkers: 4,
 };
