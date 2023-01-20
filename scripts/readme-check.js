@@ -16,19 +16,21 @@ const { slugify, withLines } = require("./util");
  * anchors are all valid.
  */
 function findHeadingAnchorErrors(lines, error) {
-  const anchors = new Map();
+  // Add entries set to undefined to ignore conflicts for these headings.
+  const anchors = new Map([["added", undefined]]);
+
   for (let i = 0; i < lines.length; i++) {
     const match = /^#+ (.*)$/.exec(lines[i]);
     if (match) {
       const anchor = slugify(match[1]);
-      if (anchors.has(anchor)) {
+      if (anchors.get(anchor) !== undefined) {
         error(
           i,
           `heading anchor conflicts with previous heading on line ${
             anchors.get(anchor) + 1
           }`
         );
-      } else {
+      } else if (!anchors.has(anchor)) {
         anchors.set(anchor, i);
       }
     }
