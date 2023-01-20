@@ -12,7 +12,7 @@ Install the `caketype` package:
 npm i caketype
 ```
 
-`caketype` has only been tested on TypeScript 4.9+, but TypeScript versions as old as 4.7 might still work.
+`caketype` has only been thoroughly tested on TypeScript 4.9+, but it seems to work in 4.8, and 4.7 might still work too.
 
 ## Getting Started
 
