@@ -387,7 +387,7 @@ const bob: Person = { name: "Bob", age: 42 };
 A convenient syntax for type definitions. Used by [bake](#bake).
 
 ```ts
-type Bakeable = Cake | ObjectBakeable;
+type Bakeable = Cake | Primitive | ObjectBakeable;
 
 type ObjectBakeable = {
   [key: string | symbol]: Bakeable | OptionalTag<Bakeable>;

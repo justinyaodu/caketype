@@ -17,10 +17,10 @@ export type AssertExtends<T extends U, U> = never;
 export function bake<B extends Bakeable>(bakeable: B): Baked<B>;
 
 // @public
-export type Bakeable = Cake | ObjectBakeable;
+export type Bakeable = Cake | Primitive | ObjectBakeable;
 
 // @public
-export type Baked<B extends Bakeable> = B extends Cake ? B : B extends ObjectBakeable ? ObjectCake<{
+export type Baked<B extends Bakeable> = B extends Cake ? B : B extends Primitive ? LiteralCake<B> : B extends ObjectBakeable ? ObjectCake<{
     -readonly [K in keyof B]: B[K] extends OptionalTag<infer I extends Bakeable> ? OptionalTag<Baked<I>> : B[K] extends Bakeable ? Baked<B[K]> : never;
 }> : never;
 
@@ -238,6 +238,36 @@ export function keysIncludingSymbolsUnsound<T extends object>(object: T): (keyof
 
 // @public
 export function keysUnsound<T extends object>(object: T): (keyof T & string)[];
+
+// @public (undocumented)
+export class LiteralCake<P extends Primitive> extends Cake<P> implements LiteralCakeRecipe<P> {
+    constructor(recipe: LiteralCakeRecipe<P>);
+    // (undocumented)
+    dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
+    // (undocumented)
+    dispatchStringify(context: CakeDispatchStringifyContext): string;
+    // (undocumented)
+    readonly value: P;
+    // (undocumented)
+    withName(name: string | null): LiteralCake<P>;
+}
+
+// @public (undocumented)
+export interface LiteralCakeRecipe<P extends Primitive> extends CakeRecipe {
+    // (undocumented)
+    value: P;
+}
+
+// @public (undocumented)
+export class LiteralNotEqualCakeError extends CakeError {
+    constructor(cake: LiteralCake<any>, value: unknown);
+    // (undocumented)
+    readonly cake: LiteralCake<any>;
+    // (undocumented)
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
+    // (undocumented)
+    readonly value: unknown;
+}
 
 // Warning: (ae-forgotten-export) The symbol "LookupReturn" needs to be exported by the entry point index.d.ts
 //

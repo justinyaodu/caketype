@@ -16,6 +16,10 @@ export {
   // Checker.ts
   Checker,
   CircularReferenceCakeError,
+  // LiteralCake.ts
+  LiteralCake,
+  LiteralCakeRecipe,
+  LiteralNotEqualCakeError,
   // ObjectCake.ts
   ObjectCake,
   ObjectCakeProperties,
