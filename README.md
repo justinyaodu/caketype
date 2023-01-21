@@ -88,7 +88,7 @@ const Person = bake({
 
 ### Runtime Type-Checking with Cakes
 
-To do runtime type-checking, we can use a Cake's [as](#cakeas), [is](#cakeis), and [check](#cakecheck) methods. [Cake.as](#cakeas) returns the value if it satisfies the Cake's type, and throws a TypeError otherwise:
+[Cake.as](#cakeas) returns the value if it satisfies the Cake's type, and throws a TypeError otherwise:
 
 ```ts
 const alice = Person.as({ name: "Alice" });
@@ -110,7 +110,19 @@ if (Person.is(alice)) {
 }
 ```
 
-Lastly, [Cake.check](#cakecheck) is similar to [Cake.as](#cakeas), but it returns the error instead of throwing it. See the [API reference](#cakecheck) for details.
+Lastly, [Cake.check](#cakecheck) returns the validated value or a [CakeError](#cakeerror), wrapped in a [Result](#result):
+
+```ts
+const result = Person.check(JSON.parse('{"name": "Alice"}'));
+if (result.ok) {
+  // result.value is a Person
+  const alice = result.value;
+  console.log(alice.name);
+} else {
+  // result.error is a CakeError
+  console.error(result.error.toString());
+}
+```
 
 ### Stricter Type-Checking
 
@@ -126,7 +138,7 @@ Person.as(carol);
 // { name: "Carol", lovesCake: true }
 ```
 
-If you want to disallow excess properties, use the [asStrict](#cakeasstrict), [isStrict](#cakeisstrict), and [checkStrict](#cakecheckstrict) methods instead:
+To forbid excess properties, use the [asStrict](#cakeasstrict), [isStrict](#cakeisstrict), and [checkStrict](#cakecheckstrict) methods instead:
 
 ```ts
 Person.asStrict(carol);
@@ -134,7 +146,7 @@ Person.asStrict(carol);
 //   Property "lovesCake": Property is not declared in type and excess properties are not allowed.
 ```
 
-This is often a good approach when validating parsed JSON objects.
+This can be useful for validating parsed JSON values.
 
 ### Inferring TypeScript Types from Cakes
 

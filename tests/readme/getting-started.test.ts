@@ -2,6 +2,7 @@ import {
   Assert,
   bake,
   Cake,
+  CakeError,
   Equivalent,
   If,
   Infer,
@@ -66,6 +67,19 @@ test("Getting Started", () => {
       // Here, the type of alice is Person
       const _: Person = alice;
       expect<string>(alice.name).toStrictEqual("Alice");
+    }
+  }
+
+  {
+    const result = Person.check(JSON.parse('{"name": "Alice"}'));
+    if (result.ok) {
+      const _: Person = result.value;
+      const alice = result.value;
+      expect(alice.name).toStrictEqual("Alice");
+    } else {
+      const _: CakeError = result.error;
+      console.error(result.error.toString());
+      fail();
     }
   }
 
