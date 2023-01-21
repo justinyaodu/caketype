@@ -10,14 +10,14 @@ import {
 /**
  * @public
  */
-interface ReferenceCakeRecipe<C extends Cake> extends CakeRecipe {
+interface ReferenceCakeRecipe<C extends Cake = Cake> extends CakeRecipe {
   readonly get: () => C;
 }
 
 /**
  * @public
  */
-class ReferenceCake<C extends Cake>
+class ReferenceCake<C extends Cake = Cake>
   extends Cake<Infer<C>>
   implements ReferenceCakeRecipe<C>
 {

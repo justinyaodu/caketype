@@ -22,14 +22,16 @@ import {
 /**
  * @public
  */
-interface TypeGuardCakeRecipe<T> extends CakeRecipe {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface TypeGuardCakeRecipe<T = any> extends CakeRecipe {
   readonly guard: (value: unknown) => value is T;
 }
 
 /**
  * @public
  */
-class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeRecipe<T> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+class TypeGuardCake<T = any> extends Cake<T> implements TypeGuardCakeRecipe<T> {
   readonly guard: (value: unknown) => value is T;
 
   constructor(recipe: TypeGuardCakeRecipe<T>) {
@@ -64,8 +66,7 @@ class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeRecipe<T> {
  * @public
  */
 class TypeGuardFailedCakeError extends CakeError {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(readonly cake: TypeGuardCake<any>, readonly value: unknown) {
+  constructor(readonly cake: TypeGuardCake, readonly value: unknown) {
     super();
   }
 

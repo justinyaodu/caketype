@@ -29,7 +29,9 @@ type ObjectCakeProperties = {
 /**
  * @public
  */
-interface ObjectCakeRecipe<P extends ObjectCakeProperties> extends CakeRecipe {
+interface ObjectCakeRecipe<
+  P extends ObjectCakeProperties = ObjectCakeProperties
+> extends CakeRecipe {
   readonly properties: Readonly<P>;
 }
 
@@ -45,7 +47,7 @@ type OnlyOptionalKeys<P extends ObjectCakeProperties> = keyof {
 /**
  * @public
  */
-class ObjectCake<P extends ObjectCakeProperties>
+class ObjectCake<P extends ObjectCakeProperties = ObjectCakeProperties>
   extends Cake<
     ({
       -readonly [K in OnlyRequiredKeys<P>]: P[K] extends Cake
@@ -205,8 +207,7 @@ class ObjectRequiredPropertyMissingCakeError extends CakeError {
  */
 class ObjectPropertiesCakeError extends CakeError {
   constructor(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    readonly cake: ObjectCake<any>,
+    readonly cake: ObjectCake,
     readonly value: object,
     readonly errors: Record<string | symbol, CakeError>
   ) {
@@ -215,10 +216,13 @@ class ObjectPropertiesCakeError extends CakeError {
 
   dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree {
     const { recurse, stringifyCake } = context;
+
+    const message = `Value does not satisfy type '${stringifyCake(
+      this.cake
+    )}': object properties are invalid.`;
+
     return [
-      `Value does not satisfy type '${stringifyCake(
-        this.cake
-      )}': object properties are invalid.`,
+      message,
       entriesUnsound(this.errors).map(([key, err]) =>
         prependStringTree(`Property ${stringifyPrimitive(key)}: `, recurse(err))
       ),
