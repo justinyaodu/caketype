@@ -1,6 +1,8 @@
 import {
+  array,
   Assert,
   bake,
+  boolean,
   Cake,
   CakeError,
   Equivalent,
@@ -107,6 +109,26 @@ test("Getting Started", () => {
 
   {
     const _: Cake<Person> = Person;
+  }
+
+  {
+    type Account = {
+      person: Person;
+      friends: string[];
+      settings: {
+        sendNotifications: boolean;
+      };
+    };
+
+    const Account = bake({
+      person: Person,
+      friends: array(string),
+      settings: {
+        sendNotifications: boolean,
+      },
+    } as const);
+
+    type _ = Assert<Equivalent<Account, Infer<typeof Account>>>;
   }
 
   {

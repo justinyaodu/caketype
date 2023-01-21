@@ -101,7 +101,11 @@ class TupleCake<
 
     if (this.optionalElements.length > 0 && this.endElements.length > 0) {
       throw new TypeError(
-        "Required elements cannot appear after optional elements in a tuple type."
+        [
+          "Cannot create TupleCake with non-empty optionalElements and",
+          "non-empty endElements, because required elements cannot appear",
+          "after optional elements in a tuple type.",
+        ].join(" ")
       );
     }
   }
