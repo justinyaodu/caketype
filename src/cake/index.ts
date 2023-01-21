@@ -1,4 +1,8 @@
 export {
+  // ArrayCake.ts
+  ArrayCake,
+  ArrayCakeRecipe,
+  array,
   // Baker.ts
   Bakeable,
   ObjectBakeable,
@@ -36,6 +40,11 @@ export {
   // tags.ts
   OptionalTag,
   optional,
+  // TupleCake.ts
+  TupleCake,
+  NotAnArrayCakeError,
+  TupleWrongLengthCakeError,
+  TupleElementsCakeError,
   // TypeGuardCake.ts
   TypeGuardCake,
   TypeGuardCakeRecipe,
