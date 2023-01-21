@@ -317,7 +317,7 @@ export type ObjectBakeable = {
 // Warning: (ae-forgotten-export) The symbol "OnlyOptionalKeys" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
-export class ObjectCake<P extends ObjectCakeProperties> extends Cake<({
+export class ObjectCake<P extends ObjectCakeProperties = ObjectCakeProperties> extends Cake<({
     -readonly [K in OnlyRequiredKeys<P>]: P[K] extends Cake ? Infer<P[K]> : never;
 } & {
     -readonly [K in OnlyOptionalKeys<P>]?: P[K] extends OptionalTag<infer I extends Cake> ? Infer<I> | undefined : never;
@@ -341,16 +341,16 @@ export type ObjectCakeProperties = {
 };
 
 // @public (undocumented)
-export interface ObjectCakeRecipe<P extends ObjectCakeProperties> extends CakeRecipe {
+export interface ObjectCakeRecipe<P extends ObjectCakeProperties = ObjectCakeProperties> extends CakeRecipe {
     // (undocumented)
     readonly properties: Readonly<P>;
 }
 
 // @public (undocumented)
 export class ObjectPropertiesCakeError extends CakeError {
-    constructor(cake: ObjectCake<any>, value: object, errors: Record<string | symbol, CakeError>);
+    constructor(cake: ObjectCake, value: object, errors: Record<string | symbol, CakeError>);
     // (undocumented)
-    readonly cake: ObjectCake<any>;
+    readonly cake: ObjectCake;
     // (undocumented)
     dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
     // (undocumented)
@@ -438,7 +438,7 @@ export type Primitive = bigint | boolean | number | string | symbol | null | und
 export function reference<T, C extends Cake<T> = Cake<T>>(get: () => C, name?: string | null): ReferenceCake<C>;
 
 // @public (undocumented)
-export class ReferenceCake<C extends Cake> extends Cake<Infer<C>> implements ReferenceCakeRecipe<C> {
+export class ReferenceCake<C extends Cake = Cake> extends Cake<Infer<C>> implements ReferenceCakeRecipe<C> {
     constructor(recipe: ReferenceCakeRecipe<C>);
     // (undocumented)
     dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
@@ -451,7 +451,7 @@ export class ReferenceCake<C extends Cake> extends Cake<Infer<C>> implements Ref
 }
 
 // @public (undocumented)
-export interface ReferenceCakeRecipe<C extends Cake> extends CakeRecipe {
+export interface ReferenceCakeRecipe<C extends Cake = Cake> extends CakeRecipe {
     // (undocumented)
     readonly get: () => C;
 }
@@ -483,7 +483,7 @@ export const symbol: TypeGuardCake<symbol>;
 export function typeGuard<T>(name: string, guard: (value: unknown) => value is T): TypeGuardCake<T>;
 
 // @public (undocumented)
-export class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeRecipe<T> {
+export class TypeGuardCake<T = any> extends Cake<T> implements TypeGuardCakeRecipe<T> {
     constructor(recipe: TypeGuardCakeRecipe<T>);
     // (undocumented)
     dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
@@ -496,16 +496,16 @@ export class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeRecipe<T> 
 }
 
 // @public (undocumented)
-export interface TypeGuardCakeRecipe<T> extends CakeRecipe {
+export interface TypeGuardCakeRecipe<T = any> extends CakeRecipe {
     // (undocumented)
     readonly guard: (value: unknown) => value is T;
 }
 
 // @public (undocumented)
 export class TypeGuardFailedCakeError extends CakeError {
-    constructor(cake: TypeGuardCake<any>, value: unknown);
+    constructor(cake: TypeGuardCake, value: unknown);
     // (undocumented)
-    readonly cake: TypeGuardCake<any>;
+    readonly cake: TypeGuardCake;
     // (undocumented)
     dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
     // (undocumented)
