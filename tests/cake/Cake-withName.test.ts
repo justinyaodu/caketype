@@ -8,6 +8,7 @@ import {
 import { is_boolean } from "../../src/type-guards";
 
 const cakes = {
+  literal: bake(0),
   object: bake({}),
   typeGuard: new TypeGuardCake({ guard: is_boolean }),
   reference: reference(() => boolean),

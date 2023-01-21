@@ -1,6 +1,12 @@
-import { mapValuesUnsound } from "../index-internal";
+import { isPrimitive, mapValuesUnsound, Primitive } from "../index-internal";
 
-import { Cake, ObjectCake, optional, OptionalTag } from "./index-internal";
+import {
+  Cake,
+  LiteralCake,
+  ObjectCake,
+  optional,
+  OptionalTag,
+} from "./index-internal";
 import type {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Infer,
@@ -10,8 +16,8 @@ import type {
  * A convenient syntax for type definitions. Used by {@link bake}.
  * @public
  */
-// TODO: add Class, Primitive, and tuples
-type Bakeable = Cake | ObjectBakeable;
+// TODO: add Class and tuples
+type Bakeable = Cake | Primitive | ObjectBakeable;
 
 /**
  * Define an object type that can be {@link bake}d into an {@link ObjectCake}.
@@ -27,6 +33,8 @@ type ObjectBakeable = {
  */
 type Baked<B extends Bakeable> = B extends Cake
   ? B
+  : B extends Primitive
+  ? LiteralCake<B>
   : B extends ObjectBakeable
   ? ObjectCake<{
       -readonly [K in keyof B]: B[K] extends OptionalTag<
@@ -49,9 +57,12 @@ class Baker {
     return this.bakeDispatch(bakeable);
   }
 
-  protected bakeDispatch<B extends Bakeable>(bakeable: B): Baked<B> {
+  protected bakeDispatch<B extends Bakeable>(bakeable: B): Baked<B>;
+  protected bakeDispatch(bakeable: Bakeable): Cake {
     if (bakeable instanceof Cake) {
-      return bakeable as Baked<B>;
+      return bakeable;
+    } else if (isPrimitive(bakeable)) {
+      return new LiteralCake({ value: bakeable });
     } else {
       return new ObjectCake({
         properties: mapValuesUnsound(bakeable as ObjectBakeable, (value) =>
@@ -59,7 +70,7 @@ class Baker {
             ? optional(this.bakeVisit(value.untagged))
             : this.bakeVisit(value)
         ),
-      }) as Baked<B>;
+      });
     }
   }
 }
