@@ -1922,6 +1922,8 @@ const c: Class<Date, [number]> = Date;
 #### Added
 
 - Cake subclasses: LiteralCake, TupleCake, ArrayCake
+- [array](#array) helper
+- [rest](#rest)
 - [Cake.asShape](#cakeasshape), [Cake.check](#cakecheckshape), and [Cake.is](#cakeisshape) use lenient runtime type-checking
 
 #### Changed
