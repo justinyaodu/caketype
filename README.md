@@ -1917,6 +1917,22 @@ const c: Class<Date, [number]> = Date;
 
 ## Changelog
 
+### v0.4.0 - 2023-01-22
+
+#### Added
+
+- Cake subclasses: LiteralCake, TupleCake, ArrayCake
+- [Cake.asShape](#cakeasshape), [Cake.check](#cakecheckshape), and [Cake.is](#cakeisshape) use lenient runtime type-checking
+
+#### Changed
+
+- [Cake.as](#cakeas), [Cake.check](#cakecheck), and [Cake.is](#cakeis) now use strict runtime type-checking
+- `-Recipe` interfaces renamed to `-Args`
+
+#### Removed
+
+- Cake.asStrict, Cake.checkStrict, and Cake.isStrict, since strict checking is the default behavior now
+
 ### v0.3.0 - 2023-01-19
 
 #### Added

@@ -17,7 +17,11 @@ const { slugify, withLines } = require("./util");
  */
 function findHeadingAnchorErrors(lines, error) {
   // Add entries set to undefined to ignore conflicts for these headings.
-  const anchors = new Map([["added", undefined]]);
+  const anchors = new Map([
+    ["added", undefined],
+    ["changed", undefined],
+    ["removed", undefined],
+  ]);
 
   for (let i = 0; i < lines.length; i++) {
     const match = /^#+ (.*)$/.exec(lines[i]);
