@@ -91,15 +91,18 @@ test("Getting Started", () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const person: Person = carol;
 
-    expect(Person.as(carol)).toStrictEqual({ name: "Carol", lovesCake: true });
-
     expectTypeError(
-      () => Person.asStrict(carol),
+      () => Person.as(carol),
       [
         `Value does not satisfy type '{name: string, age?: (number) | undefined}': object properties are invalid.`,
         `  Property "lovesCake": Property is not declared in type and excess properties are not allowed.`,
       ].join("\n")
     );
+
+    expect(Person.asShape(carol)).toStrictEqual({
+      name: "Carol",
+      lovesCake: true,
+    });
   }
 
   {

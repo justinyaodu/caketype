@@ -17,7 +17,9 @@ import {
   Cake,
   entriesUnsound,
   boolean,
+  bake,
 } from "../../src";
+import { ExcessPropertyPresentCakeError } from "../../src/cake/ObjectCake";
 
 interface CircularName {
   name?: CircularName | undefined;
@@ -153,8 +155,13 @@ const values: {
   },
   empty: {
     empty: [{}, () => null],
-    function: [() => undefined, () => null],
-    circularNameObj: [circularNameObj, () => null],
+    circularNameObj: [
+      circularNameObj,
+      (c, o) =>
+        new ObjectPropertiesCakeError(c, o as object, {
+          name: new ExcessPropertyPresentCakeError(o),
+        }),
+    ],
   },
   circularName: {
     circularNameObj: [
@@ -217,4 +224,8 @@ test("toString with weird keys", () => {
   expect(cake.toString()).toStrictEqual(
     `{"with space": number, [Symbol(sym)]: boolean, [Symbol(Symbol.iterator)]: string}`
   );
+});
+
+test("function satisfies empty shape", () => {
+  expect(bake({}).isShape(() => null)).toStrictEqual(true);
 });

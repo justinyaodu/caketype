@@ -23,23 +23,28 @@ describe("documentation examples", () => {
     );
   });
 
-  test("asStrict", () => {
+  test("asShape", () => {
     const Person = bake({ name: string } as const);
     const alice = { name: "Alice", extra: "oops" };
 
-    expect(Person.as(alice)).toStrictEqual({ name: "Alice", extra: "oops" });
+    expect(Person.asShape(alice)).toStrictEqual({
+      name: "Alice",
+      extra: "oops",
+    });
 
     expectTypeError(
-      () => Person.asStrict(alice),
+      () => Person.as(alice),
       [
         `Value does not satisfy type '{name: string}': object properties are invalid.`,
         `  Property "extra": Property is not declared in type and excess properties are not allowed.`,
       ].join("\n")
     );
 
-    // Extra test for the successful case:
-    const bob = { name: "Bob" };
-    expect(Person.asStrict(bob)).toStrictEqual(bob);
+    // Extra test for the failing case:
+    expectTypeError(
+      () => Person.asShape("oops"),
+      `Value does not satisfy type '{name: string}': value is not an object.`
+    );
   });
 
   test("check", () => {
@@ -61,19 +66,6 @@ describe("documentation examples", () => {
     );
   });
 
-  test("checkStrict", () => {
-    const Person = bake({ name: string } as const);
-    const alice = { name: "Alice", extra: "oops" };
-    expect(Person.check(alice)).toStrictEqual(Result.ok(alice));
-    expect(Person.checkStrict(alice)).toStrictEqual(
-      Result.err(
-        new ObjectPropertiesCakeError(Person, alice, {
-          extra: new ExcessPropertyPresentCakeError("oops"),
-        })
-      )
-    );
-  });
-
   test("check and Result.valueOr", () => {
     expect(number.check(3).valueOr(0)).toStrictEqual(3);
     expect(number.check("oops").valueOr(0)).toStrictEqual(0);
@@ -82,6 +74,19 @@ describe("documentation examples", () => {
   test("check and Result.errorOr", () => {
     expect(number.check(3).errorOr(null)).toStrictEqual(null);
     expect(number.check("oops").errorOr(null)).toBeInstanceOf(CakeError);
+  });
+
+  test("checkShape", () => {
+    const Person = bake({ name: string } as const);
+    const alice = { name: "Alice", extra: "oops" };
+    expect(Person.checkShape(alice)).toStrictEqual(Result.ok(alice));
+    expect(Person.check(alice)).toStrictEqual(
+      Result.err(
+        new ObjectPropertiesCakeError(Person, alice, {
+          extra: new ExcessPropertyPresentCakeError("oops"),
+        })
+      )
+    );
   });
 
   test("is returns boolean", () => {
@@ -99,11 +104,12 @@ describe("documentation examples", () => {
     })
   );
 
-  test("isStrict", () => {
+  test("isShape", () => {
     const Person = bake({ name: string } as const);
     const alice = { name: "Alice", extra: "oops" };
-    expect(Person.is(alice)).toStrictEqual(true);
-    expect(Person.isStrict(alice)).toStrictEqual(false);
+
+    expect(Person.isShape(alice)).toStrictEqual(true);
+    expect(Person.is(alice)).toStrictEqual(false);
   });
 
   test("toString", () => {

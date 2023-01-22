@@ -3,7 +3,7 @@ import { expectTypeError } from "../test-helpers";
 
 describe("documentation examples", () => {
   const cake = bake({ name: string } as const);
-  const error = cake.check({}).errorOr(null);
+  const error = cake.checkShape({}).errorOr(null);
   if (error === null) {
     fail();
   }
