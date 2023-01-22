@@ -162,7 +162,7 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
    * @see {@link Cake.as} to throw an error if the type is not satisfied.
    */
   check(value: unknown): Result<T, CakeError> {
-    return new Checker(CheckOptions.STRICT).check(this, value);
+    return new Checker().check(this, value);
   }
 
   /**
@@ -181,7 +181,7 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
    * ```
    */
   checkShape(value: unknown): Result<T, CakeError> {
-    return new Checker().check(this, value);
+    return new Checker(CheckOptions.LENIENT).check(this, value);
   }
 
   /**

@@ -4,12 +4,12 @@ interface CheckOptions {
 
 const CheckOptions: {
   STRICT: CheckOptions;
-  DEFAULT: CheckOptions;
+  LENIENT: CheckOptions;
 } = {
   STRICT: {
     objectExcessProperties: "error",
   },
-  DEFAULT: {
+  LENIENT: {
     objectExcessProperties: "ignore",
   },
 };
