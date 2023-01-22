@@ -11,8 +11,8 @@ export const any: TypeGuardCake<any>;
 export function array<B extends Bakeable>(bakeable: B): ArrayCake<Baked<B>>;
 
 // @public (undocumented)
-export class ArrayCake<C extends Cake = Cake> extends TupleCake<readonly [], readonly [], C, readonly []> implements ArrayCakeRecipe<C> {
-    constructor(recipe: ArrayCakeRecipe<C>);
+export class ArrayCake<C extends Cake = Cake> extends TupleCake<readonly [], readonly [], C, readonly []> implements ArrayCakeArgs<C> {
+    constructor(args: ArrayCakeArgs<C>);
     // (undocumented)
     readonly element: C;
     // (undocumented)
@@ -20,7 +20,7 @@ export class ArrayCake<C extends Cake = Cake> extends TupleCake<readonly [], rea
 }
 
 // @public (undocumented)
-export interface ArrayCakeRecipe<C extends Cake> extends CakeRecipe {
+export interface ArrayCakeArgs<C extends Cake> extends CakeArgs {
     // (undocumented)
     element: C;
 }
@@ -51,8 +51,8 @@ export const boolean: TypeGuardCake<boolean>;
 // Warning: (ae-forgotten-export) The symbol "Untagged" needs to be exported by the entry point index.d.ts
 //
 // @public
-export abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
-    constructor(recipe: CakeRecipe);
+export abstract class Cake<in out T = any> extends Untagged implements CakeArgs {
+    constructor(args: CakeArgs);
     as(value: unknown): T;
     asShape(value: unknown): T;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
@@ -75,6 +75,14 @@ export abstract class Cake<in out T = any> extends Untagged implements CakeRecip
     toString(): string;
     // (undocumented)
     abstract withName(name: string | null): Cake<T>;
+}
+
+// @public (undocumented)
+export interface CakeArgs {
+    // (undocumented)
+    readonly name?: string | null;
+    // (undocumented)
+    readonly options?: Partial<CheckOptions>;
 }
 
 // @public (undocumented)
@@ -105,14 +113,6 @@ export interface CakeErrorDispatchFormatContext {
     readonly recurse: (error: CakeError) => StringTree;
     // (undocumented)
     readonly stringifyCake: (cake: Cake) => string;
-}
-
-// @public (undocumented)
-export interface CakeRecipe {
-    // (undocumented)
-    readonly name?: string | null;
-    // (undocumented)
-    readonly options?: Partial<CheckOptions>;
 }
 
 // Warning: (ae-internal-missing-underscore) The name "Checker" should be prefixed with an underscore because the declaration is marked as @internal
@@ -258,8 +258,8 @@ export function keysIncludingSymbolsUnsound<T extends object>(object: T): (keyof
 export function keysUnsound<T extends object>(object: T): (keyof T & string)[];
 
 // @public (undocumented)
-export class LiteralCake<P extends Primitive> extends Cake<P> implements LiteralCakeRecipe<P> {
-    constructor(recipe: LiteralCakeRecipe<P>);
+export class LiteralCake<P extends Primitive> extends Cake<P> implements LiteralCakeArgs<P> {
+    constructor(args: LiteralCakeArgs<P>);
     // (undocumented)
     dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
@@ -271,7 +271,7 @@ export class LiteralCake<P extends Primitive> extends Cake<P> implements Literal
 }
 
 // @public (undocumented)
-export interface LiteralCakeRecipe<P extends Primitive> extends CakeRecipe {
+export interface LiteralCakeArgs<P extends Primitive> extends CakeArgs {
     // (undocumented)
     value: P;
 }
@@ -382,8 +382,8 @@ export class ObjectCake<P extends ObjectCakeProperties> extends Cake<({
     -readonly [K in OnlyOptionalKeys<P>]?: P[K] extends OptionalTag<infer I extends Cake> ? Infer<I> | undefined : never;
 } extends infer I ? {
     [K in keyof I]: I[K];
-} : never) & object> implements ObjectCakeRecipe<P> {
-    constructor(recipe: ObjectCakeRecipe<P>);
+} : never) & object> implements ObjectCakeArgs<P> {
+    constructor(args: ObjectCakeArgs<P>);
     // (undocumented)
     dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
@@ -395,15 +395,15 @@ export class ObjectCake<P extends ObjectCakeProperties> extends Cake<({
 }
 
 // @public (undocumented)
-export type ObjectCakeProperties = {
-    readonly [key: string | symbol]: Cake | OptionalTag<Cake>;
-};
-
-// @public (undocumented)
-export interface ObjectCakeRecipe<P extends ObjectCakeProperties> extends CakeRecipe {
+export interface ObjectCakeArgs<P extends ObjectCakeProperties> extends CakeArgs {
     // (undocumented)
     readonly properties: Readonly<P>;
 }
+
+// @public (undocumented)
+export type ObjectCakeProperties = {
+    readonly [key: string | symbol]: Cake | OptionalTag<Cake>;
+};
 
 // @public (undocumented)
 export class ObjectPropertiesCakeError extends CakeError {
@@ -488,8 +488,8 @@ export type Primitive = bigint | boolean | number | string | symbol | null | und
 export function reference<T, C extends Cake<T> = Cake<T>>(get: () => C, name?: string | null): ReferenceCake<C>;
 
 // @public (undocumented)
-export class ReferenceCake<C extends Cake> extends Cake<Infer<C>> implements ReferenceCakeRecipe<C> {
-    constructor(recipe: ReferenceCakeRecipe<C>);
+export class ReferenceCake<C extends Cake> extends Cake<Infer<C>> implements ReferenceCakeArgs<C> {
+    constructor(args: ReferenceCakeArgs<C>);
     // (undocumented)
     dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
@@ -501,7 +501,7 @@ export class ReferenceCake<C extends Cake> extends Cake<Infer<C>> implements Ref
 }
 
 // @public (undocumented)
-export interface ReferenceCakeRecipe<C extends Cake> extends CakeRecipe {
+export interface ReferenceCakeArgs<C extends Cake> extends CakeArgs {
     // (undocumented)
     readonly get: () => C;
 }
@@ -548,7 +548,7 @@ export const symbol: TypeGuardCake<symbol>;
 
 // Warning: (ae-forgotten-export) The symbol "MapInfer" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "MapInferOptional" needs to be exported by the entry point index.d.ts
-// Warning: (ae-forgotten-export) The symbol "TupleCakeRecipe" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "TupleCakeArgs" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
 export class TupleCake<S extends readonly Cake[], O extends readonly Cake[], R extends Cake | null, E extends readonly Cake[]> extends Cake<[
@@ -556,8 +556,8 @@ export class TupleCake<S extends readonly Cake[], O extends readonly Cake[], R e
 ...MapInferOptional<O>,
 ...(R extends Cake ? [...Infer<R>[]] : []),
 ...MapInfer<E>
-]> implements TupleCakeRecipe<S, O, R, E> {
-    constructor(recipe: TupleCakeRecipe<S, O, R, E>);
+]> implements TupleCakeArgs<S, O, R, E> {
+    constructor(args: TupleCakeArgs<S, O, R, E>);
     // (undocumented)
     dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
@@ -617,8 +617,8 @@ export class TupleWrongLengthCakeError extends CakeError {
 export function typeGuard<T>(name: string, guard: (value: unknown) => value is T): TypeGuardCake<T>;
 
 // @public (undocumented)
-export class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeRecipe<T> {
-    constructor(recipe: TypeGuardCakeRecipe<T>);
+export class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeArgs<T> {
+    constructor(args: TypeGuardCakeArgs<T>);
     // (undocumented)
     dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
@@ -630,7 +630,7 @@ export class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeRecipe<T> 
 }
 
 // @public (undocumented)
-export interface TypeGuardCakeRecipe<T> extends CakeRecipe {
+export interface TypeGuardCakeArgs<T> extends CakeArgs {
     // (undocumented)
     readonly guard: (value: unknown) => value is T;
 }

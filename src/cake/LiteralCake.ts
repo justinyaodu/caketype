@@ -8,7 +8,7 @@ import {
   Cake,
   CakeDispatchCheckContext,
   CakeDispatchStringifyContext,
-  CakeRecipe,
+  CakeArgs,
   CakeError,
   CakeErrorDispatchFormatContext,
   StringTree,
@@ -17,7 +17,7 @@ import {
 /**
  * @public
  */
-interface LiteralCakeRecipe<P extends Primitive> extends CakeRecipe {
+interface LiteralCakeArgs<P extends Primitive> extends CakeArgs {
   value: P;
 }
 
@@ -26,13 +26,13 @@ interface LiteralCakeRecipe<P extends Primitive> extends CakeRecipe {
  */
 class LiteralCake<P extends Primitive>
   extends Cake<P>
-  implements LiteralCakeRecipe<P>
+  implements LiteralCakeArgs<P>
 {
   readonly value: P;
 
-  constructor(recipe: LiteralCakeRecipe<P>) {
-    super(recipe);
-    this.value = recipe.value;
+  constructor(args: LiteralCakeArgs<P>) {
+    super(args);
+    this.value = args.value;
   }
 
   dispatchCheck(
@@ -71,4 +71,4 @@ class LiteralNotEqualCakeError extends CakeError {
   }
 }
 
-export { LiteralCake, LiteralCakeRecipe, LiteralNotEqualCakeError };
+export { LiteralCake, LiteralCakeArgs, LiteralNotEqualCakeError };

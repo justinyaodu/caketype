@@ -16,25 +16,25 @@ import {
   CakeDispatchStringifyContext,
   StringTree,
   CakeDispatchCheckContext,
-  CakeRecipe,
+  CakeArgs,
 } from "./index-internal";
 
 /**
  * @public
  */
-interface TypeGuardCakeRecipe<T> extends CakeRecipe {
+interface TypeGuardCakeArgs<T> extends CakeArgs {
   readonly guard: (value: unknown) => value is T;
 }
 
 /**
  * @public
  */
-class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeRecipe<T> {
+class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeArgs<T> {
   readonly guard: (value: unknown) => value is T;
 
-  constructor(recipe: TypeGuardCakeRecipe<T>) {
-    super(recipe);
-    this.guard = recipe.guard;
+  constructor(args: TypeGuardCakeArgs<T>) {
+    super(args);
+    this.guard = args.guard;
   }
 
   dispatchCheck(
@@ -200,7 +200,7 @@ const unknown = typeGuard("unknown", is_unknown);
 
 export {
   TypeGuardCake,
-  TypeGuardCakeRecipe,
+  TypeGuardCakeArgs,
   TypeGuardFailedCakeError,
   typeGuard,
   any,
