@@ -54,18 +54,18 @@ export const boolean: TypeGuardCake<boolean>;
 export abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
     constructor(recipe: CakeRecipe);
     as(value: unknown): T;
-    asStrict(value: unknown): T;
+    asShape(value: unknown): T;
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
     // Warning: (ae-unresolved-link) The @link reference could not be resolved: The reference is ambiguous because "Result" has more than one declaration; you need to add a TSDoc member reference selector
     check(value: unknown): Result<T, CakeError>;
-    checkStrict(value: unknown): Result<T, CakeError>;
+    checkShape(value: unknown): Result<T, CakeError>;
     // (undocumented)
     abstract dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
     abstract dispatchStringify(context: CakeDispatchStringifyContext): string;
     is(value: unknown): value is T;
-    isStrict(value: unknown): boolean;
+    isShape(value: unknown): value is T;
     // (undocumented)
     readonly name: string | null;
     // Warning: (ae-forgotten-export) The symbol "CheckOptions" needs to be exported by the entry point index.d.ts

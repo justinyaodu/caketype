@@ -27,7 +27,7 @@ class Checker {
   protected readonly context: CakeDispatchCheckContext;
 
   constructor(options?: CheckOptions) {
-    this.options = merge(CheckOptions.DEFAULT, options || {});
+    this.options = merge(CheckOptions.STRICT, options || {});
     this.cache = new Map();
     this.context = {
       recurse: (cake, value) => this.checkVisit(cake, value),

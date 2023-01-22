@@ -73,7 +73,11 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
    * // TypeError: Value does not satisfy type 'number': type guard failed.
    * ```
    *
-   * @see {@link Cake.asStrict} for stricter type-checking.
+   * The default type-checking behavior is stricter than TypeScript, making it
+   * suitable for validating parsed JSON. For example, excess object properties
+   * are not allowed.
+   *
+   * @see {@link Cake.asShape} for more lenient type-checking.
    * @see {@link Cake.check} to return the error instead of throwing it.
    */
   as(value: unknown): T {
@@ -85,25 +89,25 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
   }
 
   /**
-   * Like {@link Cake.as}, but perform additional checks suitable for JSON
-   * validation.
+   * Like {@link Cake.as}, but use lenient type-checking at runtime to match
+   * TypeScript's static type-checking more closely.
    *
-   * @example Excess object properties are allowed by default, but not allowed
-   * with strict checking:
+   * @example Excess object properties are allowed with lenient type-checking,
+   * but not allowed with strict type-checking:
    *
    * ```ts
    * const Person = bake({ name: string } as const);
    * const alice = { name: "Alice", extra: "oops" };
    *
-   * Person.as(alice); // { name: "Alice", extra: "oops" }
+   * Person.asShape(alice); // { name: "Alice", extra: "oops" }
    *
-   * Person.asStrict(alice);
+   * Person.as(alice);
    * // TypeError: Value does not satisfy type '{name: string}': object properties are invalid.
    * //   Property "extra": Property is not declared in type and excess properties are not allowed.
    * ```
    */
-  asStrict(value: unknown): T {
-    const result = this.checkStrict(value);
+  asShape(value: unknown): T {
+    const result = this.checkShape(value);
     if (result.ok) {
       return result.value;
     }
@@ -150,7 +154,11 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
    * number.check("oops").errorOr(null); // <CakeError>
    * ```
    *
-   * @see {@link Cake.checkStrict} for stricter type-checking.
+   * The default type-checking behavior is stricter than TypeScript, making it
+   * suitable for validating parsed JSON. For example, excess object properties
+   * are not allowed.
+   *
+   * @see {@link Cake.checkShape} for more lenient type-checking.
    * @see {@link Cake.as} to throw an error if the type is not satisfied.
    */
   check(value: unknown): Result<T, CakeError> {
@@ -158,21 +166,22 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
   }
 
   /**
-   * Like {@link Cake.check}, but perform additional checks suitable for JSON
-   * validation.
+   * Like {@link Cake.check}, but use lenient type-checking at runtime to match
+   * TypeScript's static type-checking more closely.
    *
-   * @example Excess object properties are allowed by default, but not allowed
-   * with strict checking:
+   * @example Excess object properties are allowed with lenient type-checking,
+   * but not allowed with strict type-checking:
    *
    * ```ts
    * const Person = bake({ name: string } as const);
    * const alice = { name: "Alice", extra: "oops" };
-   * Person.check(alice); // Ok(alice)
-   * Person.checkStrict(alice); // Err(<CakeError>)
+   *
+   * Person.checkShape(alice); // Ok(alice)
+   * Person.check(alice); // Err(<CakeError>)
    * ```
    */
-  checkStrict(value: unknown): Result<T, CakeError> {
-    return new Checker(CheckOptions.STRICT).check(this, value);
+  checkShape(value: unknown): Result<T, CakeError> {
+    return new Checker(CheckOptions.LENIENT).check(this, value);
   }
 
   /**
@@ -196,28 +205,33 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
    * }
    * ```
    *
-   * @see {@link Cake.isStrict} for stricter type-checking.
+   * The default type-checking behavior is stricter than TypeScript, making it
+   * suitable for validating parsed JSON. For example, excess object properties
+   * are not allowed.
+   *
+   * @see {@link Cake.isShape} for more lenient type-checking.
    */
   is(value: unknown): value is T {
     return this.check(value).ok;
   }
 
   /**
-   * Like {@link Cake.is}, but perform additional checks suitable for JSON
-   * validation.
+   * Like {@link Cake.is}, but use lenient type-checking at runtime to match
+   * TypeScript's static type-checking more closely.
    *
-   * @example Excess object properties are allowed by default, but not allowed
-   * with strict checking:
+   * @example Excess object properties are allowed with lenient type-checking,
+   * but not allowed with strict type-checking:
    *
    * ```ts
    * const Person = bake({ name: string } as const);
    * const alice = { name: "Alice", extra: "oops" };
-   * Person.is(alice); // true
-   * Person.isStrict(alice); // false
+   *
+   * Person.isShape(alice); // true
+   * Person.is(alice); // false
    * ```
    */
-  isStrict(value: unknown): boolean {
-    return this.checkStrict(value).ok;
+  isShape(value: unknown): value is T {
+    return this.checkShape(value).ok;
   }
 
   /**
@@ -244,17 +258,11 @@ abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
     return new CakeStringifier().stringify(this);
   }
 
-  /**
-   * @public
-   */
   abstract dispatchCheck(
     value: unknown,
     context: CakeDispatchCheckContext
   ): CakeError | null;
 
-  /**
-   * @public
-   */
   abstract dispatchStringify(context: CakeDispatchStringifyContext): string;
 
   abstract withName(name: string | null): Cake<T>;

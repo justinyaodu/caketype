@@ -124,29 +124,37 @@ if (result.ok) {
 }
 ```
 
-### Stricter Type-Checking
+### Lenient Type-Checking
 
-By default, runtime type-checking is designed to closely mimic TypeScript's behavior. In particular, objects can contain excess properties that are not declared in their type:
+By default, runtime type-checking is stricter than TypeScript's static type-checking. For example, TypeScript allows objects to contain excess properties that are not declared in their type:
 
 ```ts
 const carol = { name: "Carol", lovesCake: true };
 
 const person: Person = carol;
-// OK, even though lovesCake is not declared in the Person type
-
-Person.as(carol);
-// { name: "Carol", lovesCake: true }
+// TypeScript allows this, even though lovesCake
+// is not declared in the Person type
 ```
 
-To forbid excess properties, use the [asStrict](#cakeasstrict), [isStrict](#cakeisstrict), and [checkStrict](#cakecheckstrict) methods instead:
+However, the strict type-checking used by [Cake.as](#cakeas), [Cake.is](#cakeis), and [Cake.check](#cakecheck) does not allow excess properties:
 
 ```ts
-Person.asStrict(carol);
+Person.as(carol);
 // TypeError: Value does not satisfy type '{name: string, age?: (number) | undefined}': object properties are invalid.
 //   Property "lovesCake": Property is not declared in type and excess properties are not allowed.
 ```
 
-This can be useful for validating parsed JSON values.
+To allow excess properties (and match TypeScript's static type-checking more closely in other ways), use the [asShape](#cakeasshape), [isShape](#cakeisshape), and [checkShape](#cakecheckshape) methods instead:
+
+```ts
+Person.asShape(carol);
+// { name: "Carol", lovesCake: true }
+```
+
+> `caketype` is strict by default, under the assumption that developers should only opt-in to lenient type-checking when necessary. This has two benefits:
+>
+> 1. Runtime type-checking is often used to validate untrusted parsed JSON values from network requests. Strict type-checking is typically more appropriate for this use case.
+> 2. It's easier to find and fix bugs caused by excessively strict type-checking, because values that should be okay will produce visible type errors instead. If the type-checking is too lenient, values that should produce type errors will be considered okay, which could have unexpected effects in other parts of your codebase.
 
 ### Inferring TypeScript Types from Cakes
 
@@ -313,11 +321,11 @@ Numbers.is([2, 3]); // true
 - [Cakes](#cakes)
   - [`Cake`](#cake)
   - [`Cake.as`](#cakeas)
-  - [`Cake.asStrict`](#cakeasstrict)
+  - [`Cake.asShape`](#cakeasshape)
   - [`Cake.check`](#cakecheck)
-  - [`Cake.checkStrict`](#cakecheckstrict)
+  - [`Cake.checkShape`](#cakecheckshape)
   - [`Cake.is`](#cakeis)
-  - [`Cake.isStrict`](#cakeisstrict)
+  - [`Cake.isShape`](#cakeisshape)
   - [`Cake.toString`](#caketostring)
   - [`Infer`](#infer)
 - [Built-in Cakes](#built-in-cakes)
@@ -486,25 +494,31 @@ number.as("oops");
 // TypeError: Value does not satisfy type 'number': type guard failed.
 ```
 
+The default type-checking behavior is stricter than TypeScript, making it
+suitable for validating parsed JSON. For example, excess object properties
+are not allowed.
+
+See [Cake.asShape](#cakeasshape) for more lenient type-checking.
+
 See [Cake.check](#cakecheck) to return the error instead of throwing it.
 
 ---
 
-#### `Cake.asStrict`
+#### `Cake.asShape`
 
-Like [Cake.as](#cakeas), but perform additional checks suitable for JSON
-validation.
+Like [Cake.as](#cakeas), but use lenient type-checking at runtime to match
+TypeScript's static type-checking more closely.
 
-Excess object properties are allowed by default, but not allowed
-with strict checking:
+Excess object properties are allowed with lenient type-checking,
+but not allowed with strict type-checking:
 
 ```ts
 const Person = bake({ name: string } as const);
 const alice = { name: "Alice", extra: "oops" };
 
-Person.as(alice); // { name: "Alice", extra: "oops" }
+Person.asShape(alice); // { name: "Alice", extra: "oops" }
 
-Person.asStrict(alice);
+Person.as(alice);
 // TypeError: Value does not satisfy type '{name: string}': object properties are invalid.
 //   Property "extra": Property is not declared in type and excess properties are not allowed.
 ```
@@ -556,23 +570,30 @@ number.check(3).errorOr(null); // null
 number.check("oops").errorOr(null); // <CakeError>
 ```
 
+The default type-checking behavior is stricter than TypeScript, making it
+suitable for validating parsed JSON. For example, excess object properties
+are not allowed.
+
+See [Cake.checkShape](#cakecheckshape) for more lenient type-checking.
+
 See [Cake.as](#cakeas) to throw an error if the type is not satisfied.
 
 ---
 
-#### `Cake.checkStrict`
+#### `Cake.checkShape`
 
-Like [Cake.check](#cakecheck), but perform additional checks suitable for JSON
-validation.
+Like [Cake.check](#cakecheck), but use lenient type-checking at runtime to match
+TypeScript's static type-checking more closely.
 
-Excess object properties are allowed by default, but not allowed
-with strict checking:
+Excess object properties are allowed with lenient type-checking,
+but not allowed with strict type-checking:
 
 ```ts
 const Person = bake({ name: string } as const);
 const alice = { name: "Alice", extra: "oops" };
-Person.check(alice); // Ok(alice)
-Person.checkStrict(alice); // Err(<CakeError>)
+
+Person.checkShape(alice); // Ok(alice)
+Person.check(alice); // Err(<CakeError>)
 ```
 
 ---
@@ -603,21 +624,28 @@ if (number.is(value)) {
 }
 ```
 
+The default type-checking behavior is stricter than TypeScript, making it
+suitable for validating parsed JSON. For example, excess object properties
+are not allowed.
+
+See [Cake.isShape](#cakeisshape) for more lenient type-checking.
+
 ---
 
-#### `Cake.isStrict`
+#### `Cake.isShape`
 
-Like [Cake.is](#cakeis), but perform additional checks suitable for JSON
-validation.
+Like [Cake.is](#cakeis), but use lenient type-checking at runtime to match
+TypeScript's static type-checking more closely.
 
-Excess object properties are allowed by default, but not allowed
-with strict checking:
+Excess object properties are allowed with lenient type-checking,
+but not allowed with strict type-checking:
 
 ```ts
 const Person = bake({ name: string } as const);
 const alice = { name: "Alice", extra: "oops" };
-Person.is(alice); // true
-Person.isStrict(alice); // false
+
+Person.isShape(alice); // true
+Person.is(alice); // false
 ```
 
 ---
