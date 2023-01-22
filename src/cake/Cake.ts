@@ -35,7 +35,7 @@ interface CakeDispatchStringifyContext {
 /**
  * @public
  */
-interface CakeRecipe {
+interface CakeArgs {
   readonly name?: string | null;
   readonly options?: Partial<CheckOptions>;
 }
@@ -50,14 +50,14 @@ interface CakeRecipe {
  * @public
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-abstract class Cake<in out T = any> extends Untagged implements CakeRecipe {
+abstract class Cake<in out T = any> extends Untagged implements CakeArgs {
   readonly name: string | null;
   readonly options: Partial<CheckOptions>;
 
-  constructor(recipe: CakeRecipe) {
+  constructor(args: CakeArgs) {
     super();
-    this.name = recipe.name === undefined ? null : recipe.name;
-    this.options = recipe.options === undefined ? {} : recipe.options;
+    this.name = args.name === undefined ? null : args.name;
+    this.options = args.options === undefined ? {} : args.options;
   }
 
   /**
@@ -288,8 +288,8 @@ type Infer<C extends Cake> = C extends Cake<infer T> ? T : never;
 
 export {
   Cake,
+  CakeArgs,
   CakeDispatchCheckContext,
   CakeDispatchStringifyContext,
-  CakeRecipe,
   Infer,
 };

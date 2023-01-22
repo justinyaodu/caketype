@@ -6,7 +6,7 @@ import {
   CakeDispatchStringifyContext,
   CakeError,
   CakeErrorDispatchFormatContext,
-  CakeRecipe,
+  CakeArgs,
   Infer,
   optional,
   OptionalTag,
@@ -55,12 +55,12 @@ type MapOptionalTag<T extends readonly Cake[]> = T extends readonly []
 /**
  * @public
  */
-interface TupleCakeRecipe<
+interface TupleCakeArgs<
   S extends readonly Cake[],
   O extends readonly Cake[],
   R extends Cake | null,
   E extends readonly Cake[]
-> extends CakeRecipe {
+> extends CakeArgs {
   readonly startElements: S;
   readonly optionalElements: O;
   readonly restElement: R;
@@ -84,20 +84,20 @@ class TupleCake<
       ...MapInfer<E>
     ]
   >
-  implements TupleCakeRecipe<S, O, R, E>
+  implements TupleCakeArgs<S, O, R, E>
 {
   readonly startElements: S;
   readonly optionalElements: O;
   readonly restElement: R;
   readonly endElements: E;
 
-  constructor(recipe: TupleCakeRecipe<S, O, R, E>) {
-    super(recipe);
+  constructor(args: TupleCakeArgs<S, O, R, E>) {
+    super(args);
 
-    this.startElements = recipe.startElements;
-    this.optionalElements = recipe.optionalElements;
-    this.restElement = recipe.restElement;
-    this.endElements = recipe.endElements;
+    this.startElements = args.startElements;
+    this.optionalElements = args.optionalElements;
+    this.restElement = args.restElement;
+    this.endElements = args.endElements;
 
     if (this.optionalElements.length > 0 && this.endElements.length > 0) {
       throw new TypeError(

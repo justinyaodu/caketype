@@ -1,7 +1,7 @@
 export {
   // ArrayCake.ts
   ArrayCake,
-  ArrayCakeRecipe,
+  ArrayCakeArgs,
   array,
   // Baker.ts
   Bakeable,
@@ -10,9 +10,9 @@ export {
   Baked,
   // Cake.ts
   Cake,
+  CakeArgs,
   CakeDispatchCheckContext,
   CakeDispatchStringifyContext,
-  CakeRecipe,
   Infer,
   // CakeError.ts
   CakeError,
@@ -22,18 +22,18 @@ export {
   CircularReferenceCakeError,
   // LiteralCake.ts
   LiteralCake,
-  LiteralCakeRecipe,
+  LiteralCakeArgs,
   LiteralNotEqualCakeError,
   // ObjectCake.ts
   ObjectCake,
+  ObjectCakeArgs,
   ObjectCakeProperties,
-  ObjectCakeRecipe,
   NotAnObjectCakeError,
   ObjectPropertiesCakeError,
   RequiredPropertyMissingCakeError,
   // ReferenceCake.ts
   ReferenceCake,
-  ReferenceCakeRecipe,
+  ReferenceCakeArgs,
   reference,
   // StringTree.ts
   StringTree,
@@ -49,7 +49,7 @@ export {
   TupleElementsCakeError,
   // TypeGuardCake.ts
   TypeGuardCake,
-  TypeGuardCakeRecipe,
+  TypeGuardCakeArgs,
   TypeGuardFailedCakeError,
   typeGuard,
   any,

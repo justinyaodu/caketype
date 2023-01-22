@@ -3,14 +3,14 @@ import {
   CakeDispatchCheckContext,
   CakeDispatchStringifyContext,
   CakeError,
-  CakeRecipe,
+  CakeArgs,
   Infer,
 } from "./index-internal";
 
 /**
  * @public
  */
-interface ReferenceCakeRecipe<C extends Cake> extends CakeRecipe {
+interface ReferenceCakeArgs<C extends Cake> extends CakeArgs {
   readonly get: () => C;
 }
 
@@ -19,13 +19,13 @@ interface ReferenceCakeRecipe<C extends Cake> extends CakeRecipe {
  */
 class ReferenceCake<C extends Cake>
   extends Cake<Infer<C>>
-  implements ReferenceCakeRecipe<C>
+  implements ReferenceCakeArgs<C>
 {
   readonly get: () => C;
 
-  constructor(recipe: ReferenceCakeRecipe<C>) {
-    super(recipe);
-    this.get = recipe.get;
+  constructor(args: ReferenceCakeArgs<C>) {
+    super(args);
+    this.get = args.get;
   }
 
   dispatchCheck(
@@ -56,4 +56,4 @@ function reference<T, C extends Cake<T> = Cake<T>>(
   return new ReferenceCake({ get, name });
 }
 
-export { ReferenceCake, ReferenceCakeRecipe, reference };
+export { ReferenceCake, ReferenceCakeArgs, reference };

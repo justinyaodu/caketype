@@ -16,7 +16,7 @@ import {
   OptionalTag,
   StringTree,
   prependStringTree,
-  CakeRecipe,
+  CakeArgs,
 } from "./index-internal";
 
 /**
@@ -29,7 +29,7 @@ type ObjectCakeProperties = {
 /**
  * @public
  */
-interface ObjectCakeRecipe<P extends ObjectCakeProperties> extends CakeRecipe {
+interface ObjectCakeArgs<P extends ObjectCakeProperties> extends CakeArgs {
   readonly properties: Readonly<P>;
 }
 
@@ -62,13 +62,13 @@ class ObjectCake<P extends ObjectCakeProperties>
       : never) &
       object
   >
-  implements ObjectCakeRecipe<P>
+  implements ObjectCakeArgs<P>
 {
   readonly properties: Readonly<P>;
 
-  constructor(recipe: ObjectCakeRecipe<P>) {
-    super(recipe);
-    this.properties = recipe.properties;
+  constructor(args: ObjectCakeArgs<P>) {
+    super(args);
+    this.properties = args.properties;
   }
 
   dispatchCheck(
@@ -226,8 +226,8 @@ class ObjectPropertiesCakeError extends CakeError {
 
 export {
   ObjectCake,
+  ObjectCakeArgs,
   ObjectCakeProperties,
-  ObjectCakeRecipe,
   NotAnObjectCakeError,
   ExcessPropertyPresentCakeError,
   ObjectPropertiesCakeError,

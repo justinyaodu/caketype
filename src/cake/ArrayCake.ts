@@ -3,14 +3,14 @@ import {
   Bakeable,
   Baked,
   Cake,
-  CakeRecipe,
+  CakeArgs,
   TupleCake,
 } from "./index-internal";
 
 /**
  * @public
  */
-interface ArrayCakeRecipe<C extends Cake> extends CakeRecipe {
+interface ArrayCakeArgs<C extends Cake> extends CakeArgs {
   element: C;
 }
 
@@ -19,12 +19,12 @@ interface ArrayCakeRecipe<C extends Cake> extends CakeRecipe {
  */
 class ArrayCake<C extends Cake = Cake>
   extends TupleCake<readonly [], readonly [], C, readonly []>
-  implements ArrayCakeRecipe<C>
+  implements ArrayCakeArgs<C>
 {
   readonly element: C;
 
-  constructor(recipe: ArrayCakeRecipe<C>) {
-    const { element, ...base } = recipe;
+  constructor(args: ArrayCakeArgs<C>) {
+    const { element, ...base } = args;
     super({
       ...base,
       startElements: [],
@@ -63,4 +63,4 @@ function array<B extends Bakeable>(bakeable: B): ArrayCake<Baked<B>> {
   }) as ArrayCake<Baked<B>>;
 }
 
-export { ArrayCake, ArrayCakeRecipe, array };
+export { ArrayCake, ArrayCakeArgs, array };
