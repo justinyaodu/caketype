@@ -502,6 +502,8 @@ See [Cake.asShape](#cakeasshape) for more lenient type-checking.
 
 See [Cake.check](#cakecheck) to return the error instead of throwing it.
 
+---
+
 #### `Cake.asShape`
 
 Like [Cake.as](#cakeas), but use lenient type-checking at runtime to match
@@ -575,6 +577,8 @@ are not allowed.
 See [Cake.checkShape](#cakecheckshape) for more lenient type-checking.
 
 See [Cake.as](#cakeas) to throw an error if the type is not satisfied.
+
+---
 
 #### `Cake.checkShape`
 
