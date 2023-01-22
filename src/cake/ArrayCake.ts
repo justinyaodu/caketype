@@ -7,10 +7,16 @@ import {
   TupleCake,
 } from "./index-internal";
 
+/**
+ * @public
+ */
 interface ArrayCakeRecipe<C extends Cake> extends CakeRecipe {
   element: C;
 }
 
+/**
+ * @public
+ */
 class ArrayCake<C extends Cake = Cake>
   extends TupleCake<readonly [], readonly [], C, readonly []>
   implements ArrayCakeRecipe<C>
@@ -48,6 +54,8 @@ class ArrayCake<C extends Cake = Cake>
  * nums.is(["oops"]); // false
  * nums.is({}); // false
  * ```
+ *
+ * @public
  */
 function array<B extends Bakeable>(bakeable: B): ArrayCake<Baked<B>> {
   return new ArrayCake({

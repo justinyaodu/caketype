@@ -155,23 +155,22 @@ class TupleCake<
     | (S[number] | OptionalTag<O[number]> | RestTag<R> | E[number])[]
     | null {
     if (length === undefined) {
-      return [
-        ...this.startElements,
-        ...this.optionalElements.map((t) => optional(t)),
-        ...(this.restElement === null ? [] : [rest(this.restElement)]),
-        ...this.endElements,
-      ];
-    }
+      length =
+        this.startElements.length +
+        this.optionalElements.length +
+        (this.restElement === null ? 0 : 1) +
+        this.endElements.length;
+    } else {
+      if (length < this.minLength()) {
+        // Too short.
+        return null;
+      }
 
-    if (length < this.minLength()) {
-      // Too short.
-      return null;
-    }
-
-    const maxLength = this.maxLength();
-    if (maxLength !== null && length > maxLength) {
-      // Too long.
-      return null;
+      const maxLength = this.maxLength();
+      if (maxLength !== null && length > maxLength) {
+        // Too long.
+        return null;
+      }
     }
 
     const optionalCount = Math.min(
@@ -225,6 +224,8 @@ class TupleCake<
       return new TupleWrongLengthCakeError(this, value);
     }
 
+    // TODO: check for excess properties and empty slots
+
     const { recurse } = context;
 
     const errors: Record<string, CakeError> = {};
@@ -264,7 +265,7 @@ class TupleCake<
     for (const element of this.startElements) {
       strings.push(recurse(element));
     }
-    for (const element of this.startElements) {
+    for (const element of this.optionalElements) {
       strings.push(`((${recurse(element)}) | undefined)?`);
     }
     if (this.restElement !== null) {
@@ -335,6 +336,9 @@ class TupleWrongLengthCakeError extends CakeError {
   }
 }
 
+/**
+ * @public
+ */
 class TupleElementsCakeError extends CakeError {
   constructor(
     readonly cake: TupleCake<
@@ -355,7 +359,7 @@ class TupleElementsCakeError extends CakeError {
     const description =
       this.cake.startElements.length === 0 &&
       this.cake.optionalElements.length === 0 &&
-      this.cake.restElement === null &&
+      this.cake.restElement !== null &&
       this.cake.endElements.length === 0
         ? "array"
         : "tuple";

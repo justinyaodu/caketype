@@ -30,7 +30,7 @@ export {
   ObjectCakeRecipe,
   NotAnObjectCakeError,
   ObjectPropertiesCakeError,
-  ObjectRequiredPropertyMissingCakeError,
+  RequiredPropertyMissingCakeError,
   // ReferenceCake.ts
   ReferenceCake,
   ReferenceCakeRecipe,
@@ -40,6 +40,8 @@ export {
   // tags.ts
   OptionalTag,
   optional,
+  RestTag,
+  rest,
   // TupleCake.ts
   TupleCake,
   NotAnArrayCakeError,

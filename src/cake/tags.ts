@@ -50,12 +50,18 @@ function optional<T>(value: T): OptionalTag<T> {
   return new OptionalTag(value);
 }
 
+/**
+ * @public
+ */
 class RestTag<T> extends Tag<"rest", T> {
   constructor(untagged: T) {
     super("rest", untagged);
   }
 }
 
+/**
+ * @public
+ */
 function rest<T>(value: T): RestTag<T> {
   return new RestTag(value);
 }

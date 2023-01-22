@@ -8,7 +8,7 @@ import {
   TypeGuardFailedCakeError,
   NotAnObjectCakeError,
   ObjectPropertiesCakeError,
-  ObjectRequiredPropertyMissingCakeError,
+  RequiredPropertyMissingCakeError,
   keysUnsound,
   Result,
   optional,
@@ -101,7 +101,7 @@ const values: {
       {},
       (c, o) =>
         new ObjectPropertiesCakeError(c, o as object, {
-          name: new ObjectRequiredPropertyMissingCakeError(c.properties.name),
+          name: new RequiredPropertyMissingCakeError(c.properties.name),
         }),
       [
         `Value does not satisfy type '{name: string, age?: (number) | undefined}': object properties are invalid.`,

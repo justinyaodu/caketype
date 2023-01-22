@@ -8,6 +8,24 @@
 export const any: TypeGuardCake<any>;
 
 // @public
+export function array<B extends Bakeable>(bakeable: B): ArrayCake<Baked<B>>;
+
+// @public (undocumented)
+export class ArrayCake<C extends Cake = Cake> extends TupleCake<readonly [], readonly [], C, readonly []> implements ArrayCakeRecipe<C> {
+    constructor(recipe: ArrayCakeRecipe<C>);
+    // (undocumented)
+    readonly element: C;
+    // (undocumented)
+    withName(name: string | null): ArrayCake<C>;
+}
+
+// @public (undocumented)
+export interface ArrayCakeRecipe<C extends Cake> extends CakeRecipe {
+    // (undocumented)
+    element: C;
+}
+
+// @public
 export type Assert<T extends true> = never;
 
 // @public
@@ -325,6 +343,17 @@ export const never: TypeGuardCake<never>;
 export type Not<T extends boolean> = T extends true ? false : true;
 
 // @public (undocumented)
+export class NotAnArrayCakeError extends CakeError {
+    constructor(cake: Cake, value: unknown);
+    // (undocumented)
+    readonly cake: Cake;
+    // (undocumented)
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
+    // (undocumented)
+    readonly value: unknown;
+}
+
+// @public (undocumented)
 export class NotAnObjectCakeError extends CakeError {
     constructor(cake: Cake, value: unknown);
     // (undocumented)
@@ -387,15 +416,6 @@ export class ObjectPropertiesCakeError extends CakeError {
     readonly errors: Record<string | symbol, CakeError>;
     // (undocumented)
     readonly value: object;
-}
-
-// @public (undocumented)
-export class ObjectRequiredPropertyMissingCakeError extends CakeError {
-    constructor(cake: Cake);
-    // (undocumented)
-    readonly cake: Cake;
-    // (undocumented)
-    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
 }
 
 // @public
@@ -486,6 +506,23 @@ export interface ReferenceCakeRecipe<C extends Cake> extends CakeRecipe {
     readonly get: () => C;
 }
 
+// @public (undocumented)
+export class RequiredPropertyMissingCakeError extends CakeError {
+    constructor(cake: Cake);
+    // (undocumented)
+    readonly cake: Cake;
+    // (undocumented)
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
+}
+
+// @public (undocumented)
+export function rest<T>(value: T): RestTag<T>;
+
+// @public (undocumented)
+export class RestTag<T> extends Tag<"rest", T> {
+    constructor(untagged: T);
+}
+
 // @public
 export type Result<T, E> = Ok<T> | Err<E>;
 
@@ -508,6 +545,73 @@ export type StringTree = string | readonly [string, readonly StringTree[]];
 
 // @public
 export const symbol: TypeGuardCake<symbol>;
+
+// Warning: (ae-forgotten-export) The symbol "MapInfer" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "MapInferOptional" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "TupleCakeRecipe" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export class TupleCake<S extends readonly Cake[], O extends readonly Cake[], R extends Cake | null, E extends readonly Cake[]> extends Cake<[
+...MapInfer<S>,
+...MapInferOptional<O>,
+...(R extends Cake ? [...Infer<R>[]] : []),
+...MapInfer<E>
+]> implements TupleCakeRecipe<S, O, R, E> {
+    constructor(recipe: TupleCakeRecipe<S, O, R, E>);
+    // (undocumented)
+    dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
+    // (undocumented)
+    dispatchStringify(context: CakeDispatchStringifyContext): string;
+    // Warning: (ae-forgotten-export) The symbol "MapOptionalTag" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    elements(): [
+    ...S,
+    ...MapOptionalTag<O>,
+    ...(R extends null ? [] : [RestTag<R>]),
+    ...E
+    ];
+    // (undocumented)
+    elements(length: number): (S[number] | OptionalTag<O[number]> | (R extends null ? never : RestTag<R>) | E[number])[] | null;
+    // (undocumented)
+    readonly endElements: E;
+    // (undocumented)
+    maxLength(): number | null;
+    // (undocumented)
+    minLength(): number;
+    // (undocumented)
+    readonly optionalElements: O;
+    // (undocumented)
+    readonly restElement: R;
+    // (undocumented)
+    readonly startElements: S;
+    // (undocumented)
+    withName(name: string | null): TupleCake<S, O, R, E>;
+}
+
+// @public (undocumented)
+export class TupleElementsCakeError extends CakeError {
+    constructor(cake: TupleCake<readonly Cake[], readonly Cake[], Cake | null, readonly Cake[]>, value: unknown, errors: Record<string, CakeError>);
+    // (undocumented)
+    readonly cake: TupleCake<readonly Cake[], readonly Cake[], Cake | null, readonly Cake[]>;
+    // (undocumented)
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
+    // (undocumented)
+    readonly errors: Record<string, CakeError>;
+    // (undocumented)
+    readonly value: unknown;
+}
+
+// @public (undocumented)
+export class TupleWrongLengthCakeError extends CakeError {
+    constructor(cake: TupleCake<readonly Cake[], readonly Cake[], Cake | null, readonly Cake[]>, value: unknown[]);
+    // (undocumented)
+    readonly cake: TupleCake<readonly Cake[], readonly Cake[], Cake | null, readonly Cake[]>;
+    // (undocumented)
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
+    // (undocumented)
+    readonly value: unknown[];
+}
 
 // @public (undocumented)
 export function typeGuard<T>(name: string, guard: (value: unknown) => value is T): TypeGuardCake<T>;
