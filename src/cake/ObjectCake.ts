@@ -86,7 +86,7 @@ class ObjectCake<P extends ObjectCakeProperties>
     if (getOption(this, "objectExcessProperties") === "error") {
       for (const [key, propertyValue] of entriesIncludingSymbols(value)) {
         if (!(key in this.properties)) {
-          errors[key] = new ObjectExcessPropertyCakeError(propertyValue);
+          errors[key] = new ExcessPropertyPresentCakeError(propertyValue);
           hasError = true;
         }
       }
@@ -117,9 +117,7 @@ class ObjectCake<P extends ObjectCakeProperties>
       }
       return recurse(untagged, propertyValue);
     } else {
-      return isOptional
-        ? null
-        : new ObjectRequiredPropertyMissingCakeError(untagged);
+      return isOptional ? null : new RequiredPropertyMissingCakeError(untagged);
     }
   }
 
@@ -171,7 +169,7 @@ class NotAnObjectCakeError extends CakeError {
 /**
  * @public
  */
-class ObjectExcessPropertyCakeError extends CakeError {
+class ExcessPropertyPresentCakeError extends CakeError {
   constructor(readonly value: unknown) {
     super();
   }
@@ -187,7 +185,7 @@ class ObjectExcessPropertyCakeError extends CakeError {
 /**
  * @public
  */
-class ObjectRequiredPropertyMissingCakeError extends CakeError {
+class RequiredPropertyMissingCakeError extends CakeError {
   constructor(readonly cake: Cake) {
     super();
   }
@@ -231,7 +229,7 @@ export {
   ObjectCakeProperties,
   ObjectCakeRecipe,
   NotAnObjectCakeError,
-  ObjectExcessPropertyCakeError,
+  ExcessPropertyPresentCakeError,
   ObjectPropertiesCakeError,
-  ObjectRequiredPropertyMissingCakeError,
+  RequiredPropertyMissingCakeError,
 };

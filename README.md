@@ -165,6 +165,32 @@ type Person = Infer<typeof Person>;
 > const Person: Cake<Person> = bake(...);
 > ```
 
+### Creating Complex Cakes
+
+More complex types, with nested objects and arrays, are also supported:
+
+```ts
+type Account = {
+  person: Person;
+  friends: string[];
+  settings: {
+    sendNotifications: boolean;
+  };
+};
+
+const Account = bake({
+  person: Person,
+  friends: array(string),
+  settings: {
+    sendNotifications: boolean,
+  },
+} as const);
+```
+
+> - We can refer to the existing `Person` Cake when defining the `Account` Cake.
+> - The [array](#array) helper returns a Cake that represents arrays of the given type.
+> - Nested objects don't require any special syntax.
+
 ### More Cakes
 
 When you created the `Person` Cake, you imported the [string](#string) and [number](#number) Cakes to define the types of a Person's properties. However, you can also use these Cakes directly:
@@ -240,7 +266,7 @@ const Person = bake({
   age: optional(number),
 } as const);
 
-Person.is({ name: Alice }); // true
+Person.is({ name: "Alice" }); // true
 ```
 
 Use [Infer](#infer) to infer the TypeScript type from the Cake:
@@ -252,6 +278,27 @@ type Person = Infer<typeof Person>;
 // { name: string, age?: number | undefined }
 
 const bob: Person = { name: "Bob", age: 42 };
+```
+
+</td></tr>
+<tr><td>
+
+An array:
+
+```ts
+type Numbers = number[];
+```
+
+</td><td>
+
+Use [array](#array):
+
+```ts
+import { array, number } from "caketype";
+
+const Numbers = array(number);
+
+Numbers.is([2, 3]); // true
 ```
 
 </td></tr>
@@ -275,6 +322,7 @@ const bob: Person = { name: "Bob", age: 42 };
   - [`Infer`](#infer)
 - [Built-in Cakes](#built-in-cakes)
   - [`any`](#any)
+  - [`array`](#array)
   - [`boolean`](#boolean)
   - [`bigint`](#bigint)
   - [`never`](#never)
@@ -629,6 +677,22 @@ any.is(null); // true
 
 See [unknown](#unknown) to get the same runtime behavior, but an inferred type
 of `unknown` instead of `any`.
+
+---
+
+#### `array`
+
+Return a [Cake](#cake) representing an array of the specified type.
+
+```ts
+const nums = array(number);
+
+nums.is([2, 3]); // true
+nums.is([]); // true
+
+nums.is(["oops"]); // false
+nums.is({}); // false
+```
 
 ---
 

@@ -12,4 +12,7 @@ export * from "./LiteralCake";
 export * from "./ObjectCake";
 export * from "./ReferenceCake";
 export * from "./StringTree";
+export * from "./TupleCake";
 export * from "./TypeGuardCake";
+
+export * from "./ArrayCake";

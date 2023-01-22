@@ -10,7 +10,7 @@ import {
   Result,
   string,
 } from "../../src";
-import { ObjectExcessPropertyCakeError } from "../../src/cake/ObjectCake";
+import { ExcessPropertyPresentCakeError } from "../../src/cake/ObjectCake";
 import { expectTypeError, typeCheckOnly } from "../test-helpers";
 
 describe("documentation examples", () => {
@@ -68,7 +68,7 @@ describe("documentation examples", () => {
     expect(Person.checkStrict(alice)).toStrictEqual(
       Result.err(
         new ObjectPropertiesCakeError(Person, alice, {
-          extra: new ObjectExcessPropertyCakeError("oops"),
+          extra: new ExcessPropertyPresentCakeError("oops"),
         })
       )
     );
