@@ -1995,18 +1995,18 @@ const c: Class<Date, [number]> = Date;
 
 #### Added
 
-- Cake subclasses: LiteralCake, TupleCake, ArrayCake
-- [array](#array) helper
-- [Cake.asShape](#cakeasshape), [Cake.check](#cakecheckshape), and [Cake.is](#cakeisshape) use lenient runtime type-checking
+- LiteralCake and support for literal primitive types in [bake](#bake) ([#46](https://github.com/justinyaodu/caketype/pull/46))
+- TupleCake, ArrayCake, and [array](#array) helper ([#48](https://github.com/justinyaodu/caketype/pull/48))
+- [Cake.asShape](#cakeasshape), [Cake.checkShape](#cakecheckshape), and [Cake.isShape](#cakeisshape) use lenient runtime type-checking ([#50](https://github.com/justinyaodu/caketype/pull/50))
 
 #### Changed
 
-- [Cake.as](#cakeas), [Cake.check](#cakecheck), and [Cake.is](#cakeis) now use strict runtime type-checking
-- `-Recipe` interfaces renamed to `-Args`
+- [Cake.as](#cakeas), [Cake.check](#cakecheck), and [Cake.is](#cakeis) now use strict runtime type-checking ([#50](https://github.com/justinyaodu/caketype/pull/50))
+- `-Recipe` interfaces renamed to `-Args` ([#51](https://github.com/justinyaodu/caketype/pull/51))
 
 #### Removed
 
-- Cake.asStrict, Cake.checkStrict, and Cake.isStrict, since strict checking is the default behavior now
+- Cake.asStrict, Cake.checkStrict, and Cake.isStrict, since strict checking is the default behavior now ([#50](https://github.com/justinyaodu/caketype/pull/50))
 
 ### v0.3.0 - 2023-01-19
 

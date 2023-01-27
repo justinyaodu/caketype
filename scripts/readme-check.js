@@ -92,6 +92,19 @@ function findHorizontalRuleErrors(lines, error) {
   }
 }
 
+/**
+ * Ensure that pull request links match the link text.
+ */
+function findPullRequestLinkErrors(lines, error) {
+  for (let i = 0; i < lines.length; i++) {
+    lines[i].replaceAll(/\[#(\d+)\]\(([^)]*)\)/g, (_, num, url) => {
+      if (url !== `https://github.com/justinyaodu/caketype/pull/${num}`) {
+        error(i, "pull request link text does not match URL");
+      }
+    });
+  }
+}
+
 function processLines(lines) {
   let exitCode = 0;
   function error(line, message) {
@@ -102,6 +115,7 @@ function processLines(lines) {
   console.log("Checking README.md...");
   findHeadingAnchorErrors(lines, error);
   findHorizontalRuleErrors(lines, error);
+  findPullRequestLinkErrors(lines, error);
   if (exitCode === 0) {
     console.log("README.md OK!");
   }
