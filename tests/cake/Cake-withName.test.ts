@@ -14,7 +14,7 @@ const cakes = {
   array: array({}),
   literal: bake(0),
   object: bake({}),
-  reference: reference(() => boolean),
+  reference: reference<boolean>(() => boolean),
   tuple: new TupleCake({
     startElements: [],
     optionalElements: [],

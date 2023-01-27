@@ -266,6 +266,15 @@ abstract class Cake<in out T = any> extends Untagged implements CakeArgs {
   abstract dispatchStringify(context: CakeDispatchStringifyContext): string;
 
   abstract withName(name: string | null): Cake<T>;
+
+  /**
+   * Used for type inference to ensure that Cakes are invariant on T.
+   *
+   * This property is never used at runtime.
+   *
+   * @internal
+   */
+  readonly _ENSURE_INVARIANT?: (value: T) => T;
 }
 
 /**
