@@ -60,4 +60,9 @@ export {
   string,
   symbol,
   unknown,
+  // UnionCake.ts
+  UnionCake,
+  UnionCakeArgs,
+  UnionCakeError,
+  union,
 } from "./index-internal";

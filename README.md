@@ -310,6 +310,28 @@ Numbers.is([2, 3]); // true
 ```
 
 </td></tr>
+<tr><td>
+
+A union:
+
+```ts
+type NullableString = string | null;
+```
+
+</td><td>
+
+Use [union](#union):
+
+```ts
+import { string, union } from "caketype";
+
+const NullableString = union(string, null);
+
+NullableString.is("hello"); // true
+NullableString.is(null); // true
+```
+
+</td></tr>
 </table>
 
 ## API Reference
@@ -337,6 +359,7 @@ Numbers.is([2, 3]); // true
   - [`number`](#number)
   - [`string`](#string)
   - [`symbol`](#symbol)
+  - [`union`](#union)
   - [`unknown`](#unknown)
 - [Tags](#tags)
   - [`optional`](#optional)
@@ -786,6 +809,33 @@ A [Cake](#cake) representing the `symbol` type.
 ```ts
 symbol.is(Symbol.iterator); // true
 symbol.is(Symbol("hi")); // true
+```
+
+---
+
+#### `union`
+
+Return a [Cake](#cake) representing a union of the specified types.
+
+Union members can be existing Cakes:
+
+```ts
+// like the TypeScript type 'string | number'
+const StringOrNumber = union(string, number);
+
+StringOrNumber.is("hello"); // true
+StringOrNumber.is(7); // true
+StringOrNumber.is(false); // false
+```
+
+Union members can also be primitive values, or any other [Bakeable](#bakeable)s:
+
+```ts
+const Color = union("red", "green", "blue");
+type Color = Infer<typeof Color>; // "red" | "green" | "blue"
+
+Color.is("red"); // true
+Color.is("oops"); // false
 ```
 
 ---
