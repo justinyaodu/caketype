@@ -1985,11 +1985,11 @@ const c: Class<Date, [number]> = Date;
 
 #### Added
 
-- UnionCake and [union](#union) helper (#55)
+- UnionCake and [union](#union) helper ([#55](https://github.com/justinyaodu/caketype/pull/55))
 
 #### Changed
 
-- `Cake<...>` type annotations now enforce type equivalence (#56)
+- `Cake<...>` type annotations now enforce type equivalence ([#56](https://github.com/justinyaodu/caketype/pull/56))
 
 ### v0.4.0 - 2023-01-22
 
