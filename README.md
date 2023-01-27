@@ -158,7 +158,7 @@ Person.asShape(carol);
 
 ### Linking TypeScript Types and Cakes
 
-If you have a type definition and a corresponding Cake, you can link the Cake to the type definition by providing a type annotation:
+If you have a TypeScript type and a corresponding Cake, you can link them by adding a type annotation to the Cake:
 
 ```ts
 const Person: Cake<Person> = bake(...);
