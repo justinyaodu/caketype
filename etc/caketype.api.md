@@ -64,6 +64,8 @@ export abstract class Cake<in out T = any> extends Untagged implements CakeArgs 
     abstract dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
     // (undocumented)
     abstract dispatchStringify(context: CakeDispatchStringifyContext): string;
+    // @internal
+    readonly _ENSURE_INVARIANT?: (value: T) => T;
     is(value: unknown): value is T;
     isShape(value: unknown): value is T;
     // (undocumented)
