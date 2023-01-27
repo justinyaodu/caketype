@@ -14,30 +14,16 @@ import {
   rest,
   RestTag,
   StringTree,
+  MapInfer,
 } from "./index-internal";
 
 /**
  * @internal
  */
-type MapInfer<T extends readonly Cake[]> = T extends readonly []
+type MapOptional<T extends readonly unknown[]> = T extends readonly []
   ? []
-  : T extends readonly [
-      infer F extends Cake,
-      ...infer R extends readonly Cake[]
-    ]
-  ? [Infer<F>, ...MapInfer<R>]
-  : unknown[];
-
-/**
- * @internal
- */
-type MapInferOptional<T extends readonly Cake[]> = T extends readonly []
-  ? []
-  : T extends readonly [
-      infer F extends Cake,
-      ...infer R extends readonly Cake[]
-    ]
-  ? [Infer<F>?, ...MapInferOptional<R>]
+  : T extends readonly [infer F, ...infer R]
+  ? [F?, ...MapOptional<R>]
   : unknown[];
 
 /**
@@ -79,7 +65,7 @@ class TupleCake<
   extends Cake<
     [
       ...MapInfer<S>,
-      ...MapInferOptional<O>,
+      ...MapOptional<MapInfer<O>>,
       ...(R extends Cake ? [...Infer<R>[]] : []),
       ...MapInfer<E>
     ]

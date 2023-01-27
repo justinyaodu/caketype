@@ -547,13 +547,13 @@ export type StringTree = string | readonly [string, readonly StringTree[]];
 export const symbol: TypeGuardCake<symbol>;
 
 // Warning: (ae-forgotten-export) The symbol "MapInfer" needs to be exported by the entry point index.d.ts
-// Warning: (ae-forgotten-export) The symbol "MapInferOptional" needs to be exported by the entry point index.d.ts
+// Warning: (ae-forgotten-export) The symbol "MapOptional" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "TupleCakeArgs" needs to be exported by the entry point index.d.ts
 //
 // @public (undocumented)
 export class TupleCake<S extends readonly Cake[], O extends readonly Cake[], R extends Cake | null, E extends readonly Cake[]> extends Cake<[
 ...MapInfer<S>,
-...MapInferOptional<O>,
+...MapOptional<MapInfer<O>>,
 ...(R extends Cake ? [...Infer<R>[]] : []),
 ...MapInfer<E>
 ]> implements TupleCakeArgs<S, O, R, E> {
@@ -642,6 +642,45 @@ export class TypeGuardFailedCakeError extends CakeError {
     readonly cake: TypeGuardCake<any>;
     // (undocumented)
     dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
+    // (undocumented)
+    readonly value: unknown;
+}
+
+// Warning: (ae-forgotten-export) The symbol "MapBaked" needs to be exported by the entry point index.d.ts
+//
+// @public
+export function union<M extends readonly [Bakeable, ...Bakeable[]]>(...members: M): UnionCake<MapBaked<M>>;
+
+// Warning: (ae-forgotten-export) The symbol "FoldUnion" needs to be exported by the entry point index.d.ts
+//
+// @public (undocumented)
+export class UnionCake<M extends readonly Cake[]> extends Cake<FoldUnion<MapInfer<M>>> implements UnionCakeArgs<M> {
+    constructor(args: UnionCakeArgs<M>);
+    // (undocumented)
+    dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
+    // (undocumented)
+    dispatchStringify(context: CakeDispatchStringifyContext): string;
+    // (undocumented)
+    readonly members: M;
+    // (undocumented)
+    withName(name: string | null): UnionCake<M>;
+}
+
+// @public (undocumented)
+export interface UnionCakeArgs<M extends readonly Cake[]> extends CakeArgs {
+    // (undocumented)
+    members: M;
+}
+
+// @public (undocumented)
+export class UnionCakeError extends CakeError {
+    constructor(cake: UnionCake<readonly Cake[]>, value: unknown, errors: Record<string, CakeError>);
+    // (undocumented)
+    readonly cake: UnionCake<readonly Cake[]>;
+    // (undocumented)
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
+    // (undocumented)
+    readonly errors: Record<string, CakeError>;
     // (undocumented)
     readonly value: unknown;
 }

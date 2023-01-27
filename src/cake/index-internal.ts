@@ -14,5 +14,8 @@ export * from "./ReferenceCake";
 export * from "./StringTree";
 export * from "./TupleCake";
 export * from "./TypeGuardCake";
+export * from "./UnionCake";
 
 export * from "./ArrayCake";
+
+export * from "./helper-types";

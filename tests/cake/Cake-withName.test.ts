@@ -6,6 +6,7 @@ import {
   reference,
   TupleCake,
   TypeGuardCake,
+  union,
 } from "../../src";
 import { is_boolean } from "../../src/type-guards";
 
@@ -21,6 +22,7 @@ const cakes = {
     endElements: [],
   }),
   typeGuard: new TypeGuardCake({ guard: is_boolean }),
+  union: union(0),
 };
 
 test.each(keysUnsound(cakes))("%s.name is null", (cake) => {
