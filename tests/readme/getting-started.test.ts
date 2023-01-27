@@ -13,7 +13,7 @@ import {
   string,
 } from "../../src";
 import type { FlagExactOptionalPropertyTypes } from "../../src/typescript-flags";
-import { expectTypeError } from "../test-helpers";
+import { expectTypeError, typeCheckOnly } from "../test-helpers";
 
 test("Getting Started", () => {
   type Person = {
@@ -105,13 +105,29 @@ test("Getting Started", () => {
     });
   }
 
+  typeCheckOnly(() => {
+    type Person = {
+      name: string;
+      lovesCake: boolean;
+    };
+
+    // @ts-expect-error
+    const Person: Cake<Person> = bake({ name: string });
+
+    // @ts-expect-error
+    const _wrongType: Cake<Person> = bake({ name: string, lovesCake: number });
+
+    // @ts-expect-error
+    const _extraProperty: Cake<Person> = bake({
+      name: string,
+      lovesCake: boolean,
+      extra: string,
+    });
+  });
+
   {
     type InferredPerson = Infer<typeof Person>;
     type _ = Assert<Equivalent<Person, InferredPerson>>;
-  }
-
-  {
-    const _: Cake<Person> = Person;
   }
 
   {

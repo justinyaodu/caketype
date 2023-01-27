@@ -156,9 +156,29 @@ Person.asShape(carol);
 > 1. Runtime type-checking is often used to validate untrusted parsed JSON values from network requests. Strict type-checking is typically more appropriate for this use case.
 > 2. It's easier to find and fix bugs caused by excessively strict type-checking, because values that should be okay will produce visible type errors instead. If the type-checking is too lenient, values that should produce type errors will be considered okay, which could have unexpected effects in other parts of your codebase.
 
+### Linking TypeScript Types and Cakes
+
+If you have a TypeScript type and a corresponding Cake, you can link them by adding a type annotation to the Cake:
+
+```ts
+const Person: Cake<Person> = bake(...);
+```
+
+This ensures that the Cake always represents the specified type exactly. If you change the type without updating the Cake, or vice versa, you'll get a TypeScript type error:
+
+```ts
+type Person = {
+  name: string;
+  lovesCake: boolean;
+};
+
+const Person: Cake<Person> = bake({ name: string });
+// Property 'lovesCake' is missing in type '{ name: string; }' but required in type 'Person'.
+```
+
 ### Inferring TypeScript Types from Cakes
 
-If you don't want the Person type and its Cake to duplicate each other, you can delete the existing definition of the Person type, and infer the Person type from its Cake:
+If you want, you can also delete the existing definition of the Person type, and infer the Person type from its Cake:
 
 ```ts
 import { Infer } from "caketype";
@@ -166,12 +186,6 @@ import { Infer } from "caketype";
 type Person = Infer<typeof Person>;
 // { name: string, age?: number | undefined }
 ```
-
-> If you want to keep the explicit type definition, or the type is defined externally, use a type annotation to ensure that your Cake represents the desired type:
->
-> ```ts
-> const Person: Cake<Person> = bake(...);
-> ```
 
 ### Creating Complex Cakes
 
