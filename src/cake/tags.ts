@@ -38,7 +38,7 @@ class OptionalTag<T> extends Tag<"optional", T> {
  * const Person = bake({
  *   name: string,
  *   age: optional(number),
- * } as const);
+ * });
  *
  * type Person = Infer<typeof Person>;
  * // { name: string, age?: number | undefined }

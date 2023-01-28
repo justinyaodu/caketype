@@ -96,7 +96,7 @@ abstract class Cake<in out T = any> extends Untagged implements CakeArgs {
    * but not allowed with strict type-checking:
    *
    * ```ts
-   * const Person = bake({ name: string } as const);
+   * const Person = bake({ name: string });
    * const alice = { name: "Alice", extra: "oops" };
    *
    * Person.asShape(alice); // { name: "Alice", extra: "oops" }
@@ -173,7 +173,7 @@ abstract class Cake<in out T = any> extends Untagged implements CakeArgs {
    * but not allowed with strict type-checking:
    *
    * ```ts
-   * const Person = bake({ name: string } as const);
+   * const Person = bake({ name: string });
    * const alice = { name: "Alice", extra: "oops" };
    *
    * Person.checkShape(alice); // Ok(alice)
@@ -223,7 +223,7 @@ abstract class Cake<in out T = any> extends Untagged implements CakeArgs {
    * but not allowed with strict type-checking:
    *
    * ```ts
-   * const Person = bake({ name: string } as const);
+   * const Person = bake({ name: string });
    * const alice = { name: "Alice", extra: "oops" };
    *
    * Person.isShape(alice); // true
@@ -243,7 +243,7 @@ abstract class Cake<in out T = any> extends Untagged implements CakeArgs {
    * const Person = bake({
    *   name: string,
    *   age: optional(number),
-   * } as const);
+   * });
    *
    * Person.toString();
    * // {name: string, age?: (number) | undefined}
@@ -285,7 +285,7 @@ abstract class Cake<in out T = any> extends Untagged implements CakeArgs {
  * const Person = bake({
  *   name: string,
  *   age: optional(number),
- * } as const);
+ * });
  *
  * type Person = Infer<typeof Person>;
  * // { name: string, age?: number | undefined }

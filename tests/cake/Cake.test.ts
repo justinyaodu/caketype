@@ -24,7 +24,7 @@ describe("documentation examples", () => {
   });
 
   test("asShape", () => {
-    const Person = bake({ name: string } as const);
+    const Person = bake({ name: string });
     const alice = { name: "Alice", extra: "oops" };
 
     expect(Person.asShape(alice)).toStrictEqual({
@@ -77,7 +77,7 @@ describe("documentation examples", () => {
   });
 
   test("checkShape", () => {
-    const Person = bake({ name: string } as const);
+    const Person = bake({ name: string });
     const alice = { name: "Alice", extra: "oops" };
     expect(Person.checkShape(alice)).toStrictEqual(Result.ok(alice));
     expect(Person.check(alice)).toStrictEqual(
@@ -105,7 +105,7 @@ describe("documentation examples", () => {
   );
 
   test("isShape", () => {
-    const Person = bake({ name: string } as const);
+    const Person = bake({ name: string });
     const alice = { name: "Alice", extra: "oops" };
 
     expect(Person.isShape(alice)).toStrictEqual(true);
@@ -116,7 +116,7 @@ describe("documentation examples", () => {
     const Person = bake({
       name: string,
       age: optional(number),
-    } as const);
+    });
 
     expect(Person.toString()).toStrictEqual(
       "{name: string, age?: (number) | undefined}"
@@ -129,7 +129,7 @@ describe("documentation examples", () => {
       const Person = bake({
         name: string,
         age: optional(number),
-      } as const);
+      });
 
       type Person = Infer<typeof Person>;
       type _ = Assert<

@@ -75,7 +75,7 @@ import { bake, number, optional, string } from "caketype";
 const Person = bake({
   name: string,
   age: optional(number),
-} as const);
+});
 ```
 
 > Cakes are designed to resemble TypeScript types as much as possible, but there are still some differences:
@@ -84,7 +84,6 @@ const Person = bake({
 > - The [bake](#bake) function takes an object that looks like a TypeScript type, and creates a Cake.
 > - Here, [string](#string) and [number](#number) refer to built-in Cakes, not types.
 > - To indicate that a property is optional, we use [optional](#optional) instead of `?`.
-> - `as const` is a [const assertion](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions), which can improve type inference in some cases. It doesn't affect the runtime behavior and isn't always necessary, but it doesn't hurt to have it.
 
 ### Runtime Type-Checking with Cakes
 
@@ -206,7 +205,7 @@ const Account = bake({
   settings: {
     sendNotifications: boolean,
   },
-} as const);
+});
 ```
 
 > - We can refer to the existing `Person` Cake when defining the `Account` Cake.
@@ -286,7 +285,7 @@ import { bake, number, optional, string } from "caketype";
 const Person = bake({
   name: string,
   age: optional(number),
-} as const);
+});
 
 Person.is({ name: "Alice" }); // true
 ```
@@ -321,6 +320,7 @@ import { array, number } from "caketype";
 const Numbers = array(number);
 
 Numbers.is([2, 3]); // true
+Numbers.is([]); // true
 ```
 
 </td></tr>
@@ -343,6 +343,58 @@ const NullableString = union(string, null);
 
 NullableString.is("hello"); // true
 NullableString.is(null); // true
+```
+
+</td></tr>
+<tr><td>
+
+A literal type:
+
+```
+true
+7
+"hello"
+null
+undefined
+```
+
+</td><td>
+
+You can use literal values directly in most contexts. This Cake represents a union of string literals:
+
+```ts
+import { union } from "caketype";
+
+const Color = union("red", "green", "blue");
+```
+
+And this Cake represents a discriminated union. Note the use of [const assertions](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) (`as const`), which are needed to infer the more specific literal types:
+
+```ts
+import { number, string, union } from "caketype";
+
+const Operation = union(
+  {
+    operation: "get",
+    id: string,
+  } as const,
+  {
+    operation: "set",
+    id: string,
+    value: number,
+  } as const
+);
+```
+
+Use [bake](#bake) if you actually need a Cake instance that represents a literal type:
+
+```ts
+import { bake } from "caketype";
+
+const seven = bake(7);
+
+seven.is(7); // true
+seven.is(8); // false
 ```
 
 </td></tr>
@@ -459,7 +511,7 @@ Create a [Cake](#cake) from a [Bakeable](#bakeable) type definition.
 const Person = bake({
   name: string,
   age: optional(number),
-} as const);
+});
 
 Person.is({ name: "Alice" }); // true
 ```
@@ -550,7 +602,7 @@ Excess object properties are allowed with lenient type-checking,
 but not allowed with strict type-checking:
 
 ```ts
-const Person = bake({ name: string } as const);
+const Person = bake({ name: string });
 const alice = { name: "Alice", extra: "oops" };
 
 Person.asShape(alice); // { name: "Alice", extra: "oops" }
@@ -626,7 +678,7 @@ Excess object properties are allowed with lenient type-checking,
 but not allowed with strict type-checking:
 
 ```ts
-const Person = bake({ name: string } as const);
+const Person = bake({ name: string });
 const alice = { name: "Alice", extra: "oops" };
 
 Person.checkShape(alice); // Ok(alice)
@@ -678,7 +730,7 @@ Excess object properties are allowed with lenient type-checking,
 but not allowed with strict type-checking:
 
 ```ts
-const Person = bake({ name: string } as const);
+const Person = bake({ name: string });
 const alice = { name: "Alice", extra: "oops" };
 
 Person.isShape(alice); // true
@@ -696,7 +748,7 @@ this Cake.
 const Person = bake({
   name: string,
   age: optional(number),
-} as const);
+});
 
 Person.toString();
 // {name: string, age?: (number) | undefined}
@@ -719,7 +771,7 @@ Get the TypeScript type represented by a [Cake](#cake).
 const Person = bake({
   name: string,
   age: optional(number),
-} as const);
+});
 
 type Person = Infer<typeof Person>;
 // { name: string, age?: number | undefined }
@@ -881,7 +933,7 @@ Used to indicate that a property is optional.
 const Person = bake({
   name: string,
   age: optional(number),
-} as const);
+});
 
 type Person = Infer<typeof Person>;
 // { name: string, age?: number | undefined }

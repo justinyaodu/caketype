@@ -24,7 +24,7 @@ test("Getting Started", () => {
   const Person = bake({
     name: string,
     age: optional(number),
-  } as const);
+  });
 
   {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -145,7 +145,7 @@ test("Getting Started", () => {
       settings: {
         sendNotifications: boolean,
       },
-    } as const);
+    });
 
     type _ = Assert<Equivalent<Account, Infer<typeof Account>>>;
   }

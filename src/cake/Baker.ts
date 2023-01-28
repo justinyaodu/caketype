@@ -75,7 +75,6 @@ class Baker {
   }
 }
 
-// TODO: add note about using `as const`
 /**
  * Create a {@link Cake} from a {@link Bakeable} type definition.
  *
@@ -84,7 +83,7 @@ class Baker {
  * const Person = bake({
  *   name: string,
  *   age: optional(number),
- * } as const);
+ * });
  *
  * Person.is({ name: "Alice" }); // true
  * ```

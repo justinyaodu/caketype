@@ -2,7 +2,7 @@ import { bake, string } from "../../src";
 import { expectTypeError } from "../test-helpers";
 
 describe("documentation examples", () => {
-  const cake = bake({ name: string } as const);
+  const cake = bake({ name: string });
   const error = cake.check({}).errorOr(null);
   if (error === null) {
     fail();

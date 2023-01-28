@@ -16,7 +16,7 @@ describe("documentation examples", () => {
     const Person = bake({
       name: string,
       age: optional(number),
-    } as const);
+    });
     type _1 = Assert<
       Equivalent<
         typeof Person,
