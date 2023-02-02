@@ -2018,6 +2018,8 @@ const c: Class<Date, [number]> = Date;
 - Built-in named Cakes (e.g. [number](#number)) now have type `Cake` instead of `TypeGuardCake` ([#60](https://github.com/justinyaodu/caketype/pull/60))
 - Replaced `TypeGuardFailedCakeError` with `WrongTypeCakeError`, which is more general and has a more concise error message ([#60](https://github.com/justinyaodu/caketype/pull/60))
 
+---
+
 ### v0.4.1 - 2023-01-26
 
 #### Added
