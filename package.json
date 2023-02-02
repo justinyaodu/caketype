@@ -17,7 +17,7 @@
     "build": "mkdir -p dist/ types/ && npm run clean && tsc && api-extractor run",
     "ae": "api-extractor run --local",
     "test": "jest && printf '\\nWith exactOptionalPropertyTypes:\\n\\n' && jest --config jest-exactOptionalPropertyTypes.config.js --testNamePattern='$skipall' --passWithNoTests",
-    "lint": "eslint --cache --report-unused-disable-directives . && prettier --check . && scripts/readme-check.js",
+    "lint": "eslint --cache --report-unused-disable-directives . && prettier --check . && scripts/readme-check.js && tsc --project scripts/jsconfig.json",
     "lint-fix": "eslint --fix --cache --report-unused-disable-directives .; prettier --write .",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint"

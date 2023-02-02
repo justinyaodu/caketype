@@ -6,10 +6,12 @@
  * editing required.
  */
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 const { slugify, withLines } = require("./util");
 
+/**
+ * @param {string[]} lines
+ * @returns {string[]}
+ */
 function extractDocLines(lines) {
   const commentStart = /^\s*[/][*][*]\s*$/;
   const commentEnd = /^\s*[*][/]\s*$/;
@@ -22,6 +24,7 @@ function extractDocLines(lines) {
   }
 
   // Each group contains the lines belonging to one comment.
+  /** @type {string[][]} */
   const lineGroups = [];
 
   let insideComment = false;
@@ -52,6 +55,10 @@ function extractDocLines(lines) {
   return lineGroups.flat();
 }
 
+/**
+ * @param {string} line
+ * @returns {string}
+ */
 function processDocLine(line) {
   line = line.replace(/^\s*[*][ ]?/, "");
   line = line.replaceAll(
@@ -65,6 +72,10 @@ function processDocLine(line) {
   return line;
 }
 
+/**
+ * @param {string[]} lines
+ * @returns {void}
+ */
 function processLines(lines) {
   for (const line of extractDocLines(lines)) {
     console.log(processDocLine(line));

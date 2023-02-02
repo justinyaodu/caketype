@@ -2031,7 +2031,11 @@ const b: Class<Date> = Date;
 const c: Class<Date, [number]> = Date;
 ```
 
+---
+
 ## Changelog
+
+---
 
 ### v0.4.1 - 2023-01-26
 
@@ -2042,6 +2046,8 @@ const c: Class<Date, [number]> = Date;
 #### Changed
 
 - `Cake<...>` type annotations now enforce type equivalence ([#56](https://github.com/justinyaodu/caketype/pull/56))
+
+---
 
 ### v0.4.0 - 2023-01-22
 
@@ -2060,6 +2066,8 @@ const c: Class<Date, [number]> = Date;
 
 - Cake.asStrict, Cake.checkStrict, and Cake.isStrict, since strict checking is the default behavior now ([#50](https://github.com/justinyaodu/caketype/pull/50))
 
+---
+
 ### v0.3.0 - 2023-01-19
 
 #### Added
@@ -2070,6 +2078,8 @@ const c: Class<Date, [number]> = Date;
 - [Built-in Cakes](#built-in-cakes): any, boolean, bigint, never, number, string, symbol, unknown
 - [optional](#optional)
 - [CakeError](#cakeerror)
+
+---
 
 ### v0.2.0 - 2023-01-11
 
