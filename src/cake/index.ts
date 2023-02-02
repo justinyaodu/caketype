@@ -50,7 +50,7 @@ export {
   // TypeGuardCake.ts
   TypeGuardCake,
   TypeGuardCakeArgs,
-  TypeGuardFailedCakeError,
+  WrongTypeCakeError,
   typeGuard,
   any,
   boolean,

@@ -5,7 +5,7 @@
 ```ts
 
 // @public
-export const any: TypeGuardCake<any>;
+export const any: Cake<any>;
 
 // @public
 export function array<B extends Bakeable>(bakeable: B): ArrayCake<Baked<B>>;
@@ -43,10 +43,10 @@ export type Baked<B extends Bakeable> = B extends Cake ? B : B extends Primitive
 }> : never;
 
 // @public
-export const bigint: TypeGuardCake<bigint>;
+export const bigint: Cake<bigint>;
 
 // @public
-export const boolean: TypeGuardCake<boolean>;
+export const boolean: Cake<boolean>;
 
 // Warning: (ae-forgotten-export) The symbol "Untagged" needs to be exported by the entry point index.d.ts
 //
@@ -339,7 +339,7 @@ infer S extends object,
 ] ? Merged<[MergeTwo<F, S>, ...R]> : T extends [infer F extends object] ? MergeTwo<F, {}> : never;
 
 // @public
-export const never: TypeGuardCake<never>;
+export const never: Cake<never>;
 
 // @public
 export type Not<T extends boolean> = T extends true ? false : true;
@@ -367,7 +367,7 @@ export class NotAnObjectCakeError extends CakeError {
 }
 
 // @public
-export const number: TypeGuardCake<number>;
+export const number: Cake<number>;
 
 // @public
 export type ObjectBakeable = {
@@ -537,7 +537,7 @@ export const Result: ResultUtils;
 export function sameValueZero(a: unknown, b: unknown): boolean;
 
 // @public
-export const string: TypeGuardCake<string>;
+export const string: Cake<string>;
 
 // @public
 export function stringifyPrimitive(value: Primitive): string;
@@ -546,7 +546,7 @@ export function stringifyPrimitive(value: Primitive): string;
 export type StringTree = string | readonly [string, readonly StringTree[]];
 
 // @public
-export const symbol: TypeGuardCake<symbol>;
+export const symbol: Cake<symbol>;
 
 // Warning: (ae-forgotten-export) The symbol "MapInfer" needs to be exported by the entry point index.d.ts
 // Warning: (ae-forgotten-export) The symbol "MapOptional" needs to be exported by the entry point index.d.ts
@@ -637,17 +637,6 @@ export interface TypeGuardCakeArgs<T> extends CakeArgs {
     readonly guard: (value: unknown) => value is T;
 }
 
-// @public (undocumented)
-export class TypeGuardFailedCakeError extends CakeError {
-    constructor(cake: TypeGuardCake<any>, value: unknown);
-    // (undocumented)
-    readonly cake: TypeGuardCake<any>;
-    // (undocumented)
-    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
-    // (undocumented)
-    readonly value: unknown;
-}
-
 // Warning: (ae-forgotten-export) The symbol "MapBaked" needs to be exported by the entry point index.d.ts
 //
 // @public
@@ -688,7 +677,7 @@ export class UnionCakeError extends CakeError {
 }
 
 // @public
-export const unknown: TypeGuardCake<unknown>;
+export const unknown: Cake<unknown>;
 
 // @public
 export function values(object: object): unknown[];
@@ -701,6 +690,17 @@ export function valuesIncludingSymbolsUnsound<T extends object>(object: T): T[ke
 
 // @public
 export function valuesUnsound<T extends object>(object: T): T[keyof T & string][];
+
+// @public (undocumented)
+export class WrongTypeCakeError extends CakeError {
+    constructor(cake: Cake<any>, value: unknown);
+    // (undocumented)
+    readonly cake: Cake<any>;
+    // (undocumented)
+    dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree;
+    // (undocumented)
+    readonly value: unknown;
+}
 
 // (No @packageDocumentation comment for this package)
 

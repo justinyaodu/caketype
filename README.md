@@ -554,7 +554,7 @@ Using the built-in [number](#number) Cake:
 number.as(3); // 3
 
 number.as("oops");
-// TypeError: Value does not satisfy type 'number': type guard failed.
+// TypeError: Value does not satisfy type 'number'.
 ```
 
 The default type-checking behavior is stricter than TypeScript, making it
@@ -614,7 +614,7 @@ function square(input: unknown) {
 square(3); // 9
 
 square("oops");
-// Value does not satisfy type 'number': type guard failed.
+// Value does not satisfy type 'number'.
 ```
 
 [Result.valueOr](#resultvalueor) can be used to return a default value when
@@ -2010,6 +2010,13 @@ const c: Class<Date, [number]> = Date;
 ## Changelog
 
 ---
+
+### Unreleased
+
+#### Changed
+
+- Built-in named Cakes (e.g. [number](#number)) now have type `Cake` instead of `TypeGuardCake` ([#60](https://github.com/justinyaodu/caketype/pull/60))
+- Replaced `TypeGuardFailedCakeError` with `WrongTypeCakeError`, which is more general and has a more concise error message ([#60](https://github.com/justinyaodu/caketype/pull/60))
 
 ### v0.4.1 - 2023-01-26
 

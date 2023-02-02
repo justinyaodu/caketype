@@ -5,7 +5,7 @@ import {
   number,
   ObjectCake,
   string,
-  TypeGuardFailedCakeError,
+  WrongTypeCakeError,
   NotAnObjectCakeError,
   ObjectPropertiesCakeError,
   RequiredPropertyMissingCakeError,
@@ -116,7 +116,7 @@ const values: {
       },
       (c, o) =>
         new ObjectPropertiesCakeError(c, o as object, {
-          name: new TypeGuardFailedCakeError(c.properties.name, false),
+          name: new WrongTypeCakeError(c.properties.name, false),
         }),
     ],
     optionalWrong: [
@@ -126,7 +126,7 @@ const values: {
       },
       (c, o) =>
         new ObjectPropertiesCakeError(c, o as object, {
-          age: new TypeGuardFailedCakeError(c.properties.age.untagged, null),
+          age: new WrongTypeCakeError(c.properties.age.untagged, null),
         }),
     ],
     bothWrong: [
@@ -136,20 +136,20 @@ const values: {
       },
       (c, o) =>
         new ObjectPropertiesCakeError(c, o as object, {
-          name: new TypeGuardFailedCakeError(c.properties.name, 1234),
-          age: new TypeGuardFailedCakeError(c.properties.age.untagged, "oops"),
+          name: new WrongTypeCakeError(c.properties.name, 1234),
+          age: new WrongTypeCakeError(c.properties.age.untagged, "oops"),
         }),
       [
         `Value does not satisfy type '{name: string, age?: (number) | undefined}': object properties are invalid.`,
-        `  Property "name": Value does not satisfy type 'string': type guard failed.`,
-        `  Property "age": Value does not satisfy type 'number': type guard failed.`,
+        `  Property "name": Value does not satisfy type 'string'.`,
+        `  Property "age": Value does not satisfy type 'number'.`,
       ].join("\n"),
     ],
     circularNameObj: [
       circularNameObj,
       (c, o) =>
         new ObjectPropertiesCakeError(c, o as object, {
-          name: new TypeGuardFailedCakeError(c.properties.name, o),
+          name: new WrongTypeCakeError(c.properties.name, o),
         }),
     ],
   },

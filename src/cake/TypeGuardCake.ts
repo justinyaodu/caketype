@@ -45,7 +45,7 @@ class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeArgs<T> {
     if (this.guard(value)) {
       return null;
     }
-    return new TypeGuardFailedCakeError(this, value);
+    return new WrongTypeCakeError(this, value);
   }
 
   dispatchStringify(
@@ -63,17 +63,15 @@ class TypeGuardCake<T> extends Cake<T> implements TypeGuardCakeArgs<T> {
 /**
  * @public
  */
-class TypeGuardFailedCakeError extends CakeError {
+class WrongTypeCakeError extends CakeError {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  constructor(readonly cake: TypeGuardCake<any>, readonly value: unknown) {
+  constructor(readonly cake: Cake<any>, readonly value: unknown) {
     super();
   }
 
   dispatchFormat(context: CakeErrorDispatchFormatContext): StringTree {
     const { stringifyCake } = context;
-    return `Value does not satisfy type '${stringifyCake(
-      this.cake
-    )}': type guard failed.`;
+    return `Value does not satisfy type '${stringifyCake(this.cake)}'.`;
   }
 }
 
@@ -101,7 +99,8 @@ function typeGuard<T>(
  *
  * @public
  */
-const any = typeGuard("any", is_any);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const any: Cake<any> = typeGuard("any", is_any);
 
 /**
  * A {@link Cake} representing the `boolean` type.
@@ -114,7 +113,7 @@ const any = typeGuard("any", is_any);
  *
  * @public
  */
-const boolean = typeGuard("boolean", is_boolean);
+const boolean: Cake<boolean> = typeGuard("boolean", is_boolean);
 
 /**
  * A {@link Cake} representing the `bigint` type.
@@ -127,7 +126,7 @@ const boolean = typeGuard("boolean", is_boolean);
  *
  * @public
  */
-const bigint = typeGuard("bigint", is_bigint);
+const bigint: Cake<bigint> = typeGuard("bigint", is_bigint);
 
 /**
  * A {@link Cake} representing the `never` type. No value satisfies this type.
@@ -140,7 +139,7 @@ const bigint = typeGuard("bigint", is_bigint);
  *
  * @public
  */
-const never = typeGuard("never", is_never);
+const never: Cake<never> = typeGuard("never", is_never);
 
 /**
  * A {@link Cake} representing the `number` type.
@@ -153,7 +152,7 @@ const never = typeGuard("never", is_never);
  *
  * @public
  */
-const number = typeGuard("number", is_number);
+const number: Cake<number> = typeGuard("number", is_number);
 
 /**
  * A {@link Cake} representing the `string` type.
@@ -166,7 +165,7 @@ const number = typeGuard("number", is_number);
  *
  * @public
  */
-const string = typeGuard("string", is_string);
+const string: Cake<string> = typeGuard("string", is_string);
 
 /**
  * A {@link Cake} representing the `symbol` type.
@@ -179,7 +178,7 @@ const string = typeGuard("string", is_string);
  *
  * @public
  */
-const symbol = typeGuard("symbol", is_symbol);
+const symbol: Cake<symbol> = typeGuard("symbol", is_symbol);
 
 /**
  * A {@link Cake} representing the `unknown` type. Every value satisfies this
@@ -196,12 +195,12 @@ const symbol = typeGuard("symbol", is_symbol);
  *
  * @public
  */
-const unknown = typeGuard("unknown", is_unknown);
+const unknown: Cake<unknown> = typeGuard("unknown", is_unknown);
 
 export {
   TypeGuardCake,
   TypeGuardCakeArgs,
-  TypeGuardFailedCakeError,
+  WrongTypeCakeError,
   typeGuard,
   any,
   boolean,
