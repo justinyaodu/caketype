@@ -1,6 +1,6 @@
 # caketype
 
-A delicious runtime type-checking library for TypeScript.
+> Type-safe JSON validation? Runtime type-checking? Piece of cake.
 
 [Installation](#installation) | [Getting Started](#getting-started) | [Quick Reference](#quick-reference) | [API Reference](#api-reference)
 
@@ -155,7 +155,7 @@ Person.asShape(carol);
 > 1. Runtime type-checking is often used to validate untrusted parsed JSON values from network requests. Strict type-checking is typically more appropriate for this use case.
 > 2. It's easier to find and fix bugs caused by excessively strict type-checking, because values that should be okay will produce visible type errors instead. If the type-checking is too lenient, values that should produce type errors will be considered okay, which could have unexpected effects in other parts of your codebase.
 
-### Linking TypeScript Types and Cakes
+### Linking TypeScript Types to Cakes
 
 If you have a TypeScript type and a corresponding Cake, you can link them by adding a type annotation to the Cake:
 
@@ -212,17 +212,7 @@ const Account = bake({
 > - The [array](#array) helper returns a Cake that represents arrays of the given type.
 > - Nested objects don't require any special syntax.
 
-### More Cakes
-
-When you created the `Person` Cake, you imported the [string](#string) and [number](#number) Cakes to define the types of a Person's properties. However, you can also use these Cakes directly:
-
-```ts
-number.is(7); // true
-```
-
-Many basic TypeScript types have corresponding Cakes that you can import: [any](#any), [boolean](#boolean), [bigint](#bigint), [never](#never), [number](#number), [string](#string), [symbol](#symbol), and [unknown](#unknown).
-
-<!-- TODO: mention that null and undefined can be used with bake() once LiteralTart is added -->
+See the [Quick Reference](#quick-reference) to create Cakes for even more types, like literal types and unions.
 
 ## Quick Reference
 
@@ -233,19 +223,14 @@ Many basic TypeScript types have corresponding Cakes that you can import: [any](
 </tr>
 <tr><td>
 
-A built-in type:
-
-```
-number
-```
-
-More built-in types:
+Built-in named types:
 
 ```
 any
 boolean
 bigint
 never
+number
 string
 symbol
 unknown
@@ -288,17 +273,6 @@ const Person = bake({
 });
 
 Person.is({ name: "Alice" }); // true
-```
-
-Use [Infer](#infer) to infer the TypeScript type from the Cake:
-
-```ts
-import { Infer } from "caketype";
-
-type Person = Infer<typeof Person>;
-// { name: string, age?: number | undefined }
-
-const bob: Person = { name: "Bob", age: 42 };
 ```
 
 </td></tr>
