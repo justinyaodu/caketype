@@ -4,14 +4,20 @@
  * Generate a table of contents from Markdown headings.
  */
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 const { withLines, slugify } = require("./util");
 
+/**
+ * @param {string[]} lines
+ * @returns {string[]}
+ */
 function extractHeadings(lines) {
   return lines.filter((line) => line.startsWith("#"));
 }
 
+/**
+ * @param {string} text
+ * @returns {string}
+ */
 function capsToTitleCase(text) {
   return text.replaceAll(
     /\b[A-Z-]+\b/g,
@@ -19,6 +25,10 @@ function capsToTitleCase(text) {
   );
 }
 
+/**
+ * @param {string} line
+ * @returns {string}
+ */
 function processHeading(line) {
   return line.replace(
     /^(#+) (.*)$/,
@@ -29,6 +39,10 @@ function processHeading(line) {
   );
 }
 
+/**
+ * @param {string[]} lines
+ * @returns {void}
+ */
 function processLines(lines) {
   for (const line of extractHeadings(lines)) {
     console.log(processHeading(line));
