@@ -19,7 +19,7 @@ describe("documentation examples", () => {
 
     expectTypeError(
       () => number.as("oops"),
-      "Value does not satisfy type 'number': type guard failed."
+      "Value does not satisfy type 'number'."
     );
   });
 
@@ -62,7 +62,7 @@ describe("documentation examples", () => {
     expect(square(3)).toStrictEqual(9);
 
     expect(square("oops")).toStrictEqual(
-      "Value does not satisfy type 'number': type guard failed."
+      "Value does not satisfy type 'number'."
     );
   });
 

@@ -1,6 +1,7 @@
 import {
   Assert,
   bake,
+  Cake,
   Equivalent,
   Infer,
   number,
@@ -8,7 +9,6 @@ import {
   optional,
   OptionalTag,
   string,
-  TypeGuardCake,
 } from "../../src";
 
 describe("documentation examples", () => {
@@ -21,8 +21,8 @@ describe("documentation examples", () => {
       Equivalent<
         typeof Person,
         ObjectCake<{
-          name: TypeGuardCake<string>;
-          age: OptionalTag<TypeGuardCake<number>>;
+          name: Cake<string>;
+          age: OptionalTag<Cake<number>>;
         }>
       >
     >;

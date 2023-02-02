@@ -70,7 +70,7 @@ abstract class Cake<in out T = any> extends Untagged implements CakeArgs {
    * number.as(3); // 3
    *
    * number.as("oops");
-   * // TypeError: Value does not satisfy type 'number': type guard failed.
+   * // TypeError: Value does not satisfy type 'number'.
    * ```
    *
    * The default type-checking behavior is stricter than TypeScript, making it
@@ -135,7 +135,7 @@ abstract class Cake<in out T = any> extends Untagged implements CakeArgs {
    * square(3); // 9
    *
    * square("oops");
-   * // Value does not satisfy type 'number': type guard failed.
+   * // Value does not satisfy type 'number'.
    * ```
    *
    * @example {@link Result.valueOr} can be used to return a default value when
