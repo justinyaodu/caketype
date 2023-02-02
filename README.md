@@ -1,6 +1,6 @@
 # caketype
 
-> Type-safe JSON validation? Runtime type-checking? Piece of cake.
+Type-safe JSON validation? Runtime type-checking? Piece of cake.
 
 [Installation](#installation) | [Getting Started](#getting-started) | [Quick Reference](#quick-reference) | [API Reference](#api-reference)
 
