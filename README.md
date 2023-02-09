@@ -2022,7 +2022,7 @@ const c: Class<Date, [number]> = Date;
 
 #### Changed
 
-- [number](#number) no longer accepts `NaN` ([#61](https://github.com/justinyaodu/caketype/pull/61))
+- [number](#number) no longer accepts `NaN` ([#64](https://github.com/justinyaodu/caketype/pull/64))
 - Built-in named Cakes (e.g. [number](#number)) now have type `Cake` instead of `TypeGuardCake` ([#60](https://github.com/justinyaodu/caketype/pull/60))
 - Replaced `TypeGuardFailedCakeError` with `WrongTypeCakeError`, which is more general and has a more concise error message ([#60](https://github.com/justinyaodu/caketype/pull/60))
 
