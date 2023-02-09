@@ -3,6 +3,7 @@ import {
   bake,
   boolean,
   keysUnsound,
+  number,
   reference,
   TupleCake,
   TypeGuardCake,
@@ -13,6 +14,7 @@ import { is_boolean } from "../../src/type-guards";
 const cakes = {
   array: array({}),
   literal: bake(0),
+  number: number,
   object: bake({}),
   reference: reference<boolean>(() => boolean),
   tuple: new TupleCake({

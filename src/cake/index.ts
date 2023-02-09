@@ -24,6 +24,9 @@ export {
   LiteralCake,
   LiteralCakeArgs,
   LiteralNotEqualCakeError,
+  // NumberCake.ts
+  NumberCake,
+  number,
   // ObjectCake.ts
   ObjectCake,
   ObjectCakeArgs,
@@ -56,7 +59,6 @@ export {
   boolean,
   bigint,
   never,
-  number,
   string,
   symbol,
   unknown,

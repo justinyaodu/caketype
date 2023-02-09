@@ -33,11 +33,6 @@ describe("documentation examples", () => {
     expect(never.is(undefined)).toStrictEqual(false);
   });
 
-  test("number", () => {
-    expect(number.is(5)).toStrictEqual(true);
-    expect(number.is("5")).toStrictEqual(false);
-  });
-
   test("string", () => {
     expect(string.is("hello")).toStrictEqual(true);
     expect(string.is("")).toStrictEqual(true);
