@@ -15,10 +15,6 @@ function is_never(value: unknown): value is never {
   return false;
 }
 
-function is_number(value: unknown): value is number {
-  return typeof value === "number";
-}
-
 function is_object(value: unknown): value is object {
   switch (typeof value) {
     case "object":
@@ -47,7 +43,6 @@ export {
   is_bigint,
   is_boolean,
   is_never,
-  is_number,
   is_object,
   is_string,
   is_symbol,

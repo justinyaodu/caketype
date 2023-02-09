@@ -829,6 +829,13 @@ number.is(5); // true
 number.is("5"); // false
 ```
 
+Although `typeof NaN === "number"`, this Cake does not accept `NaN`:
+
+```ts
+number.is(NaN); // false
+number.as(NaN); // TypeError: Value is NaN.
+```
+
 ---
 
 #### `string`
@@ -2015,7 +2022,8 @@ const c: Class<Date, [number]> = Date;
 
 #### Changed
 
-- Built-in named Cakes (e.g. [number](#number)) now have type `Cake` instead of `TypeGuardCake` ([#60](https://github.com/justinyaodu/caketype/pull/60))
+- [number](#number) no longer accepts `NaN` ([#64](https://github.com/justinyaodu/caketype/pull/64))
+- Built-in named Cakes (e.g. [boolean](#boolean)) now have type `Cake` instead of `TypeGuardCake` ([#60](https://github.com/justinyaodu/caketype/pull/60))
 - Replaced `TypeGuardFailedCakeError` with `WrongTypeCakeError`, which is more general and has a more concise error message ([#60](https://github.com/justinyaodu/caketype/pull/60))
 
 ---

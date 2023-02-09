@@ -367,7 +367,17 @@ export class NotAnObjectCakeError extends CakeError {
 }
 
 // @public
-export const number: Cake<number>;
+export const number: NumberCake;
+
+// @public
+export class NumberCake extends Cake<number> {
+    // (undocumented)
+    dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
+    // (undocumented)
+    dispatchStringify(context: CakeDispatchStringifyContext): string;
+    // (undocumented)
+    withName(name: string | null): NumberCake;
+}
 
 // @public
 export type ObjectBakeable = {

@@ -9,6 +9,7 @@ export * from "./CakeStringifier";
 export * from "./Checker";
 export * from "./CheckOptions";
 export * from "./LiteralCake";
+export * from "./NumberCake";
 export * from "./ObjectCake";
 export * from "./ReferenceCake";
 export * from "./StringTree";

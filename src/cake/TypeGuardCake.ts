@@ -3,7 +3,6 @@ import {
   is_boolean,
   is_bigint,
   is_never,
-  is_number,
   is_string,
   is_symbol,
   is_unknown,
@@ -142,19 +141,6 @@ const bigint: Cake<bigint> = typeGuard("bigint", is_bigint);
 const never: Cake<never> = typeGuard("never", is_never);
 
 /**
- * A {@link Cake} representing the `number` type.
- *
- * @example
- * ```ts
- * number.is(5); // true
- * number.is("5"); // false
- * ```
- *
- * @public
- */
-const number: Cake<number> = typeGuard("number", is_number);
-
-/**
  * A {@link Cake} representing the `string` type.
  *
  * @example
@@ -206,7 +192,6 @@ export {
   boolean,
   bigint,
   never,
-  number,
   string,
   symbol,
   unknown,
