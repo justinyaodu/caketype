@@ -859,6 +859,8 @@ number.is(NaN); // false
 number.as(NaN); // TypeError: Value is NaN.
 ```
 
+---
+
 ##### `number.satisfying`
 
 Only allow numbers that satisfy the specified constraints.
