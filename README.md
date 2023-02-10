@@ -2034,7 +2034,7 @@ const c: Class<Date, [number]> = Date;
 
 #### Added
 
-- [integer](#integer) Cake
+- [integer](#integer) Cake and refinements ([#65](https://github.com/justinyaodu/caketype/pull/65))
 
 #### Changed
 
