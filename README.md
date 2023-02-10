@@ -398,6 +398,7 @@ seven.is(8); // false
   - [`integer`](#integer)
   - [`never`](#never)
   - [`number`](#number)
+    - [`number.satisfying`](#numbersatisfying)
   - [`string`](#string)
   - [`symbol`](#symbol)
   - [`union`](#union)
@@ -819,6 +820,16 @@ integer.is(5); // true
 integer.is(5.5); // false
 ```
 
+Constraints are supported as well:
+
+```ts
+const NonNegativeInteger = integer.satisfying({ min: 0 });
+NonNegativeInteger.is(5); // true
+NonNegativeInteger.is(-1); // false
+```
+
+See [number.satisfying](#numbersatisfying).
+
 ---
 
 #### `never`
@@ -846,6 +857,51 @@ Although `typeof NaN === "number"`, this Cake does not accept `NaN`:
 ```ts
 number.is(NaN); // false
 number.as(NaN); // TypeError: Value is NaN.
+```
+
+##### `number.satisfying`
+
+Only allow numbers that satisfy the specified constraints.
+
+```ts
+const Percentage = number.satisfying({ min: 0, max: 100 });
+
+Percentage.as(20.3); // 20.3
+
+Percentage.as(-1);
+// TypeError: Number is less than the minimum of 0.
+
+Percentage.as(101);
+// TypeError: Number is greater than the maximum of 100.
+```
+
+The `min` and `max` are inclusive:
+
+```ts
+Percentage.as(0); // 0
+Percentage.as(100); // 100
+```
+
+Multiples of two:
+
+```ts
+const Even = number.satisfying({ step: 2 });
+
+Even.as(-4); // -4
+
+Even.as(7);
+// TypeError: Number is not a multiple of 2.
+```
+
+Multiples of two, with an offset of one:
+
+```ts
+const Odd = number.satisfying({ step: 2, stepFrom: 1 });
+
+Odd.as(7); // 7
+
+Odd.as(-4);
+// TypeError: Number is not 1 plus a multiple of 2.
 ```
 
 ---
@@ -2034,6 +2090,7 @@ const c: Class<Date, [number]> = Date;
 
 #### Added
 
+- [number.satisfying](#numbersatisfying) ([#67](https://github.com/justinyaodu/caketype/pull/67))
 - [integer](#integer) Cake and refinements ([#65](https://github.com/justinyaodu/caketype/pull/65))
 
 #### Changed

@@ -2,6 +2,7 @@ import {
   array,
   bake,
   boolean,
+  integer,
   keysUnsound,
   number,
   reference,
@@ -17,6 +18,7 @@ const cakes = {
   number: number,
   object: bake({}),
   reference: reference<boolean>(() => boolean),
+  refinement: bake(0).refined(integer.refinement),
   tuple: new TupleCake({
     startElements: [],
     optionalElements: [],

@@ -22,7 +22,7 @@ describe("documentation examples", () => {
         typeof Person,
         ObjectCake<{
           name: Cake<string>;
-          age: OptionalTag<Cake<number>>;
+          age: OptionalTag<typeof number>;
         }>
       >
     >;

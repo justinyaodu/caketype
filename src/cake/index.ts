@@ -30,6 +30,12 @@ export {
   // NumberCake.ts
   NumberCake,
   number,
+  // NumberConstraintsRefinement.ts
+  NumberConstraints,
+  NumberConstraintsRefinement,
+  NumberConstraintsRefinementArgs,
+  // NumberRefinementCake.ts
+  NumberRefinementCake,
   // ObjectCake.ts
   ObjectCake,
   ObjectCakeArgs,

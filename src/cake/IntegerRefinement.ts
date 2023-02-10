@@ -44,6 +44,16 @@ class NotAnIntegerCakeError extends CakeError {
  * integer.is(5.5); // false
  * ```
  *
+ * @example Constraints are supported as well:
+ *
+ * ```ts
+ * const NonNegativeInteger = integer.satisfying({ min: 0 });
+ * NonNegativeInteger.is(5); // true
+ * NonNegativeInteger.is(-1); // false
+ * ```
+ *
+ * @see {@link number.satisfying}.
+ *
  * @public
  */
 const integer = number.refined(new IntegerRefinement()).withName("integer");
