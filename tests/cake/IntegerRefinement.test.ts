@@ -6,6 +6,12 @@ describe("documentation examples", () => {
     expect(integer.is(5)).toStrictEqual(true);
     expect(integer.is(5.5)).toStrictEqual(false);
   });
+
+  test("integer constraints", () => {
+    const NonNegativeInteger = integer.satisfying({ min: 0 });
+    expect(NonNegativeInteger.is(5)).toStrictEqual(true);
+    expect(NonNegativeInteger.is(-1)).toStrictEqual(false);
+  });
 });
 
 test("not integer error message", () => {

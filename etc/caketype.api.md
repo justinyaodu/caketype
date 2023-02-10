@@ -246,8 +246,10 @@ export type If<T extends boolean, U, V> = T extends true ? U : V;
 // @public
 export type Infer<C extends Cake> = C extends Cake<infer T> ? T : never;
 
+// Warning: (ae-unresolved-link) The @link reference could not be resolved: No member was found with name "satisfying"
+//
 // @public
-export const integer: RefinementCake<number, number, NumberCake, IntegerRefinement>;
+export const integer: NumberRefinementCake<number, number, NumberCake, IntegerRefinement>;
 
 // @public (undocumented)
 export class IntegerRefinement extends Refinement<number> {
@@ -389,7 +391,51 @@ export class NumberCake extends Cake<number> {
     // (undocumented)
     dispatchStringify(context: CakeDispatchStringifyContext): string;
     // (undocumented)
+    refined<O extends number, R extends Refinement<number, O>>(refinement: R): NumberRefinementCake<number, O, this, R>;
+    satisfying(constraints: NumberConstraints): NumberRefinementCake<number, number, this, NumberConstraintsRefinement>;
+    // (undocumented)
     withName(name: string | null): NumberCake;
+}
+
+// @public (undocumented)
+export interface NumberConstraints {
+    // (undocumented)
+    readonly max?: number;
+    // (undocumented)
+    readonly min?: number;
+    // (undocumented)
+    readonly step?: number;
+    // (undocumented)
+    readonly stepFrom?: number;
+}
+
+// @public (undocumented)
+export class NumberConstraintsRefinement extends Refinement<number> implements NumberConstraintsRefinementArgs {
+    constructor(args: NumberConstraintsRefinementArgs);
+    // (undocumented)
+    readonly constraints: NumberConstraints;
+    // (undocumented)
+    dispatchCheck(value: number): CakeError | null;
+    // (undocumented)
+    toString(): string;
+}
+
+// @public (undocumented)
+export interface NumberConstraintsRefinementArgs {
+    // (undocumented)
+    constraints: NumberConstraints;
+}
+
+// @public (undocumented)
+export class NumberRefinementCake<I extends number, O extends I, B extends Cake<I>, R extends Refinement<I, O>> extends RefinementCake<I, O, B, R> {
+    // (undocumented)
+    refined<P extends O, R extends Refinement<O, P>>(refinement: R): NumberRefinementCake<O, P, this, R>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: No member was found with name "satisfying"
+    //
+    // (undocumented)
+    satisfying(constraints: NumberConstraints): NumberRefinementCake<O, O, this, NumberConstraintsRefinement>;
+    // (undocumented)
+    withName(name: string | null): NumberRefinementCake<I, O, B, R>;
 }
 
 // @public
@@ -534,7 +580,7 @@ export interface ReferenceCakeArgs<C extends Cake> extends CakeArgs {
 // @public (undocumented)
 export abstract class Refinement<in I = any, out O extends I = I> {
     // (undocumented)
-    check(value: I): Result<O, CakeError>;
+    check<J extends I>(value: J): Result<J & O, CakeError>;
     // (undocumented)
     abstract dispatchCheck(value: I): CakeError | null;
     // (undocumented)

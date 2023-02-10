@@ -9,17 +9,22 @@ export * from "./CakeStringifier";
 export * from "./Checker";
 export * from "./CheckOptions";
 export * from "./LiteralCake";
-export * from "./NumberCake";
 export * from "./ObjectCake";
 export * from "./ReferenceCake";
-export * from "./Refinement";
-export * from "./RefinementCake";
 export * from "./StringTree";
 export * from "./TupleCake";
 export * from "./TypeGuardCake";
 export * from "./UnionCake";
 
 export * from "./ArrayCake";
+
+export * from "./Refinement";
+
+export * from "./RefinementCake";
+export * from "./NumberCake";
+export * from "./NumberRefinementCake";
+
 export * from "./IntegerRefinement";
+export * from "./NumberConstraintsRefinement";
 
 export * from "./helper-types";
