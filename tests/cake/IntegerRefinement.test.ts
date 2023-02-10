@@ -17,5 +17,7 @@ test("wrong type", () => {
 });
 
 test("stringify when name removed", () => {
-  expect(integer.withName(null).toString()).toStrictEqual("(number).refined(is an integer)");
-})
+  expect(integer.withName(null).toString()).toStrictEqual(
+    "(number).refined(is an integer)"
+  );
+});
