@@ -20,6 +20,9 @@ export {
   // Checker.ts
   Checker,
   CircularReferenceCakeError,
+  // IntegerRefinement.ts
+  IntegerRefinement,
+  integer,
   // LiteralCake.ts
   LiteralCake,
   LiteralCakeArgs,
@@ -38,6 +41,11 @@ export {
   ReferenceCake,
   ReferenceCakeArgs,
   reference,
+  // Refinement.ts
+  Refinement,
+  // RefinementCake.ts
+  RefinementCake,
+  RefinementCakeArgs,
   // StringTree.ts
   StringTree,
   // tags.ts

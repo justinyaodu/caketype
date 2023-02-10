@@ -4,6 +4,8 @@ import {
   CakeStringifier,
   Checker,
   CheckOptions,
+  Refinement,
+  RefinementCake,
   Untagged,
 } from "./index-internal";
 import type {
@@ -232,6 +234,12 @@ abstract class Cake<in out T = any> extends Untagged implements CakeArgs {
    */
   isShape(value: unknown): value is T {
     return this.checkShape(value).ok;
+  }
+
+  refined<O extends T, R extends Refinement<T, O>>(
+    refinement: R
+  ): RefinementCake<T, O, this, R> {
+    return new RefinementCake({ base: this, refinement });
   }
 
   /**

@@ -74,6 +74,8 @@ export abstract class Cake<in out T = any> extends Untagged implements CakeArgs 
     //
     // (undocumented)
     readonly options: Partial<CheckOptions>;
+    // (undocumented)
+    refined<O extends T, R extends Refinement<T, O>>(refinement: R): RefinementCake<T, O, this, R>;
     toString(): string;
     // (undocumented)
     abstract withName(name: string | null): Cake<T>;
@@ -243,6 +245,17 @@ export type If<T extends boolean, U, V> = T extends true ? U : V;
 
 // @public
 export type Infer<C extends Cake> = C extends Cake<infer T> ? T : never;
+
+// @public
+export const integer: RefinementCake<number, number, NumberCake, IntegerRefinement>;
+
+// @public (undocumented)
+export class IntegerRefinement extends Refinement<number> {
+    // (undocumented)
+    dispatchCheck(value: number): CakeError | null;
+    // (undocumented)
+    toString(): string;
+}
 
 // @public
 export function isPrimitive(value: unknown): value is Primitive;
@@ -516,6 +529,39 @@ export class ReferenceCake<C extends Cake> extends Cake<Infer<C>> implements Ref
 export interface ReferenceCakeArgs<C extends Cake> extends CakeArgs {
     // (undocumented)
     readonly get: () => C;
+}
+
+// @public (undocumented)
+export abstract class Refinement<in I = any, out O extends I = I> {
+    // (undocumented)
+    check(value: I): Result<O, CakeError>;
+    // (undocumented)
+    abstract dispatchCheck(value: I): CakeError | null;
+    // (undocumented)
+    abstract toString(): string;
+}
+
+// @public (undocumented)
+export class RefinementCake<I, O extends I, B extends Cake<I>, R extends Refinement<I, O>> extends Cake<O> implements RefinementCakeArgs<I, O, B, R> {
+    constructor(args: RefinementCakeArgs<I, O, B, R>);
+    // (undocumented)
+    readonly base: B;
+    // (undocumented)
+    dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
+    // (undocumented)
+    dispatchStringify(context: CakeDispatchStringifyContext): string;
+    // (undocumented)
+    readonly refinement: R;
+    // (undocumented)
+    withName(name: string | null): RefinementCake<I, O, B, R>;
+}
+
+// @public (undocumented)
+export interface RefinementCakeArgs<I, O extends I, B extends Cake<I>, R extends Refinement<I, O>> extends CakeArgs {
+    // (undocumented)
+    readonly base: B;
+    // (undocumented)
+    readonly refinement: R;
 }
 
 // @public (undocumented)
