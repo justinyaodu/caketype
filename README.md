@@ -395,6 +395,7 @@ seven.is(8); // false
   - [`array`](#array)
   - [`boolean`](#boolean)
   - [`bigint`](#bigint)
+  - [`integer`](#integer)
   - [`never`](#never)
   - [`number`](#number)
   - [`string`](#string)
@@ -805,6 +806,17 @@ A [Cake](#cake) representing the `bigint` type.
 ```ts
 bigint.is(BigInt(5)); // true
 bigint.is(5); // false
+```
+
+---
+
+#### `integer`
+
+Like [number](#number), but only allow numbers with integer values.
+
+```ts
+integer.is(5); // true
+integer.is(5.5); // false
 ```
 
 ---
@@ -2019,6 +2031,10 @@ const c: Class<Date, [number]> = Date;
 ---
 
 ### Unreleased
+
+#### Added
+
+- [integer](#integer) Cake
 
 #### Changed
 
