@@ -2032,6 +2032,10 @@ const c: Class<Date, [number]> = Date;
 
 ### Unreleased
 
+#### Added
+
+- [integer](#integer) Cake
+
 #### Changed
 
 - [number](#number) no longer accepts `NaN` ([#64](https://github.com/justinyaodu/caketype/pull/64))
