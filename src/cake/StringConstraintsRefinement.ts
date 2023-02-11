@@ -10,15 +10,24 @@ import {
   StringTree,
 } from "./index-internal";
 
+/**
+ * @public
+ */
 interface StringConstraints {
   length?: number | NumberConstraints | Cake;
   regex?: RegExp;
 }
 
+/**
+ * @public
+ */
 interface StringConstraintsRefinementArgs {
   constraints: StringConstraints;
 }
 
+/**
+ * @public
+ */
 class StringConstraintsRefinement
   extends Refinement<string>
   implements StringConstraintsRefinementArgs
