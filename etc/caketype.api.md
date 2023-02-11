@@ -639,10 +639,61 @@ export const Result: ResultUtils;
 export function sameValueZero(a: unknown, b: unknown): boolean;
 
 // @public
-export const string: Cake<string>;
+export const string: StringCake;
+
+// @public
+export class StringCake extends Cake<string> {
+    // (undocumented)
+    dispatchCheck(value: unknown, context: CakeDispatchCheckContext): CakeError | null;
+    // (undocumented)
+    dispatchStringify(context: CakeDispatchStringifyContext): string;
+    // (undocumented)
+    refined<O extends string, R extends Refinement<string, O>>(refinement: R): StringRefinementCake<string, O, this, R>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: No member was found with name "satisfying"
+    satisfying(constraints: StringConstraints): StringRefinementCake<string, string, this, StringConstraintsRefinement>;
+    // (undocumented)
+    withName(name: string | null): StringCake;
+}
+
+// @public (undocumented)
+export interface StringConstraints {
+    // (undocumented)
+    length?: number | NumberConstraints | Cake;
+    // (undocumented)
+    regex?: RegExp;
+}
+
+// @public (undocumented)
+export class StringConstraintsRefinement extends Refinement<string> implements StringConstraintsRefinementArgs {
+    constructor(args: StringConstraintsRefinementArgs);
+    // (undocumented)
+    readonly constraints: StringConstraints;
+    // (undocumented)
+    dispatchCheck(value: string): CakeError | null;
+    // (undocumented)
+    toString(): string;
+}
+
+// @public (undocumented)
+export interface StringConstraintsRefinementArgs {
+    // (undocumented)
+    constraints: StringConstraints;
+}
 
 // @public
 export function stringifyPrimitive(value: Primitive): string;
+
+// @public (undocumented)
+export class StringRefinementCake<I extends string, O extends I, B extends Cake<I>, R extends Refinement<I, O>> extends RefinementCake<I, O, B, R> {
+    // (undocumented)
+    refined<P extends O, R extends Refinement<O, P>>(refinement: R): StringRefinementCake<O, P, this, R>;
+    // Warning: (ae-unresolved-link) The @link reference could not be resolved: No member was found with name "satisfying"
+    //
+    // (undocumented)
+    satisfying(constraints: StringConstraints): StringRefinementCake<O, O, this, StringConstraintsRefinement>;
+    // (undocumented)
+    withName(name: string | null): StringRefinementCake<I, O, B, R>;
+}
 
 // @public (undocumented)
 export type StringTree = string | readonly [string, readonly StringTree[]];

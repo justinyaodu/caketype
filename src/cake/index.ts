@@ -52,6 +52,15 @@ export {
   // RefinementCake.ts
   RefinementCake,
   RefinementCakeArgs,
+  // StringCake.ts
+  StringCake,
+  string,
+  // StringConstraintsRefinement.ts
+  StringConstraints,
+  StringConstraintsRefinement,
+  StringConstraintsRefinementArgs,
+  // StringRefinementCake.ts
+  StringRefinementCake,
   // StringTree.ts
   StringTree,
   // tags.ts
@@ -73,7 +82,6 @@ export {
   boolean,
   bigint,
   never,
-  string,
   symbol,
   unknown,
   // UnionCake.ts

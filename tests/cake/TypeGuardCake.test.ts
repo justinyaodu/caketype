@@ -33,11 +33,6 @@ describe("documentation examples", () => {
     expect(never.is(undefined)).toStrictEqual(false);
   });
 
-  test("string", () => {
-    expect(string.is("hello")).toStrictEqual(true);
-    expect(string.is("")).toStrictEqual(true);
-  });
-
   test("symbol", () => {
     expect(symbol.is(Symbol.iterator)).toStrictEqual(true);
     expect(symbol.is(Symbol("hi"))).toStrictEqual(true);

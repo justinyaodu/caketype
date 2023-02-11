@@ -26,10 +26,6 @@ function is_object(value: unknown): value is object {
   }
 }
 
-function is_string(value: unknown): value is string {
-  return typeof value === "string";
-}
-
 function is_symbol(value: unknown): value is symbol {
   return typeof value === "symbol";
 }
@@ -44,7 +40,6 @@ export {
   is_boolean,
   is_never,
   is_object,
-  is_string,
   is_symbol,
   is_unknown,
 };
