@@ -2134,8 +2134,9 @@ const c: Class<Date, [number]> = Date;
 
 #### Added
 
-- [number.satisfying](#numbersatisfying) ([#67](https://github.com/justinyaodu/caketype/pull/67))
 - [integer](#integer) Cake and refinements ([#65](https://github.com/justinyaodu/caketype/pull/65))
+- [number.satisfying](#numbersatisfying) ([#67](https://github.com/justinyaodu/caketype/pull/67))
+- [string.satisfying](#stringsatisfying) ([#68](https://github.com/justinyaodu/caketype/pull/68))
 
 #### Changed
 
