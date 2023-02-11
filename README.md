@@ -950,15 +950,6 @@ HexString.as("oops");
 // TypeError: String does not match regex /^[0-9a-f]+$/.
 ```
 
-<!-- const string = new StringCake({}); -->
-
-A [Cake](#cake) representing the `string` type.
-
-```ts
-string.is("hello"); // true
-string.is(""); // true
-```
-
 ---
 
 #### `symbol`
