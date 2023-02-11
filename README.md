@@ -400,6 +400,8 @@ seven.is(8); // false
   - [`number`](#number)
     - [`number.satisfying`](#numbersatisfying)
   - [`string`](#string)
+    - [`string.satisfying`](#stringsatisfying)
+  - [`string`](#string)
   - [`symbol`](#symbol)
   - [`union`](#union)
   - [`unknown`](#unknown)
@@ -909,6 +911,46 @@ Odd.as(-4);
 ---
 
 #### `string`
+
+A [Cake](#cake) representing the `string` type.
+
+```ts
+string.is("hello"); // true
+string.is(""); // true
+```
+
+---
+
+##### `string.satisfying`
+
+Only allow strings that satisfy the specified constraints.
+
+```ts
+const NonEmptyString = string.satisfying({ length: { min: 1 } });
+
+NonEmptyString.as("hello"); // "hello"
+
+NonEmptyString.as("");
+// TypeError: String length is invalid: Number is less than the minimum of 1.
+```
+
+Here, the length constraint is an object accepted by
+[number.satisfying](#numbersatisfying); it can also be a number indicating the exact
+length, or a Cake.
+
+Strings matching a regular expression (use `^` and `$` to match
+the entire string):
+
+```ts
+const HexString = string.satisfying({ regex: /^[0-9a-f]+$/ });
+
+HexString.as("123abc"); // "123abc"
+
+HexString.as("oops");
+// TypeError: String does not match regex /^[0-9a-f]+$/.
+```
+
+<!-- const string = new StringCake({}); -->
 
 A [Cake](#cake) representing the `string` type.
 
