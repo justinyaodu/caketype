@@ -1,7 +1,6 @@
 import {
   Assert,
   bake,
-  Cake,
   Equivalent,
   Infer,
   number,
@@ -21,7 +20,7 @@ describe("documentation examples", () => {
       Equivalent<
         typeof Person,
         ObjectCake<{
-          name: Cake<string>;
+          name: typeof string;
           age: OptionalTag<typeof number>;
         }>
       >

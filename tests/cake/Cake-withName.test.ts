@@ -6,6 +6,7 @@ import {
   keysUnsound,
   number,
   reference,
+  string,
   TupleCake,
   TypeGuardCake,
   union,
@@ -19,6 +20,8 @@ const cakes = {
   object: bake({}),
   reference: reference<boolean>(() => boolean),
   refinement: bake(0).refined(integer.refinement),
+  string: string,
+  stringRefinement: string.satisfying({}).satisfying({}),
   tuple: new TupleCake({
     startElements: [],
     optionalElements: [],

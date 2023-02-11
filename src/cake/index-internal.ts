@@ -23,8 +23,11 @@ export * from "./Refinement";
 export * from "./RefinementCake";
 export * from "./NumberCake";
 export * from "./NumberRefinementCake";
+export * from "./StringCake";
+export * from "./StringRefinementCake";
 
 export * from "./IntegerRefinement";
 export * from "./NumberConstraintsRefinement";
+export * from "./StringConstraintsRefinement";
 
 export * from "./helper-types";
