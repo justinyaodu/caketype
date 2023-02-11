@@ -2130,7 +2130,7 @@ const c: Class<Date, [number]> = Date;
 
 ---
 
-### Unreleased
+### v0.5.0 - 2023-02-10
 
 #### Added
 
